@@ -123,14 +123,27 @@ export function createContext(config: ContextConfig): ComponentContext {
     },
 
     emit<D = unknown>(event: string, detail?: D, options?: CustomEventInit): boolean {
-      return element.dispatchEvent(
-        new CustomEvent(event, {
-          detail,
-          bubbles: true,
-          cancelable: true,
-          ...options,
-        })
-      );
+      const customEvent = new CustomEvent(event, {
+        detail,
+        bubbles: true,
+        cancelable: true,
+        ...options,
+      });
+
+      // Check for w-{event} attribute handler (e.g., w-open, w-close, w-change)
+      // Using w-* prefix avoids collision with native browser event handlers
+      const attrHandler = element.getAttribute(`w-${event}`);
+
+      if (attrHandler) {
+        try {
+          const fn = new Function('event', attrHandler);
+          fn.call(element, customEvent);
+        } catch (e) {
+          console.error(`Error in w-${event} handler:`, e);
+        }
+      }
+
+      return element.dispatchEvent(customEvent);
     },
 
     aria: {

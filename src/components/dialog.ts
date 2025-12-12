@@ -9,6 +9,7 @@ import { SLOT, ARIA, KEY } from "../constants";
 interface DialogElement extends HTMLElement {
   open: boolean;
   modal: boolean;
+  persistent: boolean;
   closeOnEscape: boolean;
   closeOnOutsideClick: boolean;
   returnFocus: boolean;
@@ -22,6 +23,7 @@ defineComponent({
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "modal", type: Boolean, default: true },
+    { name: "persistent", type: Boolean, default: false },
     { name: "closeOnEscape", type: Boolean, default: true },
     { name: "closeOnOutsideClick", type: Boolean, default: true },
     { name: "returnFocus", type: Boolean, default: true },
@@ -40,10 +42,8 @@ defineComponent({
         selector: SLOT.trigger,
         handler: "handleTriggerClick",
       },
-      {
-        selector: SLOT.close,
-        handler: "handleCloseClick",
-      },
+      // Note: close button click is handled directly in openDialog() because
+      // the content may be teleported to a portal where delegation won't work
     ],
     keydown: {
       selector: SLOT.trigger,
@@ -120,18 +120,22 @@ defineComponent({
       el.open = true;
       updateAria();
 
+      // When persistent, disable both escape and outside click
+      const allowEscape = el.persistent ? false : el.closeOnEscape;
+      const allowOutsideClick = el.persistent ? false : el.closeOnOutsideClick;
+
       if (el.modal) {
         focusTrap = createFocusTrap(content, {
           returnFocus: false,
-          escapeDeactivates: el.closeOnEscape,
+          escapeDeactivates: allowEscape,
           onEscape: () => closeDialog(),
         });
         focusTrap.activate();
       }
 
-      if (el.closeOnOutsideClick || el.closeOnEscape) {
+      if (allowOutsideClick || allowEscape) {
         dismissCleanup = onDismiss(content, () => closeDialog(), {
-          escapeKey: el.closeOnEscape && !el.modal,
+          escapeKey: allowEscape && !el.modal,
           delay: 10,
         });
       }
@@ -198,10 +202,6 @@ defineComponent({
           e.preventDefault();
           el.handleTriggerClick();
         }
-      },
-
-      handleCloseClick(): void {
-        closeDialog();
       },
 
       showModal(): void {

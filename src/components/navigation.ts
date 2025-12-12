@@ -101,9 +101,9 @@ defineComponent({
       });
     };
 
-    // Convert href to hash-based href when in hash mode
+    // Convert href to hash-based href when in hash mode (skip in native mode)
     const updateHrefs = (): void => {
-      if (!Router.settings.hash) return;
+      if (Router.settings.native || !Router.settings.hash) return;
 
       const items = getItems();
       items.forEach((item) => {
@@ -227,6 +227,18 @@ defineComponent({
         const target = e.target as HTMLElement;
         const item = target.closest<HTMLElement>(SLOT.item);
         if (!item) return;
+
+        // In native mode, let links work normally (server-side routing)
+        if (Router.settings.native) {
+          // Just update aria-current for visual feedback, don't prevent navigation
+          const itemValue = getItemValue(item);
+          if (itemValue) {
+            el.value = itemValue;
+            el.setAttribute("value", itemValue);
+            updateAriaCurrent();
+          }
+          return;
+        }
 
         // Prevent default link behavior - let Router handle navigation
         if (item.tagName === "A") {

@@ -15,13 +15,6 @@
     <!-- Waria (+ Router) -->
     <script src="dist/waria.iife.js"></script>
 
-    <!-- Alphine 
-      <script
-        defer
-        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-      ></script>     
-    -->
-
     <style>
       a {
         text-decoration: none;
@@ -85,6 +78,49 @@
             <h1>Admin Secret Page</h1>
             <ui-box u-text="app.route"></ui-box>
           </w-view>
+          <w-dialog
+            id="dialog_one"
+            persistent
+            w-open="$emit('app.command', {name: 'dialog.open'})"
+            w-close="console.log('close triggered')"
+          >
+            <button
+              class="mt-5"
+              slot="triggerzz"
+              style="cursor: pointer"
+              onclick="$emit('app.open.dialog', 'dialog_one')"
+            >
+              Open Dialog
+            </button>
+            <div
+              slot="content"
+              label="Example Dialog"
+              style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+                max-width: 400px;
+              "
+            >
+              <h3>Dialog Title</h3>
+              <p>
+                This is a modal dialog. Press Escape or click the close button
+                to close it.
+              </p>
+              <button
+                slot="closezz"
+                style="padding: 0.5rem 1rem; cursor: pointer"
+                onclick="$emit('app.close.dialog', 'dialog_one')"
+              >
+                Close
+              </button>
+            </div>
+          </w-dialog>
         </main>
       </uizy-main>
 
@@ -95,16 +131,28 @@
       // ============================================
       // Uizy Plugins
       // ============================================
-
       function AppPlugin(App) {
+        const $el = (name) => name && document.getElementById(name);
+
         App.plugin("app", {
           actions: {
+            command: (data) => console.log("COMMAND:", data),
+
+            open: {
+              dialog: (name) => $el(name)?.toggle(true),
+            },
+
+            close: {
+              dialog: (name) => $el(name)?.close(),
+            },
+
             toggle(side) {
               const app = uizy.get("app");
               app.action(side, ({ set }) => set());
               app.action("main", ({ set }) => set(side));
             },
           },
+
           stores: {
             route: uizy.store.atom({}),
           },
@@ -141,5 +189,6 @@
         },
       });
     </script>
+    <script></script>
   </body>
 </html>

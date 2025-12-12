@@ -22,6 +22,7 @@ interface RouterConfig {
   sync?: boolean;
   base?: string;
   hash?: boolean;
+  native?: boolean;
   before?: BeforeHook;
   after?: AfterHook;
   [key: string]: unknown;
@@ -44,13 +45,14 @@ export class App {
 }
 
 export class Router {
-  static settings: Required<Pick<RouterConfig, "sync" | "base" | "hash">> & {
+  static settings: Required<Pick<RouterConfig, "sync" | "base" | "hash" | "native">> & {
     before: BeforeHook;
     after: AfterHook;
   } & Record<string, unknown> = {
     base: "/",
     sync: true,
     hash: false,
+    native: false,
     before: (_from, _to, { next }) => next(),
     after: () => {},
   };

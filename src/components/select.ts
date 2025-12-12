@@ -10,6 +10,7 @@ interface SelectElement extends HTMLElement {
   value: string;
   open: boolean;
   disabled: boolean;
+  persistent: boolean;
   placeholder: string;
   portal: boolean;
   label: string;
@@ -25,6 +26,7 @@ defineComponent({
     { name: "value", type: String, default: "" },
     { name: "open", type: Boolean, default: false },
     { name: "disabled", type: Boolean, default: false },
+    { name: "persistent", type: Boolean, default: false },
     { name: "placeholder", type: String, default: "Select..." },
     { name: "portal", type: Boolean, default: true }, // Default to portal mode for z-index safety
     { name: "label", type: String, default: "" },
@@ -203,10 +205,10 @@ defineComponent({
 
       updateHighlight();
 
-      // Setup dismiss on outside click or escape
+      // Setup dismiss on outside click or escape (skip if persistent)
       const trigger = getTrigger();
       const listbox2 = getListbox();
-      if (listbox2) {
+      if (listbox2 && !el.persistent) {
         dismissCleanup = onDismiss(
           trigger ? [trigger, listbox2] : [listbox2],
           () => closeSelect(),
@@ -380,7 +382,9 @@ defineComponent({
 
             case KEY.Escape:
               e.preventDefault();
-              closeSelect();
+              if (!el.persistent) {
+                closeSelect();
+              }
               break;
 
             case KEY.Tab:

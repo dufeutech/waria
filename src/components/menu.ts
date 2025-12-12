@@ -12,6 +12,7 @@ defineComponent({
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "placement", type: String, default: "bottom-start" },
+    { name: "persistent", type: Boolean, default: false },
     { name: "closeOnSelect", type: Boolean, default: true },
     { name: "portal", type: Boolean, default: true }, // Default to portal mode for z-index safety
   ],
@@ -61,6 +62,7 @@ defineComponent({
     type MenuElement = HTMLElement & {
       open: boolean;
       placement: string;
+      persistent: boolean;
       closeOnSelect: boolean;
       portal: boolean;
     };
@@ -392,11 +394,13 @@ defineComponent({
         items[0].focus();
       }
 
-      // Setup dismiss
-      dismissCleanup = onDismiss([trigger, content], () => closeMenu(), {
-        escapeKey: true,
-        delay: 10,
-      });
+      // Setup dismiss (skip if persistent)
+      if (!el.persistent) {
+        dismissCleanup = onDismiss([trigger, content], () => closeMenu(), {
+          escapeKey: true,
+          delay: 10,
+        });
+      }
 
       // Transition
       ctx.transitions.content?.enter();
@@ -535,8 +539,9 @@ defineComponent({
           return;
         }
 
-        // Escape closes submenus first, then main menu
+        // Escape closes submenus first, then main menu (unless persistent)
         if (e.key === KEY.Escape) {
+          const el = ctx.element as unknown as MenuElement;
           const parentSubmenu = target.closest(SLOT.submenu);
           if (parentSubmenu) {
             e.preventDefault();
@@ -545,6 +550,11 @@ defineComponent({
             if (parentItem && parentItem.matches(SLOT.item)) {
               closeSubmenu(parentItem, true);
             }
+            return;
+          }
+          // If persistent, don't close the main menu
+          if (el.persistent) {
+            e.preventDefault();
             return;
           }
           // Let the dismiss handler close the main menu

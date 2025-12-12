@@ -9,6 +9,7 @@ import { SLOT, ARIA, KEY } from "../constants";
 interface PopoverElement extends HTMLElement {
   open: boolean;
   placement: string;
+  persistent: boolean;
   closeOnOutsideClick: boolean;
   closeOnEscape: boolean;
   returnFocus: boolean;
@@ -24,6 +25,7 @@ defineComponent({
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "placement", type: String, default: "bottom" },
+    { name: "persistent", type: Boolean, default: false },
     { name: "closeOnOutsideClick", type: Boolean, default: true },
     { name: "closeOnEscape", type: Boolean, default: true },
     { name: "returnFocus", type: Boolean, default: true },
@@ -135,13 +137,16 @@ defineComponent({
         }
       }
 
-      // Setup dismiss handlers
-      if (content && (el.closeOnOutsideClick || el.closeOnEscape)) {
+      // Setup dismiss handlers (skip if persistent)
+      const allowEscape = el.persistent ? false : el.closeOnEscape;
+      const allowOutsideClick = el.persistent ? false : el.closeOnOutsideClick;
+
+      if (content && (allowOutsideClick || allowEscape)) {
         dismissCleanup = onDismiss(
           trigger ? [trigger, content] : [content],
           () => closePopover(),
           {
-            escapeKey: el.closeOnEscape,
+            escapeKey: allowEscape,
             delay: 10,
           }
         );

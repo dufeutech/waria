@@ -58,26 +58,81 @@ App.start({
 ### Example: Tabs Component
 
 ```html
-<w-tabs>
-  <button slot="tab">Tab 1</button>
-  <button slot="tab">Tab 2</button>
-  <div slot="panel">Content 1</div>
-  <div slot="panel">Content 2</div>
+<w-tabs value="tab1">
+  <button slot="tab" name="tab1">Tab 1</button>
+  <button slot="tab" name="tab2">Tab 2</button>
+  <div slot="panel" name="tab1">Content 1</div>
+  <div slot="panel" name="tab2">Content 2</div>
 </w-tabs>
 ```
 
 ### Example: Dialog Component
 
-```html
-<button id="open-dialog">Open Dialog</button>
+**slots:**
 
-<w-dialog trigger="#open-dialog">
-  <div slot="content">
-    <h2>Dialog Title</h2>
-    <p>Dialog content goes here.</p>
-    <button data-close>Close</button>
+- **`trigger`**
+- **`content`**
+- **`close`**
+
+```html
+<w-dialog id="dialog_one">
+  <button slot="trigger" style="cursor: pointer">Open Dialog</button>
+  <div
+    slot="content"
+    label="Example Dialog"
+    style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+      "
+  >
+    <h3>Dialog Title</h3>
+    <p>
+      This is a modal dialog. Press Escape or click the close button to close
+      it.
+    </p>
+    <button slot="close" style="padding: 0.5rem 1rem; cursor: pointer">
+      Close
+    </button>
   </div>
 </w-dialog>
+<script>
+  // Close Dialog: `dialog_one` every 2 seconds.
+  const dialog = document.getElementById("dialog_one");
+  setInterval(() => {
+    dialog.close();
+  }, 2000);
+  // Listen to Open
+  document.getElementById("dialog_one").addEventListener("open", () => {
+    console.log("opened");
+  });
+</script>
+```
+
+## Event Handlers
+
+Use `w-*` attributes for inline event handling:
+
+```html
+<w-dialog w-open="console.log('opened')" w-close="console.log('closed')">
+  ...
+</w-dialog>
+
+<w-menu w-select="handleSelect(event.detail)">
+  ...
+</w-menu>
+```
+
+Or use `addEventListener`:
+
+```js
+dialog.addEventListener('open', (e) => console.log('opened'));
 ```
 
 ## Components

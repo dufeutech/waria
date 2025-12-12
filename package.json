@@ -12,14 +12,13 @@
   "bugs": {
     "url": "https://github.com/dufeut/waria/issues"
   },
-  "main": "./dist/waria.umd.js",
-  "module": "./dist/waria.es.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/waria.es.js",
-      "require": "./dist/waria.umd.js"
+      "import": "./dist/index.js"
     }
   },
   "files": [
