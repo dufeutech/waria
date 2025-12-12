@@ -31,14 +31,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            docs/pnpm-lock.yaml
-
-      - name: Build library
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm build
+          cache-dependency-path: docs/pnpm-lock.yaml
 
       - name: Build docs
         working-directory: docs
