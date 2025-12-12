@@ -6,8 +6,10 @@ declare global {
   const waria: typeof App;
 }
 
-// Base attributes for all waria components
-type WariaBaseAttributes = JSX.HTMLAttributes<HTMLElement>;
+// Base attributes for all waria components (permissive to allow unknown attributes)
+type WariaBaseAttributes = JSX.HTMLAttributes<HTMLElement> & {
+  [key: string]: unknown;
+};
 
 // Extend standard HTML elements to support slot and name attributes used by waria
 declare module "preact" {
