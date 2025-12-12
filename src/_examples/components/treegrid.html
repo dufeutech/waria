@@ -1,0 +1,95 @@
+<w-view class="view" path="/Treegrid">
+    <h2>Treegrid</h2>
+    <w-treegrid label="File Browser">
+        <!-- Level 1: Documents -->
+        <div slot="row" data-level="1">
+            <div slot="cell">
+                📁 Documents
+                <span w-icon style="float: right">➔</span>
+            </div>
+            <div slot="cell">Folder</div>
+            <div slot="cell">--</div>
+            <div slot="cell">Dec 10, 2024</div>
+        </div>
+
+        <!-- Level 2: Documents children -->
+        <div slot="row" data-level="2">
+            <div slot="cell">📄 Report.pdf</div>
+            <div slot="cell">PDF Document</div>
+            <div slot="cell">2.4 MB</div>
+            <div slot="cell">Dec 8, 2024</div>
+        </div>
+
+        <div slot="row" data-level="2">
+            <div slot="cell">📄 Notes.txt</div>
+            <div slot="cell">Text File</div>
+            <div slot="cell">4 KB</div>
+            <div slot="cell">Dec 5, 2024</div>
+        </div>
+
+        <!-- Level 1: Images -->
+        <div slot="row" data-level="1">
+            <div slot="cell">
+                📁 Images <span w-icon style="float: right">➔</span>
+            </div>
+            <div slot="cell">Folder</div>
+            <div slot="cell">--</div>
+            <div slot="cell">Dec 9, 2024</div>
+        </div>
+
+        <!-- Level 2: Images children -->
+        <div slot="row" data-level="2" hidden>
+            <div slot="cell">🖼️ photo1.jpg</div>
+            <div slot="cell">JPEG Image</div>
+            <div slot="cell">1.8 MB</div>
+            <div slot="cell">Dec 9, 2024</div>
+        </div>
+
+        <div slot="row" data-level="2" hidden>
+            <div slot="cell">🖼️ photo2.png</div>
+            <div slot="cell">PNG Image</div>
+            <div slot="cell">3.2 MB</div>
+            <div slot="cell">Dec 7, 2024</div>
+        </div>
+
+        <!-- Level 1: Projects -->
+        <div slot="row" data-level="1">
+            <div slot="cell">
+                📁 Projects <span w-icon style="float: right">➔</span>
+            </div>
+            <div slot="cell">Folder</div>
+            <div slot="cell">--</div>
+            <div slot="cell">Dec 10, 2024</div>
+        </div>
+
+        <!-- Level 2: Projects children -->
+        <div slot="row" data-level="2">
+            <div slot="cell">
+                📁 Website <span w-icon style="float: right">➔</span>
+            </div>
+            <div slot="cell">Folder</div>
+            <div slot="cell">--</div>
+            <div slot="cell">Dec 10, 2024</div>
+        </div>
+
+        <!-- Level 3: Website files -->
+        <div slot="row" data-level="3" hidden>
+            <div slot="cell">📄 index.html</div>
+            <div slot="cell">HTML File</div>
+            <div slot="cell">12 KB</div>
+            <div slot="cell">Dec 10, 2024</div>
+        </div>
+
+        <div slot="row" data-level="3" hidden>
+            <div slot="cell">📄 styles.css</div>
+            <div slot="cell">CSS File</div>
+            <div slot="cell">8 KB</div>
+            <div slot="cell">Dec 9, 2024</div>
+        </div>
+    </w-treegrid>
+
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem">
+        Use Arrow keys to navigate. Arrow Right to expand, Arrow Left to collapse.
+        Enter/Space to select. * to expand all siblings.
+    </p>
+</w-view>

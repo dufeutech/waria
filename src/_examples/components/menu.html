@@ -1,0 +1,101 @@
+<w-view class="view" path="/Menu">
+    <h2>Menu</h2>
+    <w-menu style="float:right;">
+        <button slot="trigger" style="padding: 0.5rem 1rem; cursor: pointer;">
+            Open Menu
+        </button>
+        <div slot="content"
+            style="background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 180px;">
+            <button slot="item" name="new"
+                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                New File
+            </button>
+            <button slot="item" name="open"
+                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                Open...
+            </button>
+            <hr style="margin: 0.25rem 0; border: none; border-top: 1px solid #eee;" />
+            <div slot="item" name="export"
+                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                <span>Export</span>
+                <span style="float: right;" w-icon>▶</span>
+                <div slot="submenu" hidden
+                    style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 160px;">
+                    <button slot="item" name="export-pdf"
+                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        PDF
+                    </button>
+                    <button slot="item" name="export-png"
+                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        PNG
+                    </button>
+                    <div slot="item" name="export-vector"
+                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                        <span>Vector</span>
+                        <span style="float: right;" w-icon>▶</span>
+                        <div slot="submenu" hidden
+                            style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 140px;">
+                            <button slot="item" name="export-svg"
+                                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                                SVG
+                            </button>
+                            <button slot="item" name="export-eps"
+                                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                                EPS
+                            </button>
+                            <div slot="item" name="export-ai"
+                                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                                <span>Adobe</span>
+                                <span style="float: right;" w-icon>▶</span>
+                                <div slot="submenu" hidden
+                                    style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 120px;">
+                                    <button slot="item" name="export-ai-cs6"
+                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                                        AI (CS6)
+                                    </button>
+                                    <button slot="item" name="export-ai-cc"
+                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                                        AI (CC)
+                                    </button>
+                                    <button slot="item" name="export-psd"
+                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                                        PSD
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr style="margin: 0.25rem 0; border: none; border-top: 1px solid #eee;" />
+            <div slot="item" name="edit"
+                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                <span>Edit</span>
+                <span style="float: right;" w-icon>▶</span>
+                <div slot="submenu" hidden
+                    style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 140px;">
+                    <button slot="item" name="cut"
+                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        Cut
+                    </button>
+                    <button slot="item" name="copy"
+                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        Copy
+                    </button>
+                    <button slot="item" name="paste"
+                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        Paste
+                    </button>
+                </div>
+            </div>
+            <hr style="margin: 0.25rem 0; border: none; border-top: 1px solid #eee;" />
+            <button slot="item" name="settings"
+                style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                Settings
+            </button>
+        </div>
+    </w-menu>
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        Use Arrow keys to navigate, ArrowRight to open sub-menu, ArrowLeft to close, Escape to close all.
+    </p>
+</w-view>

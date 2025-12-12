@@ -1,0 +1,44 @@
+<w-view class="view" path="/Tabs">
+    <h2>Tabs</h2>
+    <h3>Horizontal Tabs</h3>
+    <w-tabs value="tab1">
+        <div slot="list" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+            <button slot="tab" name="tab1" style="padding: 0.5rem 1rem;">Tab 1</button>
+            <button slot="tab" name="tab2" style="padding: 0.5rem 1rem;">Tab 2</button>
+            <button slot="tab" name="tab3" style="padding: 0.5rem 1rem;">Tab 3</button>
+        </div>
+        <div slot="panel" name="tab1" style="padding: 1rem; background: #f5f5f5;">
+            Content for Tab 1
+        </div>
+        <div slot="panel" name="tab2" style="padding: 1rem; background: #f5f5f5;">
+            Content for Tab 2
+        </div>
+        <div slot="panel" name="tab3" style="padding: 1rem; background: #f5f5f5;">
+            Content for Tab 3
+        </div>
+    </w-tabs>
+
+    <h3 style="margin-top: 2rem;">Vertical Tabs</h3>
+    <w-tabs value="vtab1" orientation="vertical" style="display: flex; gap: 1rem;">
+        <div slot="list" style="display: flex; flex-direction: column; gap: 0.5rem; min-width: 120px;">
+            <button slot="tab" name="vtab1" style="padding: 0.5rem 1rem; text-align: left;">Settings</button>
+            <button slot="tab" name="vtab2" style="padding: 0.5rem 1rem; text-align: left;">Profile</button>
+            <button slot="tab" name="vtab3" style="padding: 0.5rem 1rem; text-align: left;">Security</button>
+        </div>
+        <div slot="panel" name="vtab1" style="padding: 1rem; background: #f5f5f5; flex: 1;">
+            <h4 style="margin-top: 0;">Settings</h4>
+            <p>Configure your application settings here.</p>
+        </div>
+        <div slot="panel" name="vtab2" style="padding: 1rem; background: #f5f5f5; flex: 1;">
+            <h4 style="margin-top: 0;">Profile</h4>
+            <p>Manage your profile information.</p>
+        </div>
+        <div slot="panel" name="vtab3" style="padding: 1rem; background: #f5f5f5; flex: 1;">
+            <h4 style="margin-top: 0;">Security</h4>
+            <p>Update your security preferences.</p>
+        </div>
+    </w-tabs>
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        Use Arrow keys to navigate tabs. Home/End to jump to first/last tab.
+    </p>
+</w-view>

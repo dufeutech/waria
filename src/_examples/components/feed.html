@@ -1,0 +1,63 @@
+<w-view class="view" path="/Feed">
+    <h2>Feed</h2>
+    <w-feed label="Activity Feed" style="">
+        <article slot="item" style="padding: 1rem; border-bottom: 1px solid #eee; background: white; cursor: pointer;">
+            <div style="display: flex; gap: 0.75rem;">
+                <img src="https://picsum.photos/40/40?random=1" alt="User avatar"
+                    style="width: 40px; height: 40px; border-radius: 50%;" />
+                <div>
+                    <p style="margin: 0;">
+                        <strong>Alice Smith</strong>
+                        <span style="color: #666;">commented on your post</span>
+                    </p>
+                    <p style="margin: 0.25rem 0 0; font-size: 0.9rem; color: #666;">"This looks amazing! Great work 🎉"
+                    </p>
+                    <p style="margin: 0.25rem 0 0; font-size: 0.8rem; color: #767676;">2 minutes ago</p>
+                </div>
+            </div>
+        </article>
+        <article slot="item" style="padding: 1rem; border-bottom: 1px solid #eee; background: white; cursor: pointer;">
+            <div style="display: flex; gap: 0.75rem;">
+                <img src="https://picsum.photos/40/40?random=2" alt="User avatar"
+                    style="width: 40px; height: 40px; border-radius: 50%;" />
+                <div>
+                    <p style="margin: 0;">
+                        <strong>Bob Johnson</strong>
+                        <span style="color: #666;">started following you</span>
+                    </p>
+                    <p style="margin: 0.25rem 0 0; font-size: 0.8rem; color: #767676;">15 minutes ago</p>
+                </div>
+            </div>
+        </article>
+        <article slot="item" style="padding: 1rem; border-bottom: 1px solid #eee; background: white; cursor: pointer;">
+            <div style="display: flex; gap: 0.75rem;">
+                <img src="https://picsum.photos/40/40?random=3" alt="User avatar"
+                    style="width: 40px; height: 40px; border-radius: 50%;" />
+                <div>
+                    <p style="margin: 0;">
+                        <strong>Carol White</strong>
+                        <span style="color: #666;">liked your photo</span>
+                    </p>
+                    <p style="margin: 0.25rem 0 0; font-size: 0.8rem; color: #767676;">1 hour ago</p>
+                </div>
+            </div>
+        </article>
+        <article slot="item" style="padding: 1rem; background: white; cursor: pointer;">
+            <div style="display: flex; gap: 0.75rem;">
+                <img src="https://picsum.photos/40/40?random=4" alt="User avatar"
+                    style="width: 40px; height: 40px; border-radius: 50%;" />
+                <div>
+                    <p style="margin: 0;">
+                        <strong>David Brown</strong>
+                        <span style="color: #666;">mentioned you in a comment</span>
+                    </p>
+                    <p style="margin: 0.25rem 0 0; font-size: 0.9rem; color: #666;">"@you should check this out!"</p>
+                    <p style="margin: 0.25rem 0 0; font-size: 0.8rem; color: #767676;">3 hours ago</p>
+                </div>
+            </div>
+        </article>
+    </w-feed>
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        Use Arrow Up/Down to navigate. Home/End to jump to first/last item. Screen readers announce new items.
+    </p>
+</w-view>

@@ -1,0 +1,54 @@
+{
+  "name": "@dufeut/waria",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Accessible Web Components Library - Framework-agnostic, performant, WCAG 2.1 AA compliant UI primitives",
+  "author": "dufeut",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dufeut/waria.git"
+  },
+  "homepage": "https://github.com/dufeut/waria#readme",
+  "bugs": {
+    "url": "https://github.com/dufeut/waria/issues"
+  },
+  "main": "./dist/waria.umd.js",
+  "module": "./dist/waria.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/waria.es.js",
+      "require": "./dist/waria.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && tsc -p tsconfig.build.json",
+    "preview": "vite preview",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:a11y": "playwright test --grep @a11y"
+  },
+  "keywords": [
+    "web-components",
+    "accessibility",
+    "a11y",
+    "wcag",
+    "aria",
+    "ui-components",
+    "custom-elements"
+  ],
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/test": "^1.57.0",
+    "terser": "^5.44.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4"
+  }
+}

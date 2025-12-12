@@ -1,0 +1,21 @@
+<w-view class="view" path="/Toggles">
+    <h2>Toggles</h2>
+    <p>Multiple selection:</p>
+    <w-toggles value="bold" multiple label="Text formatting" style="display: inline-flex; gap: 0;">
+        <button slot="item" name="bold"
+            style="padding: 0.5rem 1rem; border: 1px solid #ccc; cursor: pointer;">B</button>
+        <button slot="item" name="italic"
+            style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">I</button>
+        <button slot="item" name="underline"
+            style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">U</button>
+    </w-toggles>
+    <p style="margin-top: 1rem;">Single selection:</p>
+    <w-toggles value="left" label="Text alignment" style="display: inline-flex; gap: 0;">
+        <button slot="item" name="left"
+            style="padding: 0.5rem 1rem; border: 1px solid #ccc; cursor: pointer;">Left</button>
+        <button slot="item" name="center"
+            style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">Center</button>
+        <button slot="item" name="right"
+            style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">Right</button>
+    </w-toggles>
+</w-view>

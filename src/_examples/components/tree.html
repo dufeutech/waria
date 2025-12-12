@@ -1,0 +1,101 @@
+<w-view class="view" path="/Tree">
+    <h2>Tree</h2>
+    <w-tree expanded="src,tools,components,ui,layout">
+        <!-- Root folder: src -->
+        <div slot="item" name="src">
+            <div toggle>
+                <span w-icon>▶</span>
+                <span>src</span>
+            </div>
+
+            <!-- Level 1 groups inside /src -->
+            <div role="group" style="margin-left: 1em">
+                <!-- components/ -->
+                <div slot="item" name="components">
+                    <div toggle>
+                        <span w-icon>➔</span>
+                        <span>components</span>
+                    </div>
+
+                    <!-- Level 2 groups inside /components -->
+                    <div role="group" style="margin-left: 1em">
+                        <!-- ui/ -->
+                        <div slot="item" name="ui">
+                            <div toggle>
+                                <span w-icon>➤</span>
+                                <span>ui</span>
+                            </div>
+
+                            <!-- Level 3 Files inside /components/ui -->
+                            <div role="group" style="margin-left: 1.75em">
+                                <div slot="item" name="button.ts">
+                                    <span slot="label">button.ts</span>
+                                </div>
+                                <div slot="item" name="input.ts">
+                                    <span slot="label">input.ts</span>
+                                </div>
+                                <div slot="item" name="modal.ts">
+                                    <span slot="label">modal.ts</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- layout/ -->
+                        <div slot="item" name="layout">
+                            <div toggle>
+                                <span w-icon>➤</span>
+                                <span>layout</span>
+                            </div>
+
+                            <!-- Level 3 Files inside /components/layout -->
+                            <div role="group" style="margin-left: 1.75em">
+                                <div slot="item" name="header.ts">
+                                    <span slot="label">header.ts</span>
+                                </div>
+                                <div slot="item" name="sidebar.ts">
+                                    <span slot="label">sidebar.ts</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- index file in /components -->
+                        <div slot="item" name="index.ts">
+                            <span slot="label">index.ts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- main.ts at root of /src -->
+                <div slot="item" name="main.ts">
+                    <span slot="label">main.ts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Root folder: tools -->
+        <div slot="item" name="tools">
+            <div toggle>
+                <span w-icon>▶</span>
+                <span>tools</span>
+            </div>
+
+            <!-- Files inside /tools -->
+            <div role="group" style="margin-left: 1em">
+                <div slot="item" name="helpers.ts">
+                    <span slot="label">helpers.ts</span>
+                </div>
+                <div slot="item" name="constants.ts">
+                    <span slot="label">constants.ts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Standalone files at project root -->
+        <div slot="item" name="package.json">
+            <span slot="label">package.json</span>
+        </div>
+        <div slot="item" name="README.md">
+            <span slot="label">README.md</span>
+        </div>
+    </w-tree>
+</w-view>

@@ -1,0 +1,66 @@
+<w-view class="view" path="/Scrollbar">
+    <h2>Scrollbar</h2>
+    <p>Native scrolling with CSS-styled scrollbars. No JavaScript track/thumb needed.</p>
+
+    <h4>Horizontal Scroll</h4>
+    <w-scrollbar orientation="horizontal" class="custom-scrollbar"
+        style="width: 300px; border: 1px solid #ddd; border-radius: 4px; padding: 1rem;">
+        <div style="display: flex; gap: 1rem; width: max-content;">
+            <div
+                style="width: 150px; height: 100px; background: #e3f2fd; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                Card 1</div>
+            <div
+                style="width: 150px; height: 100px; background: #f3e5f5; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                Card 2</div>
+            <div
+                style="width: 150px; height: 100px; background: #e8f5e9; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                Card 3</div>
+            <div
+                style="width: 150px; height: 100px; background: #fff3e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                Card 4</div>
+            <div
+                style="width: 150px; height: 100px; background: #fce4ec; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                Card 5</div>
+        </div>
+    </w-scrollbar>
+
+    <h4 style="margin-top: 1.5rem;">Custom Styled Scrollbar</h4>
+    <w-scrollbar orientation="vertical" class="custom-scrollbar"
+        style="height: 150px; width: 300px; border: 1px solid #ddd; border-radius: 4px; padding: 1rem;">
+        <p>This scrollbar uses CSS to customize its appearance.</p>
+        <p>Modern browsers support scrollbar-width, scrollbar-color, and ::-webkit-scrollbar pseudo-elements.</p>
+        <p>Native scrolling provides the best performance and accessibility.</p>
+        <p>Keyboard navigation (arrow keys, page up/down, home/end) works automatically.</p>
+        <p>Screen readers announce scroll position natively.</p>
+    </w-scrollbar>
+
+    <style>
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f0f0f0;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+    </style>
+
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        Uses native browser scrolling. Style with CSS scrollbar-* properties or ::-webkit-scrollbar.
+    </p>
+</w-view>

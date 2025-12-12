@@ -1,0 +1,47 @@
+<w-view class="view" path="/Range">
+    <h2>Range</h2>
+    <div style="max-width: 400px;">
+        <w-label for="volume">Volume</w-label>
+        <w-range id="volume" name="volume" min="0" max="100" value="50" step="1" label="Volume"
+            style="position: relative; height: 20px; display: block;">
+            <div slot="track"
+                style="position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: #ddd; border-radius: 2px; transform: translateY(-50%);">
+                <div slot="fill" style="background: #0066cc; border-radius: 2px;"></div>
+            </div>
+            <div slot="thumb"
+                style="position: absolute; width: 20px; height: 20px; background: #0066cc; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            </div>
+        </w-range>
+    </div>
+
+    <div style="max-width: 400px; margin-top: 2rem;">
+        <w-label for="price">Price Range ($0-1000)</w-label>
+        <w-range id="price" name="price" min="0" max="1000" value="250" step="50" label="Price Range"
+            style="position: relative; height: 20px; display: block;">
+            <div slot="track"
+                style="position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: #ddd; border-radius: 2px; transform: translateY(-50%);">
+                <div slot="fill" style="background: #28a745; border-radius: 2px;"></div>
+            </div>
+            <div slot="thumb"
+                style="position: absolute; width: 20px; height: 20px; background: #28a745; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            </div>
+        </w-range>
+    </div>
+
+    <w-label for="vertical">Vertical Range</w-label>
+    <div style="height: 200px; width: 40px;">
+        <w-range id="vertical" name="vertical" min="0" max="100" value="75" orientation="vertical"
+            label="Vertical Range" style="position: relative; width: 20px; height: 100%; display: block;">
+            <div slot="track"
+                style="position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: #ddd; border-radius: 2px; transform: translateX(-50%);">
+                <div slot="fill" style="background: #dc3545; border-radius: 2px;"></div>
+            </div>
+            <div slot="thumb"
+                style="position: absolute; width: 20px; height: 20px; background: #dc3545; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            </div>
+        </w-range>
+    </div>
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        Use Arrow keys to adjust value. Home/End for min/max. PageUp/PageDown for larger steps.
+    </p>
+</w-view>

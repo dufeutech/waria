@@ -1,0 +1,16 @@
+<w-view class="view" path="/Select">
+    <h2>Select</h2>
+    <w-select value="apple" label="Select a fruit" style="position: relative; display: inline-block;">
+        <button slot="trigger"
+            style="padding: 0.5rem 2rem 0.5rem 1rem; border: 1px solid #ccc; background: white; cursor: pointer; min-width: 150px; text-align: left; display: inline-flex; justify-content: space-between;">
+            Apple <span w-icon>➔</span>
+        </button>
+        <div slot="listbox"
+            style="position: absolute; top: 100%; left: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 150px; z-index: 100;">
+            <div slot="option" value="apple" style="padding: 0.5rem 1rem; cursor: pointer;">Apple</div>
+            <div slot="option" value="banana" style="padding: 0.5rem 1rem; cursor: pointer;">Banana</div>
+            <div slot="option" value="cherry" style="padding: 0.5rem 1rem; cursor: pointer;">Cherry</div>
+            <div slot="option" value="date" style="padding: 0.5rem 1rem; cursor: pointer;">Date</div>
+        </div>
+    </w-select>
+</w-view>

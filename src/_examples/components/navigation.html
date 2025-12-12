@@ -1,0 +1,20 @@
+<w-view class="view" path="/Navigation">
+    <h2>Navigation</h2>
+    <w-nav label="Main navigation">
+        <a slot="item" href="/Navigation">Home</a>
+        <a slot="item" href="/About">About</a>
+        <a slot="item" href="/Services">Services</a>
+        <a slot="item" href="/Contact">Contact</a>
+    </w-nav>
+
+    <h3 style="margin-top: 2rem;">Vertical Navigation</h3>
+    <w-nav label="Sidebar navigation" orientation="vertical">
+        <a slot="item" href="/Navigation">Dashboard</a>
+        <a slot="item" href="/Profile">Profile</a>
+        <a slot="item" href="/Settings">Settings</a>
+        <a slot="item" href="/Logout">Logout</a>
+    </w-nav>
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        Use Arrow keys to navigate between items. aria-current="page" marks the active page.
+    </p>
+</w-view>

@@ -1,0 +1,14 @@
+<w-view class="view" path="/Dialog">
+    <h2>Dialog</h2>
+    <w-dialog>
+        <button slot="trigger" style="padding: 0.5rem 1rem; cursor: pointer;">
+            Open Dialog
+        </button>
+        <div slot="content" label="Example Dialog"
+            style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); max-width: 400px;">
+            <h3 style="margin-top: 0;">Dialog Title</h3>
+            <p>This is a modal dialog. Press Escape or click the close button to close it.</p>
+            <button slot="close" style="padding: 0.5rem 1rem; cursor: pointer;">Close</button>
+        </div>
+    </w-dialog>
+</w-view>

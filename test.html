@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Waria + Uizy Demo</title>
+
+    <!-- Uizy Framework -->
+    <script src="https://unpkg.com/@dufeut/uizy/dist/uizy.iife.js"></script>
+    <link
+      href="https://unpkg.com/@dufeut/uizy/dist/index.css"
+      rel="stylesheet"
+    />
+
+    <!-- Waria (+ Router) -->
+    <script src="dist/waria.iife.js"></script>
+
+    <!-- Alphine 
+      <script
+        defer
+        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      ></script>     
+    -->
+
+    <style>
+      a {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <uizy-app id="app">
+      <uizy-header shadow="12">
+        <w-nav
+          label="Main Navigation"
+          class="d-flex dy-ce dx-sb ew-100p eh-100p ml-3 mr-5"
+        >
+          <div class="d-flex dy-ce">
+            <ui-box
+              class="p-2 ta-c e-p ts-3 e-ns"
+              onclick="uizy.emit('app.toggle', 'left')"
+              >&#9776;</ui-box
+            >
+            <span class="ts-2 ml-4">Website</span>
+          </div>
+          <div class="d-flex gx-5 dx-ce dy-ce">
+            <a slot="item" href="/home?q=1" class="e-ns">Home (q=1)</a>
+            <a slot="item" href="/home?q=2" class="e-ns">Home (q=2)</a>
+            <a slot="item" href="/about" class="e-ns">About</a>
+            <a slot="item" href="/contact" class="e-ns">Contact</a>
+            <a slot="item" href="/admin" class="e-ns">Admin</a>
+            <ui-box
+              class="ts-2 ta-c e-p e-ns"
+              onclick="uizy.emit('app.toggle', 'right')"
+              >&#9881;</ui-box
+            >
+          </div>
+        </w-nav>
+      </uizy-header>
+
+      <uizy-drawer open shadow="6" clip-top clip-bottom
+        >Left Sidebar</uizy-drawer
+      >
+      <uizy-drawer right open shadow="6" clip-top clip-bottom
+        >Right Sidebar</uizy-drawer
+      >
+      <uizy-overlay clip-top clip-bottom></uizy-overlay>
+
+      <uizy-main clip-top clip-bottom clip-left clip-right class="bd-a">
+        <main class="eh-100p px-12 py-4">
+          <w-view path="/home">
+            <h1>Welcome Home</h1>
+            <ui-box u-text="app.route"></ui-box>
+          </w-view>
+          <w-view path="/about">
+            <h1>About Us</h1>
+            <ui-box u-text="app.route"></ui-box>
+          </w-view>
+          <w-view path="/contact">
+            <h1>Contact</h1>
+            <ui-box u-text="app.route"></ui-box>
+          </w-view>
+          <w-view path="/admin">
+            <h1>Admin Secret Page</h1>
+            <ui-box u-text="app.route"></ui-box>
+          </w-view>
+        </main>
+      </uizy-main>
+
+      <uizy-footer shadow="12">Footer</uizy-footer>
+    </uizy-app>
+
+    <script>
+      // ============================================
+      // Uizy Plugins
+      // ============================================
+
+      function AppPlugin(App) {
+        App.plugin("app", {
+          actions: {
+            toggle(side) {
+              const app = uizy.get("app");
+              app.action(side, ({ set }) => set());
+              app.action("main", ({ set }) => set(side));
+            },
+          },
+          stores: {
+            route: uizy.store.atom({}),
+          },
+        });
+      }
+
+      uizy.start({
+        globals: true,
+        plugins: [AppPlugin],
+        onReady() {},
+      });
+
+      // ============================================
+      // Waria Router
+      // ============================================
+
+      waria.start({
+        hash: true,
+        base: "/",
+
+        before(from, to, { next, redirect }) {
+          uizy.$set("app.route", { last: from, current: to });
+
+          // Guard: redirect unauthenticated users from /admin
+          const isLoggedIn = false;
+          if (to.path === "/admin" && !isLoggedIn) {
+            return redirect("/home");
+          }
+          next();
+        },
+
+        after(from, to) {
+          console.log(`Navigated: ${from?.path ?? "start"} -> ${to.path}`);
+        },
+      });
+    </script>
+  </body>
+</html>

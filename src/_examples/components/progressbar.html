@@ -1,0 +1,28 @@
+<w-view class="view" path="/Progressbar">
+    <h2>Progressbar</h2>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+            <p style="margin-bottom: 0.5rem;">Determinate progress (50%):</p>
+            <w-progressbar value="50" label="Loading progress"
+                style="display: block; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden;">
+                <div slot="indicator" style="height: 100%; background: #0056b3; transition: width 0.3s;"></div>
+            </w-progressbar>
+        </div>
+        <div>
+            <p style="margin-bottom: 0.5rem;">Determinate progress (75%):</p>
+            <w-progressbar value="75" label="Upload progress"
+                style="display: block; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden;">
+                <div slot="indicator" style="height: 100%; background: #28a745; transition: width 0.3s;"></div>
+            </w-progressbar>
+        </div>
+        <div>
+            <p style="margin-bottom: 0.5rem;">Indeterminate progress:</p>
+            <w-progressbar indeterminate label="Processing"
+                style="display: block; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden;">
+                <div slot="indicator"
+                    style="height: 100%; width: 30%; background: #0056b3; animation: indeterminate 1.5s infinite linear;">
+                </div>
+            </w-progressbar>
+        </div>
+    </div>
+</w-view>

@@ -1,0 +1,47 @@
+<w-view class="view" path="/Label">
+    <h2>Label</h2>
+    <h3>With Native Inputs</h3>
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 300px;">
+        <w-label for="demo-input">Click this label to focus input:</w-label>
+        <input id="demo-input" type="text" placeholder="Type here..."
+            style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;" />
+    </div>
+    <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; max-width: 300px;">
+        <w-label for="demo-required" required>Required field *</w-label>
+        <input id="demo-required" type="text" required
+            style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;" />
+    </div>
+    <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; max-width: 300px;">
+        <w-label for="demo-disabled" disabled>Disabled label</w-label>
+        <input id="demo-disabled" type="text" disabled
+            style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;" />
+    </div>
+
+    <h3 style="margin-top: 2rem;">With Custom Components</h3>
+    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+        w-label automatically finds the focusable element inside custom components (e.g., the thumb in w-range).
+    </p>
+    <div style="max-width: 400px;">
+        <w-label for="demo-range">Volume (click label to focus slider):</w-label>
+        <w-range id="demo-range" min="0" max="100" value="50" step="1" label="Volume"
+            style="position: relative; height: 20px; display: block; margin-top: 0.5rem;">
+            <div slot="track"
+                style="position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: #ddd; border-radius: 2px; transform: translateY(-50%);">
+                <div slot="fill" style="background: #0066cc; border-radius: 2px;"></div>
+            </div>
+            <div slot="thumb"
+                style="position: absolute; width: 20px; height: 20px; background: #0066cc; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            </div>
+        </w-range>
+    </div>
+    <div style="max-width: 400px; margin-top: 1rem;">
+        <w-label for="demo-spinbutton">Quantity:</w-label>
+        <w-spinbutton id="demo-spinbutton" min="0" max="10" value="5"
+            style="display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.5rem;">
+            <button slot="decrement" style="padding: 0.25rem 0.5rem; cursor: pointer;">-</button>
+            <input slot="input" type="text" readonly
+                style="width: 3rem; text-align: center; padding: 0.25rem; border: 1px solid #ccc; border-radius: 4px;" />
+            <button slot="increment" style="padding: 0.25rem 0.5rem; cursor: pointer;">+</button>
+        </w-spinbutton>
+    </div>
+</w-view>

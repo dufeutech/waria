@@ -1,0 +1,14 @@
+<w-view class="view" path="/Separator">
+    <h2>Separator</h2>
+    <p>Horizontal separator:</p>
+    <w-separator style="display: block; height: 1px; background: #ccc; margin: 1rem 0;"></w-separator>
+    <p>Vertical separator (in flex container):</p>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <span>Left</span>
+        <w-separator orientation="vertical"
+            style="display: block; width: 1px; height: 1.5em; background: #ccc;"></w-separator>
+        <span>Right</span>
+    </div>
+    <p style="margin-top: 1rem;">Decorative separator:</p>
+    <w-separator decorative style="display: block; height: 1px; background: #ccc; margin: 1rem 0;"></w-separator>
+</w-view>

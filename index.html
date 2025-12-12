@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>waria</title>
+    <script src="https://unpkg.com/@dufeut/uizy/dist/uizy.iife.js"></script>
+    <link
+      href="https://unpkg.com/@dufeut/uizy/dist/index.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div id="app" x-data></div>
+    <script type="module" src="/src/main.ts"></script>
+    <script>
+      uizy.start({
+        globals: true,
+        layout: { layout: { header: 56, footer: 48, left: 240 } },
+        theme: { colors: { primary: "#6b08a5", accent: "#1eadff" } },
+        components: {
+          button: () => "px-4 py-2 bd-a br-1 e-p e-ns",
+        },
+        stores: {
+          counter: uizy.store.atom(0),
+        },
+        onReady: () => console.log("Ready!"),
+      });
+    </script>
+  </body>
+</html>
