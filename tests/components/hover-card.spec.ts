@@ -1,39 +1,62 @@
+/**
+ * w-hover-card - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.4.13 Content on Hover or Focus: Dismissible, hoverable, persistent
+ * - 2.1.1 Keyboard: Focus triggers hover card
+ * - 4.1.2 Name, Role, Value: Proper ARIA expanded states
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-hover-card accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const HOVER_CARD = `
+<w-hover-card portal="false" open-delay="0" close-delay="0">
+  <button slot="trigger">Hover over me</button>
+  <div slot="content">
+    <h4>Card Title</h4>
+    <p>This is the hover card content.</p>
+  </div>
+</w-hover-card>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-hover-card", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/hover-card", { waitUntil: "domcontentloaded" });
+    // w-hover-card sets aria-expanded on trigger
+    await renderComponent(page, HOVER_CARD, '[slot="trigger"]', "aria-expanded");
   });
 
-  test("should have no axe violations when closed", async ({ page }) => {
+  test("axe accessibility scan (closed)", async ({ page }) => {
     await checkA11y(page, { selector: "w-hover-card" });
   });
 
-  test("should show content on focus", async ({ page }) => {
-    const hoverCard = page.locator("w-hover-card").first();
-    const trigger = hoverCard.locator('[slot="trigger"]');
+  test("shows content on focus", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.focus();
-    // Content is teleported to portal - verify via aria-expanded on trigger
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
-  test("should hide content on blur", async ({ page }) => {
-    const hoverCard = page.locator("w-hover-card").first();
-    const trigger = hoverCard.locator('[slot="trigger"]');
+  test("hides content on blur", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
 
-    await page.keyboard.press("Tab");
-    await page.waitForTimeout(400); // Wait for close delay
+    await trigger.blur();
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should close on Escape key", async ({ page }) => {
-    const hoverCard = page.locator("w-hover-card").first();
-    const trigger = hoverCard.locator('[slot="trigger"]');
+  test("Escape key closes hover card", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
@@ -42,50 +65,36 @@ test.describe("w-hover-card accessibility", () => {
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should have aria-expanded on trigger", async ({ page }) => {
-    const hoverCard = page.locator("w-hover-card").first();
-    const trigger = hoverCard.locator('[slot="trigger"]');
+  test("trigger has aria-expanded", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
-  test("should show content on mouse hover", async ({ page }) => {
-    const hoverCard = page.locator("w-hover-card").first();
-    const trigger = hoverCard.locator('[slot="trigger"]');
+  test("shows content on mouse hover", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.hover();
 
-    // Wait for open delay (default 500ms)
-    await page.waitForTimeout(600);
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
-  test("should hide content on mouse leave", async ({ page }) => {
-    const hoverCard = page.locator("w-hover-card").first();
-    const trigger = hoverCard.locator('[slot="trigger"]');
+  test("hides content on mouse leave", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    // First show by hovering
     await trigger.hover();
-    await page.waitForTimeout(600);
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
 
-    // Move mouse away from trigger
     await page.mouse.move(0, 0);
 
-    // Wait for close delay (default 300ms)
-    await page.waitForTimeout(400);
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should have aria-controls linking trigger to content", async ({
-    page,
-  }) => {
-    const hoverCard = page.locator("w-hover-card").first();
-    const trigger = hoverCard.locator('[slot="trigger"]');
+  test("aria-controls links trigger to content", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    // Show content to ensure aria-controls is set
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
 

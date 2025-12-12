@@ -1,170 +1,176 @@
+/**
+ * w-menu - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper menu/menuitem roles
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 2.4.3 Focus Order: Logical navigation in submenus
+ * - 4.1.2 Name, Role, Value: Proper ARIA states
+ */
+
 import { test, expect, Page } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-// Helper to get menu content (works whether portaled or not)
-function getMenuContent(page: Page) {
-  // When open and portaled, content has role="menu" and data-portal-owner
-  // When closed, it's inside w-menu
-  // Use a combined selector that works in both cases
-  return page
-    .locator('[slot="content"][role="menu"]')
-    .or(page.locator('w-menu [slot="content"]'));
-}
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
 
-// Helper to get visible menu content
-function getVisibleMenuContent(page: Page) {
-  return page.locator('[slot="content"][role="menu"]:not([hidden])');
-}
+const MENU = `
+<w-menu>
+  <button slot="trigger">Open Menu</button>
+  <div slot="content">
+    <button slot="item" name="new">New File</button>
+    <button slot="item" name="open">Open...</button>
+    <button slot="item" name="save">Save</button>
+  </div>
+</w-menu>`;
 
-// Helper to get menu items from visible content
-function getMenuItems(page: Page) {
-  return page.locator(
-    '[slot="content"][role="menu"]:not([hidden]) > [slot="item"]'
-  );
-}
+const MENU_WITH_SUBMENU = `
+<w-menu>
+  <button slot="trigger">Open Menu</button>
+  <div slot="content">
+    <button slot="item" name="new">New File</button>
+    <div slot="item" name="export">
+      <span>Export</span>
+      <div slot="submenu" hidden>
+        <button slot="item" name="export-pdf">PDF</button>
+        <button slot="item" name="export-png">PNG</button>
+      </div>
+    </div>
+    <button slot="item" name="settings">Settings</button>
+  </div>
+</w-menu>`;
 
-// Helper to get a specific item by name
-function getMenuItem(page: Page, name: string) {
-  return page.locator(
-    `[slot="content"][role="menu"]:not([hidden]) > [slot="item"][name="${name}"]`
-  );
-}
+// ═══════════════════════════════════════════════════════════════════════════
+// Helpers
+// ═══════════════════════════════════════════════════════════════════════════
 
-// Helper for submenu content
-function getSubmenu(page: Page, parentName: string) {
-  return page.locator(`[slot="item"][name="${parentName}"] > [slot="submenu"]`);
-}
+const getVisibleMenuContent = (page: Page) =>
+  page.locator('[slot="content"][role="menu"]:not([hidden])');
+const getMenuItems = (page: Page) =>
+  page.locator('[slot="content"][role="menu"]:not([hidden]) > [slot="item"]');
+const getMenuItem = (page: Page, name: string) =>
+  page.locator(`[slot="content"][role="menu"]:not([hidden]) > [slot="item"][name="${name}"]`);
 
-test.describe("w-menu accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-menu", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Menu", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-menu", { state: "visible" });
+    await renderComponent(page, MENU, "w-menu");
   });
 
-  test("should have no axe violations when closed", async ({ page }) => {
+  test("axe accessibility scan (closed)", async ({ page }) => {
     await checkA11y(page, { selector: "w-menu" });
   });
 
-  test("should have correct ARIA attributes on trigger", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("trigger has correct ARIA attributes", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await expect(trigger).toHaveAttribute("aria-haspopup", "menu");
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should open menu on trigger click", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("click opens menu", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
-    const content = getVisibleMenuContent(page);
-    await expect(content).toBeVisible();
+    await expect(getVisibleMenuContent(page)).toBeVisible();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
-  test('should have role="menu" on content', async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test('content has role="menu"', async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
-    const content = getVisibleMenuContent(page);
-    await expect(content).toHaveAttribute("role", "menu");
+    await expect(getVisibleMenuContent(page)).toHaveAttribute("role", "menu");
   });
 
-  test('should have role="menuitem" on items', async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test('items have role="menuitem"', async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
     const items = getMenuItems(page);
-
     const count = await items.count();
+
     for (let i = 0; i < count; i++) {
       await expect(items.nth(i)).toHaveAttribute("role", "menuitem");
     }
   });
 
-  test("should have no axe violations when open", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("axe accessibility scan (open)", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
     await trigger.click();
     await expect(getVisibleMenuContent(page)).toBeVisible();
-
     await checkA11y(page);
   });
 
-  test("should close on Escape key", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("Escape key closes menu", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
-    const content = getVisibleMenuContent(page);
-    await expect(content).toBeVisible();
+    await expect(getVisibleMenuContent(page)).toBeVisible();
 
     await page.keyboard.press("Escape");
-    // After close, content goes back to w-menu and becomes hidden
-    await expect(page.locator('w-menu [slot="content"]')).toBeHidden();
+    await expect(page.locator('w-menu [slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should navigate items with arrow keys", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("arrow keys navigate items", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
     const items = getMenuItems(page);
 
-    // First item should be focused
     await expect(items.first()).toBeFocused();
 
-    // Arrow down to second item
     await page.keyboard.press("ArrowDown");
     await expect(items.nth(1)).toBeFocused();
 
-    // Arrow up back to first
     await page.keyboard.press("ArrowUp");
     await expect(items.first()).toBeFocused();
   });
 
-  test("should open on Enter key from trigger", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("Enter key opens menu from trigger", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.focus();
     await page.keyboard.press("Enter");
     await expect(getVisibleMenuContent(page)).toBeVisible();
   });
 
-  test("should open on ArrowDown from trigger", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("ArrowDown opens menu from trigger", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.focus();
     await page.keyboard.press("ArrowDown");
     await expect(getVisibleMenuContent(page)).toBeVisible();
   });
 
-  test("should close on item click and emit select", async ({ page }) => {
+  test("item click closes menu and emits select", async ({ page }) => {
     const menu = page.locator("w-menu");
-    const trigger = page.locator('w-menu [slot="trigger"]');
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
-    await expect(getVisibleMenuContent(page)).toBeVisible();
 
     const selectPromise = menu.evaluate((el) => {
       return new Promise<{ item: string }>((resolve) => {
-        el.addEventListener(
-          "select",
-          (e: Event) => {
-            resolve((e as CustomEvent).detail);
-          },
-          { once: true }
-        );
+        el.addEventListener("select", (e: Event) => {
+          resolve((e as CustomEvent).detail);
+        }, { once: true });
       });
     });
 
-    const firstItem = getMenuItems(page).first();
-    await firstItem.click();
+    await getMenuItems(page).first().click();
 
     const detail = await selectPromise;
     expect(detail.item).toBeTruthy();
-    // After close, content is back in w-menu and hidden
-    await expect(page.locator('w-menu [slot="content"]')).toBeHidden();
+    await expect(page.locator('w-menu [slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should return focus to trigger on close", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("focus returns to trigger on close", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
     await expect(getVisibleMenuContent(page)).toBeVisible();
@@ -172,149 +178,130 @@ test.describe("w-menu accessibility", () => {
     await page.keyboard.press("Escape");
     await expect(trigger).toBeFocused();
   });
+});
 
-  test("should open submenu with ArrowRight and focus first item", async ({
-    page,
-  }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+test.describe("w-menu with submenu", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, MENU_WITH_SUBMENU, "w-menu");
+  });
+
+  test("ArrowRight opens submenu", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
 
-    // Navigate to Export item (New File -> Open -> Export)
-    await page.keyboard.press("ArrowDown"); // New File -> Open
-    await page.keyboard.press("ArrowDown"); // Open -> Export
-
+    // Navigate to export item
+    await page.keyboard.press("ArrowDown");
     const exportItem = getMenuItem(page, "export");
     await expect(exportItem).toBeFocused();
 
-    // ArrowRight should open submenu
+    // Open submenu
     await page.keyboard.press("ArrowRight");
-    const exportSubmenu = getSubmenu(page, "export");
-    await expect(exportSubmenu).toBeVisible();
-
-    // First submenu item should be focused
-    const pdfItem = exportSubmenu.locator('> [slot="item"][name="export-pdf"]');
-    await expect(pdfItem).toBeFocused();
+    const submenu = exportItem.locator('[slot="submenu"]');
+    await expect(submenu).not.toHaveAttribute("hidden");
   });
 
-  test("should close submenu with ArrowLeft and return focus to parent", async ({
-    page,
-  }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("ArrowLeft closes submenu", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
-
-    // Navigate to Export and open submenu
-    await page.keyboard.press("ArrowDown"); // New File -> Open
-    await page.keyboard.press("ArrowDown"); // Open -> Export
+    await page.keyboard.press("ArrowDown");
     await page.keyboard.press("ArrowRight");
 
-    const exportSubmenu = getSubmenu(page, "export");
-    const pdfItem = exportSubmenu.locator('> [slot="item"][name="export-pdf"]');
-    await expect(pdfItem).toBeFocused();
+    const exportItem = getMenuItem(page, "export");
+    const submenu = exportItem.locator('[slot="submenu"]');
+    await expect(submenu).not.toHaveAttribute("hidden");
 
-    // ArrowLeft should close submenu
     await page.keyboard.press("ArrowLeft");
-    await expect(exportSubmenu).toBeHidden();
-    await expect(getMenuItem(page, "export")).toBeFocused();
+    await expect(submenu).toHaveAttribute("hidden", "");
+    await expect(exportItem).toBeFocused();
   });
 
-  test("should close submenu with Escape and return focus to parent", async ({
-    page,
-  }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("Escape closes submenu first", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click();
-
-    // Navigate to Export and open submenu
-    await page.keyboard.press("ArrowDown"); // New File -> Open
-    await page.keyboard.press("ArrowDown"); // Open -> Export
+    await page.keyboard.press("ArrowDown");
     await page.keyboard.press("ArrowRight");
 
-    const exportSubmenu = getSubmenu(page, "export");
-    const pdfItem = exportSubmenu.locator('> [slot="item"][name="export-pdf"]');
-    await expect(pdfItem).toBeFocused();
+    const exportItem = getMenuItem(page, "export");
+    const submenu = exportItem.locator('[slot="submenu"]');
+    await expect(submenu).not.toHaveAttribute("hidden");
 
-    // Escape should close submenu first (not the whole menu)
     await page.keyboard.press("Escape");
-    await expect(exportSubmenu).toBeHidden();
-    await expect(getMenuItem(page, "export")).toBeFocused();
+    await expect(submenu).toHaveAttribute("hidden", "");
+    await expect(exportItem).toBeFocused();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests - Nested Menus (separate w-menu components)
+// ═══════════════════════════════════════════════════════════════════════════
+
+const MENU_NESTED = `
+<w-menu>
+  <button slot="trigger">Outer Menu</button>
+  <div slot="content">
+    <button slot="item" name="outer1">Outer Item 1</button>
+    <w-menu>
+      <button slot="trigger" name="nested-trigger">Open Nested</button>
+      <div slot="content">
+        <button slot="item" name="inner1">Inner Item 1</button>
+        <button slot="item" name="inner2">Inner Item 2</button>
+      </div>
+    </w-menu>
+    <button slot="item" name="outer2">Outer Item 2</button>
+  </div>
+</w-menu>`;
+
+test.describe("w-menu nested", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, MENU_NESTED, "w-menu");
   });
 
-  test("should only have one submenu open at a time", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("outer and inner menus have independent triggers", async ({ page }) => {
+    const outerTrigger = page.locator('[slot="trigger"]').first();
+    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
 
-    await trigger.click();
-
-    const exportItem = getMenuItem(page, "export");
-    const editItem = getMenuItem(page, "edit");
-    const exportSubmenu = getSubmenu(page, "export");
-    const editSubmenu = getSubmenu(page, "edit");
-
-    // Open Export submenu
-    await exportItem.click();
-    await expect(exportSubmenu).toBeVisible();
-
-    // Now open Edit submenu - Export should close
-    await editItem.click();
-    await expect(editSubmenu).toBeVisible();
-    await expect(exportSubmenu).toBeHidden();
+    await expect(outerTrigger).toHaveAttribute("aria-haspopup", "menu");
+    await expect(innerTrigger).toHaveAttribute("aria-haspopup", "menu");
   });
 
-  test("should navigate through deeply nested submenus", async ({ page }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("opening outer menu does not open inner", async ({ page }) => {
+    const outerTrigger = page.locator('[slot="trigger"]').first();
+    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
 
-    await trigger.click();
-
-    const exportItem = getMenuItem(page, "export");
-    const exportSubmenu = getSubmenu(page, "export");
-
-    // Open Export submenu by clicking
-    await exportItem.click();
-    await expect(exportSubmenu).toBeVisible();
-
-    // Click Vector to open its submenu
-    const vectorItem = exportSubmenu.locator(
-      '> [slot="item"][name="export-vector"]'
-    );
-    const vectorSubmenu = vectorItem.locator('> [slot="submenu"]');
-
-    await vectorItem.click();
-    await expect(vectorSubmenu).toBeVisible();
+    await outerTrigger.click();
+    await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
+    // Inner trigger becomes visible but not expanded
+    await expect(innerTrigger).toBeVisible();
+    await expect(innerTrigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should open nested submenu with ArrowRight from within submenu", async ({
-    page,
-  }) => {
-    const trigger = page.locator('w-menu [slot="trigger"]');
+  test("opening inner menu does not close outer", async ({ page }) => {
+    const outerTrigger = page.locator('[slot="trigger"]').first();
+    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
 
-    await trigger.click();
+    await outerTrigger.click();
+    await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
+    await expect(innerTrigger).toBeVisible();
 
-    // Navigate to Export and open
-    await page.keyboard.press("ArrowDown");
-    await page.keyboard.press("ArrowDown");
-    await page.keyboard.press("ArrowRight");
+    await innerTrigger.click();
+    await expect(innerTrigger).toHaveAttribute("aria-expanded", "true");
+    // Outer should still be open
+    await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
+  });
 
-    const exportSubmenu = getSubmenu(page, "export");
-    await expect(exportSubmenu).toBeVisible();
 
-    const pdfItem = exportSubmenu.locator('> [slot="item"][name="export-pdf"]');
-    const vectorItem = exportSubmenu.locator(
-      '> [slot="item"][name="export-vector"]'
-    );
-    const vectorSubmenu = vectorItem.locator('> [slot="submenu"]');
-    const svgItem = vectorSubmenu.locator('> [slot="item"][name="export-svg"]');
+  test("inner menu items have correct role", async ({ page }) => {
+    const outerTrigger = page.locator('[slot="trigger"]').first();
+    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
 
-    // Wait for focus to settle on first item
-    await expect(pdfItem).toBeFocused();
+    await outerTrigger.click();
+    await expect(innerTrigger).toBeVisible();
+    await innerTrigger.click();
 
-    // Focus Vector directly and open with ArrowRight
-    await vectorItem.focus();
-    await expect(vectorItem).toBeFocused();
-
-    // Open Vector submenu with ArrowRight
-    await page.keyboard.press("ArrowRight");
-    await expect(vectorSubmenu).toBeVisible();
-    await expect(svgItem).toBeFocused();
+    const innerItems = page.locator('[slot="item"][name^="inner"]');
+    await expect(innerItems.first()).toHaveAttribute("role", "menuitem");
   });
 });

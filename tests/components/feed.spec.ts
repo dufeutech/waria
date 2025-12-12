@@ -1,72 +1,92 @@
+/**
+ * w-feed - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Feed/article roles
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-setsize, aria-posinset
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent, testHomeEnd } from "../test-utils";
 
-test.describe("w-feed accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const FEED = `
+<w-feed label="News feed">
+  <article slot="item" name="1">
+    <h3>Article 1</h3>
+    <p>Content for article 1</p>
+  </article>
+  <article slot="item" name="2">
+    <h3>Article 2</h3>
+    <p>Content for article 2</p>
+  </article>
+  <article slot="item" name="3">
+    <h3>Article 3</h3>
+    <p>Content for article 3</p>
+  </article>
+</w-feed>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-feed", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/feed", { waitUntil: "domcontentloaded" });
+    await renderComponent(page, FEED, "w-feed");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-feed" });
   });
 
-  test("should have correct ARIA role", async ({ page }) => {
+  test('has role="feed"', async ({ page }) => {
     const feed = page.locator("w-feed");
-
     await expect(feed).toHaveAttribute("role", "feed");
-    await expect(feed).toHaveAttribute("aria-label");
   });
 
-  test("should have article role on items", async ({ page }) => {
-    const items = page.locator('w-feed [slot="item"]');
-
-    if ((await items.count()) > 0) {
-      await expect(items.first()).toHaveAttribute("role", "article");
-    }
+  test("has aria-label", async ({ page }) => {
+    const feed = page.locator("w-feed");
+    await expect(feed).toHaveAttribute("aria-label", "News feed");
   });
 
-  test("should have aria-setsize and aria-posinset on items", async ({
-    page,
-  }) => {
-    const items = page.locator('w-feed [slot="item"]');
+  test('items have role="article"', async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    await expect(items.first()).toHaveAttribute("role", "article");
+  });
+
+  test("items have aria-setsize and aria-posinset", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
     const count = await items.count();
 
-    if (count > 0) {
-      await expect(items.first()).toHaveAttribute(
-        "aria-setsize",
-        String(count)
-      );
-      await expect(items.first()).toHaveAttribute("aria-posinset", "1");
-    }
+    await expect(items.first()).toHaveAttribute("aria-setsize", String(count));
+    await expect(items.first()).toHaveAttribute("aria-posinset", "1");
   });
 
-  test("should support keyboard navigation", async ({ page }) => {
-    const items = page.locator('w-feed [slot="item"]');
+  test("ArrowDown navigates to next item", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
 
-    if ((await items.count()) > 1) {
-      await items.first().focus();
-      await expect(items.first()).toBeFocused();
+    await items.first().focus();
+    await page.keyboard.press("ArrowDown");
 
-      await page.keyboard.press("ArrowDown");
-      await expect(items.nth(1)).toBeFocused();
-
-      await page.keyboard.press("ArrowUp");
-      await expect(items.first()).toBeFocused();
-    }
+    await expect(items.nth(1)).toBeFocused();
   });
 
-  test("should support Home and End keys", async ({ page }) => {
-    const items = page.locator('w-feed [slot="item"]');
-    const count = await items.count();
+  test("ArrowUp navigates to previous item", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
 
-    if (count > 1) {
-      await items.first().focus();
+    await items.nth(1).focus();
+    await page.keyboard.press("ArrowUp");
 
-      await page.keyboard.press("End");
-      await expect(items.last()).toBeFocused();
+    await expect(items.first()).toBeFocused();
+  });
 
-      await page.keyboard.press("Home");
-      await expect(items.first()).toBeFocused();
-    }
+  test("Home/End keys navigate to first/last", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    await testHomeEnd(page, items);
   });
 });

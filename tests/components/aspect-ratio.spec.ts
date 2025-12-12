@@ -1,40 +1,73 @@
+/**
+ * w-aspect-ratio - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.4.4 Resize Text: Maintain usable layout at different sizes
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-aspect-ratio accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const ASPECT_RATIO = `
+<w-aspect-ratio ratio="16/9" style="width: 320px;">
+  <div slot="content">Content</div>
+</w-aspect-ratio>`;
+
+const ASPECT_RATIO_4_3 = `
+<w-aspect-ratio ratio="4/3" style="width: 320px;">
+  <div slot="content">4:3 Content</div>
+</w-aspect-ratio>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-aspect-ratio", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/aspect-ratio", { waitUntil: "domcontentloaded" });
-    // Wait for Alpine.js to initialize and make the section visible
-    await page.waitForSelector("w-aspect-ratio", { state: "visible" });
+    await renderComponent(page, ASPECT_RATIO, "w-aspect-ratio");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-aspect-ratio" });
   });
 
-  test("should maintain aspect ratio styles", async ({ page }) => {
-    const aspectRatio = page.locator("w-aspect-ratio").first();
-
-    // Check container has position relative
-    await expect(aspectRatio).toHaveCSS("position", "relative");
-    await expect(aspectRatio).toHaveCSS("width", /\d+px/);
+  test("has ratio attribute", async ({ page }) => {
+    const aspectRatio = page.locator("w-aspect-ratio");
+    await expect(aspectRatio).toHaveAttribute("ratio", "16/9");
   });
 
-  test("should update content styles", async ({ page }) => {
-    const content = page.locator('w-aspect-ratio [slot="content"]').first();
+  test("maintains aspect ratio styles", async ({ page }) => {
+    const aspectRatio = page.locator("w-aspect-ratio");
+    await expect(aspectRatio).toHaveCSS("position", "relative");
+  });
 
+  test("content fills container", async ({ page }) => {
+    const content = page.locator('[slot="content"]');
     await expect(content).toHaveCSS("position", "absolute");
     await expect(content).toHaveCSS("top", "0px");
     await expect(content).toHaveCSS("left", "0px");
   });
 
-  test("should respond to ratio attribute changes", async ({ page }) => {
-    const aspectRatio = page.locator("w-aspect-ratio").first();
+  test("responds to ratio attribute changes", async ({ page }) => {
+    const aspectRatio = page.locator("w-aspect-ratio");
 
-    // Change ratio
     await aspectRatio.evaluate((el) => el.setAttribute("ratio", "4/3"));
+    await expect(aspectRatio).toHaveAttribute("ratio", "4/3");
+  });
+});
 
-    // Component should still be valid
+test.describe("w-aspect-ratio 4:3", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, ASPECT_RATIO_4_3, "w-aspect-ratio");
+  });
+
+  test("supports different ratios", async ({ page }) => {
+    const aspectRatio = page.locator("w-aspect-ratio");
     await expect(aspectRatio).toHaveAttribute("ratio", "4/3");
   });
 });

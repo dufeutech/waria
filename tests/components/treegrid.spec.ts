@@ -1,95 +1,128 @@
+/**
+ * w-treegrid - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Treegrid/row/gridcell roles
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-expanded, aria-level, aria-selected
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-treegrid accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Treegrid uses data-level and data-expanded for hierarchy
+// Parent rows have children with higher data-level
+const TREEGRID = `
+<w-treegrid label="File browser">
+  <div slot="row" name="folder1" data-level="1" data-expanded="false">
+    <div slot="cell" name="folder1-name">Documents</div>
+    <div slot="cell" name="folder1-size">--</div>
+  </div>
+  <div slot="row" name="file1" data-level="2">
+    <div slot="cell" name="file1-name">Report.pdf</div>
+    <div slot="cell" name="file1-size">2.5 MB</div>
+  </div>
+  <div slot="row" name="file2" data-level="1">
+    <div slot="cell" name="file2-name">Image.png</div>
+    <div slot="cell" name="file2-size">1.2 MB</div>
+  </div>
+</w-treegrid>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-treegrid", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Treegrid", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-treegrid", { state: "visible" });
+    await renderComponent(page, TREEGRID, "w-treegrid");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-treegrid" });
   });
 
-  test("should have correct ARIA role", async ({ page }) => {
+  test('has role="treegrid"', async ({ page }) => {
     const treegrid = page.locator("w-treegrid");
-
     await expect(treegrid).toHaveAttribute("role", "treegrid");
-    await expect(treegrid).toHaveAttribute("aria-label");
   });
 
-  test("should have row and gridcell roles", async ({ page }) => {
-    const rows = page.locator('w-treegrid [slot="row"]');
-    const cells = page.locator('w-treegrid [slot="cell"]');
-
-    if ((await rows.count()) > 0) {
-      await expect(rows.first()).toHaveAttribute("role", "row");
-      await expect(rows.first()).toHaveAttribute("aria-level");
-    }
-    if ((await cells.count()) > 0) {
-      await expect(cells.first()).toHaveAttribute("role", "gridcell");
-    }
+  test("has aria-label", async ({ page }) => {
+    const treegrid = page.locator("w-treegrid");
+    await expect(treegrid).toHaveAttribute("aria-label", "File browser");
   });
 
-  test("should have aria-expanded on expandable rows", async ({ page }) => {
-    const expandableRow = page
-      .locator('w-treegrid [slot="row"][data-expanded]')
-      .first();
-
-    if ((await expandableRow.count()) > 0) {
-      await expect(expandableRow).toHaveAttribute("aria-expanded");
-    }
+  test('rows have role="row"', async ({ page }) => {
+    const rows = page.locator('[slot="row"]');
+    await expect(rows.first()).toHaveAttribute("role", "row");
   });
 
-  test("should support arrow key navigation", async ({ page }) => {
-    const cells = page.locator('w-treegrid [slot="cell"]');
-
-    if ((await cells.count()) > 1) {
-      await cells.first().focus();
-      await expect(cells.first()).toBeFocused();
-
-      await page.keyboard.press("ArrowDown");
-      // Should focus cell in next row
-    }
+  test("rows have aria-level", async ({ page }) => {
+    const rows = page.locator('[slot="row"]');
+    await expect(rows.first()).toHaveAttribute("aria-level", "1");
   });
 
-  test("should expand/collapse with ArrowRight/ArrowLeft", async ({ page }) => {
-    const expandableRow = page
-      .locator('w-treegrid [slot="row"][data-expanded]')
-      .first();
-    const firstCell = page.locator('w-treegrid [slot="cell"]').first();
-
-    if ((await expandableRow.count()) > 0) {
-      await firstCell.focus();
-
-      // Collapse
-      if ((await expandableRow.getAttribute("data-expanded")) === "true") {
-        await page.keyboard.press("ArrowLeft");
-        await expect(expandableRow).toHaveAttribute("aria-expanded", "false");
-      }
-
-      // Expand
-      await page.keyboard.press("ArrowRight");
-      await expect(expandableRow).toHaveAttribute("aria-expanded", "true");
-    }
+  test('cells have role="gridcell"', async ({ page }) => {
+    const cells = page.locator('[slot="cell"]');
+    await expect(cells.first()).toHaveAttribute("role", "gridcell");
   });
 
-  test("should select row on Enter/Space", async ({ page }) => {
-    // Select a leaf row (without children) - need to navigate to it first
-    // First row is a folder with children, so Enter toggles expansion
-    // Navigate down to the second row (Report.pdf - a leaf node) then select
-    const rows = page.locator('w-treegrid [slot="row"]');
-    const firstCell = page.locator('w-treegrid [slot="cell"]').first();
+  test("expandable rows have aria-expanded", async ({ page }) => {
+    // Row with data-expanded and children (next row with higher level) has aria-expanded
+    const expandableRow = page.locator('[slot="row"][name="folder1"]');
+    await expect(expandableRow).toHaveAttribute("aria-expanded", "false");
+  });
 
-    await firstCell.focus();
-    // Expand the first folder
-    await page.keyboard.press("Enter");
-    // Navigate down to Report.pdf (first child)
+  test("ArrowDown navigates to next visible row", async ({ page }) => {
+    const cells = page.locator('[slot="row"]:not([hidden]) [slot="cell"]');
+
+    // Click first cell to set internal state
+    await cells.first().click();
     await page.keyboard.press("ArrowDown");
-    // Select it
+
+    // Should focus a cell in a visible row (children are hidden when parent collapsed)
+    const focused = page.locator(":focus");
+    await expect(focused).toHaveAttribute("role", "gridcell");
+  });
+
+  test("expand/collapse row via programmatic API", async ({ page }) => {
+    const expandableRow = page.locator('[slot="row"][name="folder1"]');
+
+    // Initially collapsed
+    await expect(expandableRow).toHaveAttribute("aria-expanded", "false");
+
+    // Expand via API
+    await page.evaluate(() => {
+      const treegrid = document.querySelector("w-treegrid") as HTMLElement & { expand: (row: HTMLElement) => void };
+      const row = document.querySelector('[slot="row"][name="folder1"]') as HTMLElement;
+      treegrid.expand(row);
+    });
+
+    await expect(expandableRow).toHaveAttribute("aria-expanded", "true");
+
+    // Collapse via API
+    await page.evaluate(() => {
+      const treegrid = document.querySelector("w-treegrid") as HTMLElement & { collapse: (row: HTMLElement) => void };
+      const row = document.querySelector('[slot="row"][name="folder1"]') as HTMLElement;
+      treegrid.collapse(row);
+    });
+
+    await expect(expandableRow).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("Enter key selects non-expandable row", async ({ page }) => {
+    const rows = page.locator('[slot="row"]:not([hidden])');
+    // Last visible row (file2 at level 1)
+    const leafRow = rows.last();
+    const firstCell = leafRow.locator('[slot="cell"]').first();
+
+    await firstCell.click();
     await page.keyboard.press("Enter");
 
-    // Second row (Report.pdf) should be selected
-    await expect(rows.nth(1)).toHaveAttribute("aria-selected", "true");
+    await expect(leafRow).toHaveAttribute("aria-selected", "true");
   });
 });

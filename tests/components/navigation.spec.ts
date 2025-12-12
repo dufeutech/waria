@@ -1,107 +1,108 @@
+/**
+ * w-nav - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Navigation role
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 2.4.8 Location: aria-current for current page
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
-import { gotoComponent, SLOT, KEY } from "../test-utils";
+import { renderComponent, testArrowNav, testHomeEnd } from "../test-utils";
 
-// Selector for the demo nav (not the router nav)
-const DEMO_NAV = 'w-nav[aria-label="Main navigation"]';
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
 
-test.describe("w-nav accessibility", () => {
+const NAVIGATION = `
+<w-nav label="Main navigation" value="/home">
+  <a slot="item" data-value="/home" href="/home">Home</a>
+  <a slot="item" data-value="/about" href="/about">About</a>
+  <a slot="item" data-value="/contact" href="/contact">Contact</a>
+</w-nav>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-nav", () => {
   test.beforeEach(async ({ page }) => {
-    await gotoComponent(page, "Navigation");
-    // Wait for demo nav items to be visible (Alpine.js section)
-    await page.waitForSelector(`${DEMO_NAV} ${SLOT.item}`, {
-      state: "visible",
-      timeout: 10000,
-    });
+    await renderComponent(page, NAVIGATION, "w-nav");
   });
 
-  test("should have no axe violations", async ({ page }) => {
-    await checkA11y(page, { selector: DEMO_NAV });
+  test("axe accessibility scan", async ({ page }) => {
+    await checkA11y(page, { selector: "w-nav" });
   });
 
-  test("should have correct ARIA role and label", async ({ page }) => {
-    const nav = page.locator(DEMO_NAV);
-
+  test('has role="navigation"', async ({ page }) => {
+    const nav = page.locator("w-nav");
     await expect(nav).toHaveAttribute("role", "navigation");
+  });
+
+  test("has aria-label", async ({ page }) => {
+    const nav = page.locator("w-nav");
     await expect(nav).toHaveAttribute("aria-label", "Main navigation");
   });
 
-  test("should support keyboard navigation with arrow keys", async ({
-    page,
-  }) => {
-    const nav = page.locator(DEMO_NAV);
-    const items = nav.locator(SLOT.item);
-
-    await items.first().focus();
-    await expect(items.first()).toBeFocused();
-
-    await page.keyboard.press(KEY.ArrowRight);
-    await expect(items.nth(1)).toBeFocused();
-
-    await page.keyboard.press(KEY.ArrowLeft);
-    await expect(items.first()).toBeFocused();
+  test("arrow keys navigate items", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    await testArrowNav(page, items, { horizontal: true });
   });
 
-  test("should support Home and End keys", async ({ page }) => {
-    const nav = page.locator(DEMO_NAV);
-    const items = nav.locator(SLOT.item);
-    const itemCount = await items.count();
-
-    if (itemCount > 1) {
-      await items.first().focus();
-
-      await page.keyboard.press(KEY.End);
-      await expect(items.last()).toBeFocused();
-
-      await page.keyboard.press(KEY.Home);
-      await expect(items.first()).toBeFocused();
-    }
+  test("Home/End keys navigate to first/last", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    await testHomeEnd(page, items);
   });
 
-  test('should set aria-current="page" on active item', async ({ page }) => {
-    const nav = page.locator(DEMO_NAV);
-    const items = nav.locator(SLOT.item);
+  test('clicked item has aria-current="page"', async ({ page }) => {
+    // Click an item and verify it gets aria-current
+    const aboutItem = page.locator('[slot="item"][data-value="/about"]');
+    await aboutItem.click();
+    await expect(aboutItem).toHaveAttribute("aria-current", "page");
 
-    // First item in demo nav has href="/Navigation" which syncs with current URL
-    await expect(items.first()).toHaveAttribute("aria-current", "page");
-
-    // Other items should not have aria-current
-    const secondItem = items.nth(1);
-    const ariaCurrent = await secondItem.getAttribute("aria-current");
-    expect(ariaCurrent).toBeNull();
+    // Verify only one item has aria-current at a time
+    const homeItem = page.locator('[slot="item"][data-value="/home"]');
+    await expect(homeItem).not.toHaveAttribute("aria-current");
   });
 
-  test("should update aria-current on click", async ({ page }) => {
-    const nav = page.locator(DEMO_NAV);
-    const items = nav.locator(SLOT.item);
+  test('programmatic value sets aria-current="page"', async ({ page }) => {
+    // Setting value attribute should update aria-current
+    const nav = page.locator("w-nav");
+    const homeItem = page.locator('[slot="item"][data-value="/home"]');
 
-    // Click second item
-    await items.nth(1).click();
+    await nav.evaluate((el) => {
+      el.setAttribute("value", "/home");
+    });
 
-    // Value should update
+    await expect(homeItem).toHaveAttribute("aria-current", "page");
+  });
+
+  test("click updates selection", async ({ page }) => {
+    const nav = page.locator("w-nav");
+    const aboutItem = page.locator('[slot="item"][data-value="/about"]');
+
+    await aboutItem.click();
+
     const value = await nav.getAttribute("value");
-    expect(value).toBeTruthy();
+    expect(value).toBe("/about");
   });
 
-  test("should emit change event on selection", async ({ page }) => {
-    const nav = page.locator(DEMO_NAV);
-    const items = nav.locator(SLOT.item);
+  test("emits change event", async ({ page }) => {
+    const nav = page.locator("w-nav");
+    const aboutItem = page.locator('[slot="item"][data-value="/about"]');
 
     const changePromise = nav.evaluate((el) => {
       return new Promise<{ value: string }>((resolve) => {
-        el.addEventListener(
-          "change",
-          (e: Event) => {
-            resolve((e as CustomEvent).detail);
-          },
-          { once: true }
-        );
+        el.addEventListener("change", (e: Event) => {
+          resolve((e as CustomEvent).detail);
+        }, { once: true });
       });
     });
 
-    await items.nth(1).click();
+    await aboutItem.click();
 
     const detail = await changePromise;
-    expect(detail.value).toBeTruthy();
+    expect(detail.value).toBe("/about");
   });
 });

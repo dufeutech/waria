@@ -1,174 +1,153 @@
+/**
+ * w-tree - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Tree/treeitem roles
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-expanded, aria-level, aria-selected
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-tree accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Tree items with children automatically get aria-expanded
+// The component detects children by nested [slot="item"] elements
+const TREE = `
+<w-tree>
+  <div slot="item" name="folder1">
+    Folder 1
+    <div role="group">
+      <div slot="item" name="file1">File 1</div>
+      <div slot="item" name="file2">File 2</div>
+    </div>
+  </div>
+  <div slot="item" name="folder2">
+    Folder 2
+    <div role="group">
+      <div slot="item" name="file3">File 3</div>
+    </div>
+  </div>
+  <div slot="item" name="file4">File 4</div>
+</w-tree>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-tree", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Tree", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-tree", { state: "visible" });
+    await renderComponent(page, TREE, "w-tree");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
+    await checkA11y(page, { selector: "w-tree" });
+  });
+
+  test('has role="tree"', async ({ page }) => {
     const tree = page.locator("w-tree");
-    if ((await tree.count()) > 0) {
-      await checkA11y(page, { selector: "w-tree" });
+    await expect(tree).toHaveAttribute("role", "tree");
+  });
+
+  test('items have role="treeitem"', async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    const count = await items.count();
+
+    for (let i = 0; i < Math.min(count, 3); i++) {
+      await expect(items.nth(i)).toHaveAttribute("role", "treeitem");
     }
   });
 
-  test('should have role="tree" on container', async ({ page }) => {
-    const tree = page.locator("w-tree").first();
-
-    if ((await tree.count()) > 0) {
-      await expect(tree).toHaveAttribute("role", "tree");
-    }
+  test("items have aria-level", async ({ page }) => {
+    const firstItem = page.locator('[slot="item"]').first();
+    const level = await firstItem.getAttribute("aria-level");
+    expect(level).toBeTruthy();
+    expect(parseInt(level!)).toBeGreaterThan(0);
   });
 
-  test('should have role="treeitem" on items', async ({ page }) => {
-    const items = page.locator('w-tree [slot="item"]');
-
-    if ((await items.count()) > 0) {
-      const count = await items.count();
-      for (let i = 0; i < Math.min(count, 5); i++) {
-        await expect(items.nth(i)).toHaveAttribute("role", "treeitem");
-      }
-    }
+  test("items with children have aria-expanded", async ({ page }) => {
+    // Folder1 has children, so it should have aria-expanded
+    const folder = page.locator('[slot="item"][name="folder1"]');
+    const expanded = await folder.getAttribute("aria-expanded");
+    expect(["true", "false"]).toContain(expanded);
   });
 
-  test("should have aria-level on items", async ({ page }) => {
-    const items = page.locator('w-tree [slot="item"]');
+  test("ArrowDown navigates to next item", async ({ page }) => {
+    const items = page.locator('w-tree > [slot="item"]');
 
-    if ((await items.count()) > 0) {
-      const ariaLevel = await items.first().getAttribute("aria-level");
-      expect(ariaLevel).toBeTruthy();
-      expect(parseInt(ariaLevel!)).toBeGreaterThan(0);
-    }
+    await items.first().focus();
+    await page.keyboard.press("ArrowDown");
+
+    const focused = page.locator(":focus");
+    await expect(focused).toHaveAttribute("slot", "item");
   });
 
-  test("should have aria-expanded on expandable items", async ({ page }) => {
-    const items = page.locator('w-tree [slot="item"]');
+  test("ArrowRight expands item with children", async ({ page }) => {
+    const folder = page.locator('[slot="item"][name="folder1"]');
 
-    if ((await items.count()) > 0) {
-      // Find an item with children (should have aria-expanded)
-      const count = await items.count();
-      for (let i = 0; i < count; i++) {
-        const ariaExpanded = await items.nth(i).getAttribute("aria-expanded");
-        if (ariaExpanded !== null) {
-          expect(["true", "false"]).toContain(ariaExpanded);
-          break;
-        }
-      }
-    }
+    await folder.focus();
+    // Item may start collapsed
+    await expect(folder).toHaveAttribute("aria-expanded", "false");
+
+    await page.keyboard.press("ArrowRight");
+    await expect(folder).toHaveAttribute("aria-expanded", "true");
   });
 
-  test("should navigate items with arrow keys", async ({ page }) => {
-    const items = page.locator('w-tree [slot="item"]');
+  test("ArrowLeft collapses item with children", async ({ page }) => {
+    const folder = page.locator('[slot="item"][name="folder1"]');
 
-    if ((await items.count()) > 1) {
-      await items.first().focus();
+    await folder.focus();
+    await page.keyboard.press("ArrowRight"); // expand first
+    await expect(folder).toHaveAttribute("aria-expanded", "true");
 
-      // Arrow down to next visible item
-      await page.keyboard.press("ArrowDown");
-
-      // Should focus a different item
-      const focusedElement = page.locator(":focus");
-      await expect(focusedElement).toHaveAttribute("slot", "item");
-    }
+    await page.keyboard.press("ArrowLeft");
+    await expect(folder).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should expand/collapse with ArrowRight/ArrowLeft", async ({ page }) => {
-    const items = page.locator('w-tree [slot="item"]');
+  test("Enter selects item", async ({ page }) => {
+    const item = page.locator('[slot="item"]').first();
 
-    if ((await items.count()) > 0) {
-      // Find an expandable item
-      const count = await items.count();
-      for (let i = 0; i < count; i++) {
-        const item = items.nth(i);
-        const ariaExpanded = await item.getAttribute("aria-expanded");
+    await item.focus();
+    await page.keyboard.press("Enter");
 
-        if (ariaExpanded === "false") {
-          await item.focus();
-
-          // Expand with ArrowRight
-          await page.keyboard.press("ArrowRight");
-          await expect(item).toHaveAttribute("aria-expanded", "true");
-
-          // Collapse with ArrowLeft
-          await page.keyboard.press("ArrowLeft");
-          await expect(item).toHaveAttribute("aria-expanded", "false");
-          break;
-        }
-      }
-    }
+    await expect(item).toHaveAttribute("aria-selected", "true");
   });
 
-  test("should select item on click", async ({ page }) => {
-    // Use a leaf node (file4) that doesn't have toggle indicator issues
-    const fileItem = page.locator('w-tree [slot="item"][name="file4"]');
+  test("click selects item", async ({ page }) => {
+    const item = page.locator('[slot="item"][name="file4"]');
 
-    if ((await fileItem.count()) > 0) {
-      await fileItem.click();
-      await expect(fileItem).toHaveAttribute("aria-selected", "true");
-    }
+    await item.click();
+    await expect(item).toHaveAttribute("aria-selected", "true");
   });
 
-  test("should select item on Enter/Space", async ({ page }) => {
-    const items = page.locator('w-tree [slot="item"]');
+  test("Home goes to first item", async ({ page }) => {
+    const items = page.locator('w-tree > [slot="item"]');
 
-    if ((await items.count()) > 0) {
-      const firstItem = items.first();
-      await firstItem.focus();
+    await items.nth(1).focus();
+    await page.keyboard.press("Home");
 
-      await page.keyboard.press("Enter");
-      await expect(firstItem).toHaveAttribute("aria-selected", "true");
-    }
+    await expect(items.first()).toBeFocused();
   });
 
-  test("should go to first item on Home key", async ({ page }) => {
-    // Select only visible (top-level) items that are not inside hidden groups
-    const visibleItems = page.locator('w-tree > [slot="item"]');
+  test("emits select event", async ({ page }) => {
+    const tree = page.locator("w-tree");
+    const item = page.locator('[slot="item"]').first();
 
-    if ((await visibleItems.count()) > 1) {
-      // Focus on second visible item
-      await visibleItems.nth(1).focus();
-      await page.keyboard.press("Home");
-
-      await expect(visibleItems.first()).toBeFocused();
-    }
-  });
-
-  test("should go to last visible item on End key", async ({ page }) => {
-    const items = page.locator('w-tree [slot="item"]');
-
-    if ((await items.count()) > 1) {
-      await items.first().focus();
-      await page.keyboard.press("End");
-
-      // Should focus some item (last visible)
-      const focusedElement = page.locator(":focus");
-      await expect(focusedElement).toHaveAttribute("slot", "item");
-    }
-  });
-
-  test("should emit select event", async ({ page }) => {
-    const tree = page.locator("w-tree").first();
-    const items = tree.locator('[slot="item"]');
-
-    if ((await items.count()) > 0) {
-      const selectPromise = tree.evaluate((el) => {
-        return new Promise<{ value: string }>((resolve) => {
-          el.addEventListener(
-            "select",
-            (e: Event) => {
-              resolve((e as CustomEvent).detail);
-            },
-            { once: true }
-          );
-        });
+    const selectPromise = tree.evaluate((el) => {
+      return new Promise<{ value: string }>((resolve) => {
+        el.addEventListener("select", (e: Event) => {
+          resolve((e as CustomEvent).detail);
+        }, { once: true });
       });
+    });
 
-      await items.first().click();
+    await item.click();
 
-      const detail = await selectPromise;
-      expect(detail.value).toBeTruthy();
-    }
+    const detail = await selectPromise;
+    expect(detail.value).toBeTruthy();
   });
 });

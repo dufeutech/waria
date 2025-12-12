@@ -4,21 +4,23 @@ sidebar_position: 3
 
 # Tabs
 
-Tabbed interface with automatic or manual activation.
+Tabbed interface with automatic or manual activation. Supports nested tabs without conflicts.
 
 ## Usage
 
 ```html
 <w-tabs value="tab1">
-  <div slot="list">
+  <div slot="tabs">
     <button slot="tab" name="tab1">Tab 1</button>
     <button slot="tab" name="tab2">Tab 2</button>
     <button slot="tab" name="tab3">Tab 3</button>
   </div>
 
-  <div slot="panel" name="tab1">Content for Tab 1</div>
-  <div slot="panel" name="tab2">Content for Tab 2</div>
-  <div slot="panel" name="tab3">Content for Tab 3</div>
+  <div slot="views">
+    <div slot="view" name="tab1">Content for Tab 1</div>
+    <div slot="view" name="tab2">Content for Tab 2</div>
+    <div slot="view" name="tab3">Content for Tab 3</div>
+  </div>
 </w-tabs>
 ```
 
@@ -34,9 +36,10 @@ Tabbed interface with automatic or manual activation.
 
 | Slot | Element | Description |
 |------|---------|-------------|
-| `list` | Container | Wrapper for tab buttons |
-| `tab` | Button | Tab button (requires `name` attribute) |
-| `panel` | Any | Tab panel content (requires matching `name`) |
+| `tabs` | Container | Wrapper for tab buttons (becomes tablist) |
+| `tab` | Button | Tab button inside `slot="tabs"` (requires `name` attribute) |
+| `views` | Container | Wrapper for all tab panels |
+| `view` | Any | Tab view content inside `slot="views"` (requires matching `name`) |
 
 ## Events
 
@@ -69,15 +72,17 @@ Tabbed interface with automatic or manual activation.
 
 ```html
 <w-tabs orientation="vertical" value="settings">
-  <div slot="list">
+  <div slot="tabs">
     <button slot="tab" name="profile">Profile</button>
     <button slot="tab" name="settings">Settings</button>
     <button slot="tab" name="notifications">Notifications</button>
   </div>
 
-  <div slot="panel" name="profile">Profile settings...</div>
-  <div slot="panel" name="settings">General settings...</div>
-  <div slot="panel" name="notifications">Notification preferences...</div>
+  <div slot="views">
+    <div slot="view" name="profile">Profile settings...</div>
+    <div slot="view" name="settings">General settings...</div>
+    <div slot="view" name="notifications">Notification preferences...</div>
+  </div>
 </w-tabs>
 ```
 
@@ -87,13 +92,50 @@ Focus moves but tab doesn't activate until Enter/Space:
 
 ```html
 <w-tabs activation="manual" value="tab1">
-  <!-- Tabs only activate on Enter/Space, not arrow keys -->
+  <div slot="tabs">
+    <button slot="tab" name="tab1">Tab 1</button>
+    <button slot="tab" name="tab2">Tab 2</button>
+  </div>
+  <div slot="views">
+    <div slot="view" name="tab1">Content 1</div>
+    <div slot="view" name="tab2">Content 2</div>
+  </div>
+</w-tabs>
+```
+
+### Nested Tabs
+
+Tabs can be nested without conflicts. Each `w-tabs` component only manages the tabs and panels within its own `slot="tabs"` and `slot="views"` containers:
+
+```html
+<w-tabs value="outer1">
+  <div slot="tabs">
+    <button slot="tab" name="outer1">Outer 1</button>
+    <button slot="tab" name="outer2">Outer 2</button>
+  </div>
+
+  <div slot="views">
+    <div slot="view" name="outer1">
+      <!-- Nested tabs work independently -->
+      <w-tabs value="inner1">
+        <div slot="tabs">
+          <button slot="tab" name="inner1">Inner A</button>
+          <button slot="tab" name="inner2">Inner B</button>
+        </div>
+        <div slot="views">
+          <div slot="view" name="inner1">Inner content A</div>
+          <div slot="view" name="inner2">Inner content B</div>
+        </div>
+      </w-tabs>
+    </div>
+    <div slot="view" name="outer2">Outer content 2</div>
+  </div>
 </w-tabs>
 ```
 
 ## Accessibility
 
-- Tab list has `role="tablist"` with `aria-orientation`
+- Tab container has `role="tablist"` with `aria-orientation`
 - Tabs have `role="tab"` with `aria-selected`
 - Panels have `role="tabpanel"` with `aria-labelledby`
 - `aria-controls` links tabs to their panels

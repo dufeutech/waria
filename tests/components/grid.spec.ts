@@ -1,67 +1,104 @@
+/**
+ * w-grid - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Grid/row/gridcell roles
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-selected state
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-grid accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const GRID = `
+<w-grid label="Data grid">
+  <div slot="row" name="1">
+    <div slot="cell" name="1-1">Cell 1-1</div>
+    <div slot="cell" name="1-2">Cell 1-2</div>
+    <div slot="cell" name="1-3">Cell 1-3</div>
+  </div>
+  <div slot="row" name="2">
+    <div slot="cell" name="2-1">Cell 2-1</div>
+    <div slot="cell" name="2-2">Cell 2-2</div>
+    <div slot="cell" name="2-3">Cell 2-3</div>
+  </div>
+</w-grid>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-grid", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/grid", { waitUntil: "domcontentloaded" });
+    await renderComponent(page, GRID, "w-grid");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-grid" });
   });
 
-  test("should have correct ARIA role", async ({ page }) => {
+  test('has role="grid"', async ({ page }) => {
     const grid = page.locator("w-grid");
-
     await expect(grid).toHaveAttribute("role", "grid");
-    await expect(grid).toHaveAttribute("aria-label");
   });
 
-  test("should have row and gridcell roles", async ({ page }) => {
-    const rows = page.locator('w-grid [slot="row"]');
-    const cells = page.locator('w-grid [slot="cell"]');
-
-    if ((await rows.count()) > 0) {
-      await expect(rows.first()).toHaveAttribute("role", "row");
-    }
-    if ((await cells.count()) > 0) {
-      await expect(cells.first()).toHaveAttribute("role", "gridcell");
-    }
+  test("has aria-label", async ({ page }) => {
+    const grid = page.locator("w-grid");
+    await expect(grid).toHaveAttribute("aria-label", "Data grid");
   });
 
-  test("should support arrow key navigation", async ({ page }) => {
-    const cells = page.locator('w-grid [slot="cell"]');
-
-    if ((await cells.count()) > 1) {
-      await cells.first().focus();
-      await expect(cells.first()).toBeFocused();
-
-      await page.keyboard.press("ArrowRight");
-      await expect(cells.nth(1)).toBeFocused();
-
-      await page.keyboard.press("ArrowLeft");
-      await expect(cells.first()).toBeFocused();
-    }
+  test('rows have role="row"', async ({ page }) => {
+    const rows = page.locator('[slot="row"]');
+    await expect(rows.first()).toHaveAttribute("role", "row");
   });
 
-  test("should support Home and End keys", async ({ page }) => {
-    const cells = page.locator('w-grid [slot="cell"]');
-
-    if ((await cells.count()) > 1) {
-      await cells.first().focus();
-
-      await page.keyboard.press("End");
-      // Should be at end of row
-
-      await page.keyboard.press("Home");
-      await expect(cells.first()).toBeFocused();
-    }
+  test('cells have role="gridcell"', async ({ page }) => {
+    const cells = page.locator('[slot="cell"]');
+    await expect(cells.first()).toHaveAttribute("role", "gridcell");
   });
 
-  test("should select cell on Enter/Space", async ({ page }) => {
-    const cell = page.locator('w-grid [slot="cell"]').first();
+  test("ArrowRight navigates to next cell", async ({ page }) => {
+    const cells = page.locator('[slot="cell"]');
 
-    await cell.focus();
+    await cells.first().focus();
+    await page.keyboard.press("ArrowRight");
+
+    await expect(cells.nth(1)).toBeFocused();
+  });
+
+  test("ArrowLeft navigates to previous cell", async ({ page }) => {
+    const cells = page.locator('[slot="cell"]');
+
+    // First click on cell to set internal index
+    await cells.nth(1).click();
+    await page.keyboard.press("ArrowLeft");
+
+    await expect(cells.first()).toBeFocused();
+  });
+
+  test("Home/End keys navigate to first/last cell in row", async ({ page }) => {
+    const cells = page.locator('[slot="cell"]');
+
+    // Click first cell to set internal index
+    await cells.first().click();
+    await page.keyboard.press("End");
+
+    // Third cell (last in row)
+    await expect(cells.nth(2)).toBeFocused();
+
+    await page.keyboard.press("Home");
+    await expect(cells.first()).toBeFocused();
+  });
+
+  test("Enter key selects cell", async ({ page }) => {
+    const cell = page.locator('[slot="cell"]').first();
+
+    await cell.click();
     await page.keyboard.press("Enter");
 
     await expect(cell).toHaveAttribute("aria-selected", "true");

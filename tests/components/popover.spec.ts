@@ -1,128 +1,121 @@
+/**
+ * w-popover - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper dialog role
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 2.1.2 No Keyboard Trap: Escape closes popover
+ * - 4.1.2 Name, Role, Value: Proper ARIA states
+ */
+
 import { test, expect, Page } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-// Helper to get visible popover content (works whether portaled or not)
-function getVisiblePopoverContent(page: Page) {
-  return page.locator('[slot="content"][role="dialog"]:not([hidden])');
-}
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
 
-test.describe("w-popover accessibility", () => {
+const POPOVER = `
+<w-popover>
+  <button slot="trigger">Open Popover</button>
+  <div slot="content" label="Popover content">
+    <h4>Popover Title</h4>
+    <p>This is popover content.</p>
+  </div>
+</w-popover>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Helpers
+// ═══════════════════════════════════════════════════════════════════════════
+
+const getVisiblePopoverContent = (page: Page) =>
+  page.locator('[slot="content"][role="dialog"]:not([hidden])');
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-popover", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Popover", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-popover", { state: "visible" });
+    await renderComponent(page, POPOVER, "w-popover");
   });
 
-  test("should have no axe violations when closed", async ({ page }) => {
-    const popover = page.locator("w-popover");
-    if ((await popover.count()) > 0) {
-      await checkA11y(page, { selector: "w-popover" });
-    }
+  test("axe accessibility scan (closed)", async ({ page }) => {
+    await checkA11y(page, { selector: "w-popover" });
   });
 
-  test("should have aria-haspopup on trigger", async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
-
-    if ((await trigger.count()) > 0) {
-      await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
-    }
+  test("trigger has aria-haspopup", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
+    await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
   });
 
-  test("should have aria-expanded on trigger", async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
-
-    if ((await trigger.count()) > 0) {
-      await expect(trigger).toHaveAttribute("aria-expanded", "false");
-    }
+  test("trigger has aria-expanded false when closed", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should open popover on trigger click", async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
+  test("click opens popover", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.click();
-      await expect(getVisiblePopoverContent(page)).toBeVisible();
-      await expect(trigger).toHaveAttribute("aria-expanded", "true");
-    }
+    await trigger.click();
+    await expect(getVisiblePopoverContent(page)).toBeVisible();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
-  test('should have role="dialog" on content', async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
+  test('content has role="dialog"', async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.click();
-      await expect(getVisiblePopoverContent(page)).toHaveAttribute(
-        "role",
-        "dialog"
-      );
-    }
+    await trigger.click();
+    await expect(getVisiblePopoverContent(page)).toHaveAttribute("role", "dialog");
   });
 
-  test("should close on Escape key", async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
+  test("Escape key closes popover", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.click();
-      await expect(getVisiblePopoverContent(page)).toBeVisible();
+    await trigger.click();
+    await expect(getVisiblePopoverContent(page)).toBeVisible();
 
-      await page.keyboard.press("Escape");
-      // After close, content is back in w-popover and hidden
-      await expect(
-        page.locator('w-popover [slot="content"]').first()
-      ).toBeHidden();
-    }
+    await page.keyboard.press("Escape");
+    await expect(page.locator('w-popover [slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should close on outside click", async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
+  test("outside click closes popover", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.click();
-      await expect(getVisiblePopoverContent(page)).toBeVisible();
+    await trigger.click();
+    await expect(getVisiblePopoverContent(page)).toBeVisible();
 
-      // Click outside
-      await page.click("body", { position: { x: 10, y: 10 } });
-      // After close, content is back in w-popover and hidden
-      await expect(
-        page.locator('w-popover [slot="content"]').first()
-      ).toBeHidden();
-    }
+    await page.click("body", { position: { x: 10, y: 10 } });
+    await expect(page.locator('w-popover [slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should return focus to trigger on close", async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
+  test("focus returns to trigger on close", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.click();
-      await expect(getVisiblePopoverContent(page)).toBeVisible();
+    await trigger.click();
+    await expect(getVisiblePopoverContent(page)).toBeVisible();
 
-      await page.keyboard.press("Escape");
-      await expect(trigger).toBeFocused();
-    }
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
   });
 
-  test("should have aria-controls linking trigger to content", async ({
-    page,
-  }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
+  test("aria-controls links trigger to content", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.click();
-      const content = getVisiblePopoverContent(page);
-      await expect(content).toBeVisible();
+    await trigger.click();
+    const content = getVisiblePopoverContent(page);
+    await expect(content).toBeVisible();
 
-      const ariaControls = await trigger.getAttribute("aria-controls");
-      const contentId = await content.getAttribute("id");
-
-      expect(ariaControls).toBe(contentId);
-    }
+    const ariaControls = await trigger.getAttribute("aria-controls");
+    const contentId = await content.getAttribute("id");
+    expect(ariaControls).toBe(contentId);
   });
 
-  test("should have no axe violations when open", async ({ page }) => {
-    const trigger = page.locator('w-popover [slot="trigger"]').first();
-
-    if ((await trigger.count()) > 0) {
-      await trigger.click();
-      await checkA11y(page);
-    }
+  test("axe accessibility scan (open)", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
+    await trigger.click();
+    await expect(getVisiblePopoverContent(page)).toBeVisible();
+    await checkA11y(page);
   });
 });

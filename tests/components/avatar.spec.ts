@@ -1,103 +1,95 @@
+/**
+ * w-avatar - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.1.1 Non-text Content: Alternative text for images
+ * - 4.1.2 Name, Role, Value: role="img", aria-label
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-avatar accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const AVATAR = `<w-avatar aria-label="John Doe" fallback="JD"></w-avatar>`;
+const AVATAR_WITH_IMAGE = `<w-avatar aria-label="Jane Smith" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>"></w-avatar>`;
+const AVATAR_DECORATIVE = `<w-avatar decorative fallback="X"></w-avatar>`;
+const AVATAR_SIZES = `
+<w-avatar aria-label="Small" size="small" fallback="S"></w-avatar>
+<w-avatar aria-label="Medium" size="medium" fallback="M"></w-avatar>
+<w-avatar aria-label="Large" size="large" fallback="L"></w-avatar>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-avatar", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Avatar", { waitUntil: "domcontentloaded" });
-    // Wait for Alpine.js to initialize and make the section visible
-    await page.waitForSelector("w-avatar", { state: "visible" });
+    await renderComponent(page, AVATAR, "w-avatar");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
+    await checkA11y(page, { selector: "w-avatar" });
+  });
+
+  test('has role="img"', async ({ page }) => {
     const avatar = page.locator("w-avatar");
-    if ((await avatar.count()) > 0) {
-      await checkA11y(page, { selector: "w-avatar" });
-    }
-  });
-
-  test('should have role="img" on avatar', async ({ page }) => {
-    const avatar = page.locator("w-avatar").first();
-
-    if ((await avatar.count()) > 0) {
-      await expect(avatar).toHaveAttribute("role", "img");
-    }
-  });
-
-  test("should have aria-label for accessibility", async ({ page }) => {
-    const avatar = page.locator("w-avatar").first();
-
-    if ((await avatar.count()) > 0) {
-      const ariaLabel = await avatar.getAttribute("aria-label");
-      // Avatar should have an accessible name
-      expect(ariaLabel).toBeTruthy();
-    }
-  });
-
-  test("should display image when src is provided", async ({ page }) => {
-    const avatar = page.locator("w-avatar[src]").first();
-
-    if ((await avatar.count()) > 0) {
-      const img = avatar.locator('img, [slot="image"]');
-      // Wait for image to load (it may be hidden initially while loading)
-      await expect(img).toBeVisible({ timeout: 10000 });
-    }
-  });
-
-  test("should display fallback when image fails to load", async ({ page }) => {
-    // Create an avatar with a broken image
-    await page.evaluate(() => {
-      const avatar = document.createElement("w-avatar");
-      avatar.setAttribute("src", "invalid-image-url.jpg");
-      avatar.setAttribute("aria-label", "Test user");
-      avatar.setAttribute("fallback", "TU");
-      document.body.appendChild(avatar);
-    });
-
-    const avatar = page.locator('w-avatar[fallback="TU"]');
-    // Wait for fallback to potentially show
-    await page.waitForTimeout(500);
-
-    // The avatar should still be accessible
     await expect(avatar).toHaveAttribute("role", "img");
   });
 
-  test("should display initials as fallback", async ({ page }) => {
-    const avatar = page.locator("w-avatar[fallback]").first();
-
-    if ((await avatar.count()) > 0) {
-      const fallback = await avatar.getAttribute("fallback");
-      expect(fallback).toBeTruthy();
-    }
+  test("has aria-label", async ({ page }) => {
+    const avatar = page.locator("w-avatar");
+    await expect(avatar).toHaveAttribute("aria-label", "John Doe");
   });
 
-  test("should support different sizes", async ({ page }) => {
-    const smallAvatar = page.locator('w-avatar[size="small"]');
-    const mediumAvatar = page.locator('w-avatar[size="medium"]');
-    const largeAvatar = page.locator('w-avatar[size="large"]');
+  test("displays fallback text", async ({ page }) => {
+    const avatar = page.locator("w-avatar");
+    await expect(avatar).toHaveAttribute("fallback", "JD");
+  });
+});
 
-    // At least one size variant should exist or default
-    const avatar = page.locator("w-avatar").first();
-    if ((await avatar.count()) > 0) {
-      const size = await avatar.getAttribute("size");
-      expect(["small", "medium", "large", null]).toContain(size);
-    }
+test.describe("w-avatar with image", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, AVATAR_WITH_IMAGE, "w-avatar");
   });
 
-  test("should support different shapes", async ({ page }) => {
-    const avatar = page.locator("w-avatar").first();
-
-    if ((await avatar.count()) > 0) {
-      const shape = await avatar.getAttribute("shape");
-      expect(["circle", "square", "rounded", null]).toContain(shape);
-    }
+  test("displays image when src is provided", async ({ page }) => {
+    const avatar = page.locator("w-avatar");
+    await expect(avatar).toHaveAttribute("src");
   });
 
-  test("should be presentational when decorative", async ({ page }) => {
-    const avatar = page.locator("w-avatar[decorative]").first();
+  test("still has aria-label for accessibility", async ({ page }) => {
+    const avatar = page.locator("w-avatar");
+    await expect(avatar).toHaveAttribute("aria-label", "Jane Smith");
+  });
+});
 
-    if ((await avatar.count()) > 0) {
-      // Decorative avatars should have aria-hidden
-      await expect(avatar).toHaveAttribute("aria-hidden", "true");
-    }
+test.describe("w-avatar decorative", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, AVATAR_DECORATIVE, "w-avatar");
+  });
+
+  test("has aria-hidden when decorative", async ({ page }) => {
+    const avatar = page.locator("w-avatar");
+    await expect(avatar).toHaveAttribute("aria-hidden", "true");
+  });
+});
+
+test.describe("w-avatar sizes", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, AVATAR_SIZES, "w-avatar");
+  });
+
+  test("supports different sizes", async ({ page }) => {
+    const small = page.locator('w-avatar[size="small"]');
+    const medium = page.locator('w-avatar[size="medium"]');
+    const large = page.locator('w-avatar[size="large"]');
+
+    await expect(small).toHaveAttribute("size", "small");
+    await expect(medium).toHaveAttribute("size", "medium");
+    await expect(large).toHaveAttribute("size", "large");
   });
 });

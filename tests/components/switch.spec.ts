@@ -1,27 +1,58 @@
+/**
+ * w-switch - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper ARIA role/state
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: Proper aria-pressed state
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-switch accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const SWITCH = `
+<w-switch label="Test Switch">
+  <button slot="trigger">Toggle</button>
+</w-switch>`;
+
+const SWITCH_PRESSED = `
+<w-switch pressed label="Pressed Switch">
+  <button slot="trigger">Toggle</button>
+</w-switch>`;
+
+const SWITCH_DISABLED = `
+<w-switch disabled label="Disabled Switch">
+  <button slot="trigger">Toggle</button>
+</w-switch>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-switch", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/switch", { waitUntil: "domcontentloaded" });
+    await renderComponent(page, SWITCH, "w-switch");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-switch" });
   });
 
-  test("should have correct ARIA attributes when not pressed", async ({
-    page,
-  }) => {
-    const trigger = page.locator('w-switch [slot="trigger"]').first();
+  test("trigger has correct ARIA attributes", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await expect(trigger).toHaveAttribute("role", "button");
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
     await expect(trigger).toHaveAttribute("tabindex", "0");
   });
 
-  test("should toggle aria-pressed on click", async ({ page }) => {
-    const trigger = page.locator('w-switch [slot="trigger"]').first();
+  test("click toggles aria-pressed", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
     await trigger.click();
@@ -30,8 +61,8 @@ test.describe("w-switch accessibility", () => {
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
   });
 
-  test("should toggle on Enter key", async ({ page }) => {
-    const trigger = page.locator('w-switch [slot="trigger"]').first();
+  test("Enter key toggles state", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
@@ -39,8 +70,8 @@ test.describe("w-switch accessibility", () => {
     await expect(trigger).toHaveAttribute("aria-pressed", "true");
   });
 
-  test("should toggle on Space key", async ({ page }) => {
-    const trigger = page.locator('w-switch [slot="trigger"]').first();
+  test("Space key toggles state", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
@@ -48,19 +79,17 @@ test.describe("w-switch accessibility", () => {
     await expect(trigger).toHaveAttribute("aria-pressed", "true");
   });
 
-  test("should be focusable via Tab", async ({ page }) => {
-    const trigger = page.locator('w-switch [slot="trigger"]').first();
+  test("trigger is focusable", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    // Verify element has tabindex="0" making it focusable
     await expect(trigger).toHaveAttribute("tabindex", "0");
-
-    // Focus the element directly and verify it receives focus
     await trigger.focus();
     await expect(trigger).toBeFocused();
   });
 
-  test("should emit change event with pressed state", async ({ page }) => {
-    const switchEl = page.locator("w-switch").first();
+  test("emits change event with pressed state", async ({ page }) => {
+    const switchEl = page.locator("w-switch");
+    const trigger = page.locator('[slot="trigger"]');
 
     const changeEvent = switchEl.evaluate((el) => {
       return new Promise<{ pressed: boolean }>((resolve) => {
@@ -74,8 +103,30 @@ test.describe("w-switch accessibility", () => {
       });
     });
 
-    await page.locator('w-switch [slot="trigger"]').first().click();
+    await trigger.click();
     const detail = await changeEvent;
     expect(detail.pressed).toBe(true);
+  });
+});
+
+test.describe("w-switch pressed", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, SWITCH_PRESSED, "w-switch");
+  });
+
+  test("starts with aria-pressed true", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
+    await expect(trigger).toHaveAttribute("aria-pressed", "true");
+  });
+});
+
+test.describe("w-switch disabled", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, SWITCH_DISABLED, "w-switch");
+  });
+
+  test("has aria-disabled attribute", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
+    await expect(trigger).toHaveAttribute("aria-disabled", "true");
   });
 });

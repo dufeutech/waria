@@ -1,136 +1,121 @@
+/**
+ * w-tooltip - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper tooltip role
+ * - 1.4.13 Content on Hover or Focus: Dismissible, hoverable, persistent
+ * - 2.1.1 Keyboard: Focus triggers tooltip
+ * - 4.1.2 Name, Role, Value: aria-describedby links trigger to tooltip
+ */
+
 import { test, expect, Page } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-// Helper to get tooltip content (works whether portaled or not)
-function getTooltipContent(page: Page) {
-  // When open and portaled, content has role="tooltip"
-  // Use a selector that works in both cases
-  return page.locator('[slot="content"][role="tooltip"]');
-}
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
 
-// Helper to get visible tooltip content
-function getVisibleTooltipContent(page: Page) {
-  return page.locator('[slot="content"][role="tooltip"]:not([hidden])');
-}
+const TOOLTIP = `
+<w-tooltip>
+  <button slot="trigger">Hover me</button>
+  <div slot="content">This is a tooltip!</div>
+</w-tooltip>`;
 
-test.describe("w-tooltip accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Helpers
+// ═══════════════════════════════════════════════════════════════════════════
+
+const getVisibleTooltipContent = (page: Page) =>
+  page.locator('[slot="content"][role="tooltip"]:not([hidden])');
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-tooltip", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Tooltip", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-tooltip", { state: "visible" });
+    await renderComponent(page, TOOLTIP, "w-tooltip");
   });
 
-  test("should have no axe violations when closed", async ({ page }) => {
+  test("axe accessibility scan (closed)", async ({ page }) => {
     await checkA11y(page, { selector: "w-tooltip" });
   });
 
-  test('should have role="tooltip" on content', async ({ page }) => {
-    const content = page.locator('w-tooltip [slot="content"]');
-
-    if ((await content.count()) > 0) {
-      await expect(content.first()).toHaveAttribute("role", "tooltip");
-    }
+  test('content has role="tooltip"', async ({ page }) => {
+    const content = page.locator('[slot="content"]');
+    await expect(content).toHaveAttribute("role", "tooltip");
   });
 
-  test("should show tooltip on hover", async ({ page }) => {
-    const trigger = page.locator('w-tooltip [slot="trigger"]').first();
+  test("tooltip shows on hover", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      // Initially hidden (check before opening)
-      await expect(
-        page.locator('w-tooltip [slot="content"]').first()
-      ).toBeHidden();
+    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
 
-      await trigger.hover();
+    await trigger.hover();
+    await page.waitForTimeout(400); // Wait for delay
 
-      // Wait for delay (default 300ms)
-      await page.waitForTimeout(400);
-
-      await expect(getVisibleTooltipContent(page)).toBeVisible();
-    }
+    await expect(getVisibleTooltipContent(page)).toBeVisible();
   });
 
-  test("should hide tooltip on mouse leave", async ({ page }) => {
-    const trigger = page.locator('w-tooltip [slot="trigger"]').first();
+  test("tooltip hides on mouse leave", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.hover();
-      await page.waitForTimeout(400);
-      await expect(getVisibleTooltipContent(page)).toBeVisible();
+    await trigger.hover();
+    await page.waitForTimeout(400);
+    await expect(getVisibleTooltipContent(page)).toBeVisible();
 
-      // Move mouse away
-      await page.mouse.move(0, 0);
-      await page.waitForTimeout(200);
+    await page.mouse.move(0, 0);
+    await page.waitForTimeout(200);
 
-      // After close, content is back in w-tooltip and hidden
-      await expect(
-        page.locator('w-tooltip [slot="content"]').first()
-      ).toBeHidden();
-    }
+    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should show tooltip on focus", async ({ page }) => {
-    const trigger = page.locator('w-tooltip [slot="trigger"]').first();
+  test("tooltip shows on focus", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.focus();
-      await expect(getVisibleTooltipContent(page)).toBeVisible();
-    }
+    await trigger.focus();
+    await expect(getVisibleTooltipContent(page)).toBeVisible();
   });
 
-  test("should hide tooltip on blur", async ({ page }) => {
-    const trigger = page.locator('w-tooltip [slot="trigger"]').first();
+  test("tooltip hides on blur", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.focus();
-      await expect(getVisibleTooltipContent(page)).toBeVisible();
+    await trigger.focus();
+    await expect(getVisibleTooltipContent(page)).toBeVisible();
 
-      await trigger.blur();
-      // After close, content is back in w-tooltip and hidden
-      await expect(
-        page.locator('w-tooltip [slot="content"]').first()
-      ).toBeHidden();
-    }
+    await trigger.blur();
+    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should close on Escape key", async ({ page }) => {
-    const trigger = page.locator('w-tooltip [slot="trigger"]').first();
+  test("Escape key closes tooltip", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.focus();
-      await expect(getVisibleTooltipContent(page)).toBeVisible();
+    await trigger.focus();
+    await expect(getVisibleTooltipContent(page)).toBeVisible();
 
-      await page.keyboard.press("Escape");
-      // After close, content is back in w-tooltip and hidden
-      await expect(
-        page.locator('w-tooltip [slot="content"]').first()
-      ).toBeHidden();
-    }
+    await page.keyboard.press("Escape");
+    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should have aria-describedby when open", async ({ page }) => {
-    const trigger = page.locator('w-tooltip [slot="trigger"]').first();
+  test("aria-describedby links trigger to tooltip when open", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
-    if ((await trigger.count()) > 0) {
-      await trigger.focus();
-      const content = getVisibleTooltipContent(page);
-      await expect(content).toBeVisible();
+    await trigger.focus();
+    const content = getVisibleTooltipContent(page);
+    await expect(content).toBeVisible();
 
-      const ariaDescribedby = await trigger.getAttribute("aria-describedby");
-      expect(ariaDescribedby).toBeTruthy();
+    const describedby = await trigger.getAttribute("aria-describedby");
+    expect(describedby).toBeTruthy();
 
-      const contentId = await content.getAttribute("id");
-      expect(ariaDescribedby).toBe(contentId);
-    }
+    const contentId = await content.getAttribute("id");
+    expect(describedby).toBe(contentId);
   });
 
-  test("should have no axe violations when open", async ({ page }) => {
-    const trigger = page.locator('w-tooltip [slot="trigger"]').first();
-
-    if ((await trigger.count()) > 0) {
-      await trigger.focus();
-      await page.waitForTimeout(100);
-
-      await checkA11y(page);
-    }
+  test("axe accessibility scan (open)", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
+    await trigger.focus();
+    await page.waitForTimeout(100);
+    await checkA11y(page);
   });
 });

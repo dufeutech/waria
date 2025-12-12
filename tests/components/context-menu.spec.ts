@@ -1,107 +1,122 @@
+/**
+ * w-context-menu - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper menu/menuitem roles
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: Proper ARIA states
+ */
+
 import { test, expect, Page } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-// Helper to get visible context menu content (works whether portaled or not)
-function getVisibleContextMenuContent(page: Page) {
-  return page.locator('[slot="content"][role="menu"]:not([hidden])');
-}
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
 
-// Helper to get menu items from visible content
-function getContextMenuItems(page: Page) {
-  return page.locator(
-    '[slot="content"][role="menu"]:not([hidden]) [slot="item"]'
-  );
-}
+const CONTEXT_MENU = `
+<w-context-menu>
+  <div slot="trigger" style="padding: 2rem; background: #f0f0f0;">
+    Right-click here
+  </div>
+  <div slot="content">
+    <button slot="item" name="cut">Cut</button>
+    <button slot="item" name="copy">Copy</button>
+    <button slot="item" name="paste">Paste</button>
+  </div>
+</w-context-menu>`;
 
-test.describe("w-context-menu accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Helpers
+// ═══════════════════════════════════════════════════════════════════════════
+
+const getVisibleMenuContent = (page: Page) =>
+  page.locator('[slot="content"][role="menu"]:not([hidden])');
+const getMenuItems = (page: Page) =>
+  page.locator('[slot="content"][role="menu"]:not([hidden]) [slot="item"]');
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-context-menu", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/ContextMenu", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-context-menu", { state: "visible" });
+    await renderComponent(page, CONTEXT_MENU, "w-context-menu");
   });
 
-  test("should have no axe violations when closed", async ({ page }) => {
+  test("axe accessibility scan (closed)", async ({ page }) => {
     await checkA11y(page, { selector: "w-context-menu" });
   });
 
-  test("should open on right-click", async ({ page }) => {
-    const trigger = page.locator('w-context-menu [slot="trigger"]');
+  test("opens on right-click", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click({ button: "right" });
-    await expect(getVisibleContextMenuContent(page)).toBeVisible();
+    await expect(getVisibleMenuContent(page)).toBeVisible();
   });
 
-  test("should have correct ARIA roles when open", async ({ page }) => {
-    const trigger = page.locator('w-context-menu [slot="trigger"]');
+  test('content has role="menu"', async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click({ button: "right" });
-    const content = getVisibleContextMenuContent(page);
-    await expect(content).toHaveAttribute("role", "menu");
-
-    const items = getContextMenuItems(page);
-    if ((await items.count()) > 0) {
-      await expect(items.first()).toHaveAttribute("role", "menuitem");
-    }
+    await expect(getVisibleMenuContent(page)).toHaveAttribute("role", "menu");
   });
 
-  test("should support keyboard navigation", async ({ page }) => {
-    const trigger = page.locator('w-context-menu [slot="trigger"]');
+  test('items have role="menuitem"', async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click({ button: "right" });
-    await expect(getVisibleContextMenuContent(page)).toBeVisible();
+    const items = getMenuItems(page);
 
-    const items = getContextMenuItems(page);
-    if ((await items.count()) > 1) {
-      await expect(items.first()).toBeFocused();
-
-      await page.keyboard.press("ArrowDown");
-      await expect(items.nth(1)).toBeFocused();
-    }
+    await expect(items.first()).toHaveAttribute("role", "menuitem");
   });
 
-  test("should close on Escape", async ({ page }) => {
-    const trigger = page.locator('w-context-menu [slot="trigger"]');
+  test("arrow keys navigate items", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click({ button: "right" });
-    await expect(getVisibleContextMenuContent(page)).toBeVisible();
+    const items = getMenuItems(page);
+
+    await expect(items.first()).toBeFocused();
+
+    await page.keyboard.press("ArrowDown");
+    await expect(items.nth(1)).toBeFocused();
+  });
+
+  test("Escape key closes menu", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
+
+    await trigger.click({ button: "right" });
+    await expect(getVisibleMenuContent(page)).toBeVisible();
 
     await page.keyboard.press("Escape");
-    // After close, content is back in w-context-menu and hidden
-    await expect(page.locator('w-context-menu [slot="content"]')).toBeHidden();
+    await expect(page.locator('w-context-menu [slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should close on item selection", async ({ page }) => {
-    const trigger = page.locator('w-context-menu [slot="trigger"]');
+  test("item click closes menu", async ({ page }) => {
+    const trigger = page.locator('[slot="trigger"]');
 
     await trigger.click({ button: "right" });
-    await expect(getVisibleContextMenuContent(page)).toBeVisible();
 
-    const items = getContextMenuItems(page);
-    await items.first().click();
-    // After close, content is back in w-context-menu and hidden
-    await expect(page.locator('w-context-menu [slot="content"]')).toBeHidden();
+    await getMenuItems(page).first().click();
+    await expect(page.locator('w-context-menu [slot="content"]')).toHaveAttribute("hidden", "");
   });
 
-  test("should emit select event", async ({ page }) => {
+  test("emits select event", async ({ page }) => {
     const contextMenu = page.locator("w-context-menu");
-    const trigger = page.locator('w-context-menu [slot="trigger"]');
+    const trigger = page.locator('[slot="trigger"]');
 
     const selectEvent = contextMenu.evaluate((el) => {
       return new Promise<{ item: string | null }>((resolve) => {
-        el.addEventListener(
-          "select",
-          (e: Event) => {
-            resolve((e as CustomEvent).detail);
-          },
-          { once: true }
-        );
+        el.addEventListener("select", (e: Event) => {
+          resolve((e as CustomEvent).detail);
+        }, { once: true });
       });
     });
 
     await trigger.click({ button: "right" });
-    await expect(getVisibleContextMenuContent(page)).toBeVisible();
-
-    const items = getContextMenuItems(page);
-    await items.first().click();
+    await getMenuItems(page).first().click();
 
     const detail = await selectEvent;
     expect(detail).toBeDefined();

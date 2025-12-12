@@ -1,120 +1,122 @@
+/**
+ * w-spinbutton - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper spinbutton role
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-valuenow/min/max
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
-import { gotoComponent, SLOT, KEY } from "../test-utils";
+import { renderComponent } from "../test-utils";
 
-// Select demo spinbutton by label (not the one on Label page which has label="Quantity")
-// The main Spinbutton page has "Quantity" too, so select the one with higher max value
-const DEMO_SPINBUTTON = 'w-spinbutton[max="100"]';
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
 
-test.describe("w-spinbutton accessibility", () => {
+const SPINBUTTON = `
+<w-spinbutton min="0" max="100" value="50" step="1" label="Quantity">
+  <button slot="decrement">-</button>
+  <input slot="input" type="text" />
+  <button slot="increment">+</button>
+</w-spinbutton>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-spinbutton", () => {
   test.beforeEach(async ({ page }) => {
-    await gotoComponent(page, "Spinbutton");
-    // Wait for demo spinbutton's input to be visible
-    await page.waitForSelector(`${DEMO_SPINBUTTON} ${SLOT.input}`, {
-      state: "visible",
-      timeout: 10000,
-    });
+    await renderComponent(page, SPINBUTTON, "w-spinbutton");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-spinbutton" });
   });
 
-  test("should have correct ARIA role and attributes", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
+  test("input has correct ARIA attributes", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
 
     await expect(input).toHaveAttribute("role", "spinbutton");
-    await expect(input).toHaveAttribute("aria-valuemin");
-    await expect(input).toHaveAttribute("aria-valuemax");
-    await expect(input).toHaveAttribute("aria-valuenow");
+    await expect(input).toHaveAttribute("aria-valuemin", "0");
+    await expect(input).toHaveAttribute("aria-valuemax", "100");
+    await expect(input).toHaveAttribute("aria-valuenow", "50");
   });
 
-  test("should increment value with ArrowUp", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
-
-    await input.focus();
-    const initialValue = await input.getAttribute("aria-valuenow");
-
-    await page.keyboard.press(KEY.ArrowUp);
-
-    const newValue = await input.getAttribute("aria-valuenow");
-    expect(Number(newValue)).toBeGreaterThan(Number(initialValue));
-  });
-
-  test("should decrement value with ArrowDown", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
-
-    await input.focus();
-    const initialValue = await input.getAttribute("aria-valuenow");
-
-    await page.keyboard.press(KEY.ArrowDown);
-
-    const newValue = await input.getAttribute("aria-valuenow");
-    expect(Number(newValue)).toBeLessThan(Number(initialValue));
-  });
-
-  test("should go to min value with Home key", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
-    const min = await spinbutton.getAttribute("min");
-
-    await input.focus();
-    await page.keyboard.press(KEY.Home);
-
-    const newValue = await input.getAttribute("aria-valuenow");
-    expect(newValue).toBe(min);
-  });
-
-  test("should go to max value with End key", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
-    const max = await spinbutton.getAttribute("max");
-
-    await input.focus();
-    await page.keyboard.press(KEY.End);
-
-    const newValue = await input.getAttribute("aria-valuenow");
-    expect(newValue).toBe(max);
-  });
-
-  test("should increment with increment button click", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
-    const incrementBtn = spinbutton.locator(SLOT.increment);
-
-    const initialValue = await input.getAttribute("aria-valuenow");
-    await incrementBtn.click();
-
-    const newValue = await input.getAttribute("aria-valuenow");
-    expect(Number(newValue)).toBeGreaterThan(Number(initialValue));
-  });
-
-  test("should decrement with decrement button click", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
-    const decrementBtn = spinbutton.locator(SLOT.decrement);
-
-    const initialValue = await input.getAttribute("aria-valuenow");
-    await decrementBtn.click();
-
-    const newValue = await input.getAttribute("aria-valuenow");
-    expect(Number(newValue)).toBeLessThan(Number(initialValue));
-  });
-
-  test("should support PageUp for larger increments", async ({ page }) => {
-    const spinbutton = page.locator(DEMO_SPINBUTTON);
-    const input = spinbutton.locator(SLOT.input);
+  test("ArrowUp increments value", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
 
     await input.focus();
     const initialValue = Number(await input.getAttribute("aria-valuenow"));
 
-    await page.keyboard.press(KEY.PageUp);
-
+    await page.keyboard.press("ArrowUp");
     const newValue = Number(await input.getAttribute("aria-valuenow"));
-    // PageUp should increment by more than 1 step
+
+    expect(newValue).toBeGreaterThan(initialValue);
+  });
+
+  test("ArrowDown decrements value", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
+
+    await input.focus();
+    const initialValue = Number(await input.getAttribute("aria-valuenow"));
+
+    await page.keyboard.press("ArrowDown");
+    const newValue = Number(await input.getAttribute("aria-valuenow"));
+
+    expect(newValue).toBeLessThan(initialValue);
+  });
+
+  test("Home key sets to min", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
+
+    await input.focus();
+    await page.keyboard.press("Home");
+
+    await expect(input).toHaveAttribute("aria-valuenow", "0");
+  });
+
+  test("End key sets to max", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
+
+    await input.focus();
+    await page.keyboard.press("End");
+
+    await expect(input).toHaveAttribute("aria-valuenow", "100");
+  });
+
+  test("increment button increases value", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
+    const incrementBtn = page.locator('[slot="increment"]');
+
+    const initialValue = Number(await input.getAttribute("aria-valuenow"));
+    await incrementBtn.click();
+    const newValue = Number(await input.getAttribute("aria-valuenow"));
+
+    expect(newValue).toBeGreaterThan(initialValue);
+  });
+
+  test("decrement button decreases value", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
+    const decrementBtn = page.locator('[slot="decrement"]');
+
+    const initialValue = Number(await input.getAttribute("aria-valuenow"));
+    await decrementBtn.click();
+    const newValue = Number(await input.getAttribute("aria-valuenow"));
+
+    expect(newValue).toBeLessThan(initialValue);
+  });
+
+  test("PageUp increments by larger step", async ({ page }) => {
+    const input = page.locator('[slot="input"]');
+
+    await input.focus();
+    const initialValue = Number(await input.getAttribute("aria-valuenow"));
+
+    await page.keyboard.press("PageUp");
+    const newValue = Number(await input.getAttribute("aria-valuenow"));
+
     expect(newValue - initialValue).toBeGreaterThan(1);
   });
 });

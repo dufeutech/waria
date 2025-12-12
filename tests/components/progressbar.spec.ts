@@ -1,91 +1,89 @@
-import { test, expect } from '@playwright/test';
-import { checkA11y } from '../a11y/axe-helper';
+/**
+ * w-progressbar - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper progressbar role
+ * - 4.1.2 Name, Role, Value: aria-valuenow/min/max
+ */
 
-test.describe('w-progressbar accessibility', () => {
+import { test, expect } from "@playwright/test";
+import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const PROGRESSBAR = `
+<w-progressbar value="50" min="0" max="100" label="Loading progress">
+  <div slot="track"></div>
+  <div slot="fill"></div>
+</w-progressbar>`;
+
+const PROGRESSBAR_INDETERMINATE = `
+<w-progressbar indeterminate label="Loading...">
+  <div slot="track"></div>
+  <div slot="fill"></div>
+</w-progressbar>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-progressbar", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await renderComponent(page, PROGRESSBAR, "w-progressbar");
   });
 
-  test('should have no axe violations', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar');
-    if (await progressbar.count() > 0) {
-      await checkA11y(page, { selector: 'w-progressbar' });
-    }
+  test("axe accessibility scan", async ({ page }) => {
+    await checkA11y(page, { selector: "w-progressbar" });
   });
 
-  test('should have role="progressbar"', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar').first();
-
-    if (await progressbar.count() > 0) {
-      await expect(progressbar).toHaveAttribute('role', 'progressbar');
-    }
+  test('has role="progressbar"', async ({ page }) => {
+    const progressbar = page.locator("w-progressbar");
+    await expect(progressbar).toHaveAttribute("role", "progressbar");
   });
 
-  test('should have aria-valuenow attribute', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar').first();
-
-    if (await progressbar.count() > 0) {
-      const valueNow = await progressbar.getAttribute('aria-valuenow');
-      expect(valueNow).toBeTruthy();
-      const numValue = parseFloat(valueNow!);
-      expect(numValue).toBeGreaterThanOrEqual(0);
-    }
+  test("has aria-valuenow", async ({ page }) => {
+    const progressbar = page.locator("w-progressbar");
+    await expect(progressbar).toHaveAttribute("aria-valuenow", "50");
   });
 
-  test('should have aria-valuemin attribute', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar').first();
-
-    if (await progressbar.count() > 0) {
-      const valueMin = await progressbar.getAttribute('aria-valuemin');
-      expect(valueMin).toBeTruthy();
-    }
+  test("has aria-valuemin", async ({ page }) => {
+    const progressbar = page.locator("w-progressbar");
+    await expect(progressbar).toHaveAttribute("aria-valuemin", "0");
   });
 
-  test('should have aria-valuemax attribute', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar').first();
-
-    if (await progressbar.count() > 0) {
-      const valueMax = await progressbar.getAttribute('aria-valuemax');
-      expect(valueMax).toBeTruthy();
-    }
+  test("has aria-valuemax", async ({ page }) => {
+    const progressbar = page.locator("w-progressbar");
+    await expect(progressbar).toHaveAttribute("aria-valuemax", "100");
   });
 
-  test('should support indeterminate state', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar[indeterminate]');
-
-    if (await progressbar.count() > 0) {
-      // Indeterminate progress bars should not have aria-valuenow
-      const valueNow = await progressbar.first().getAttribute('aria-valuenow');
-      expect(valueNow).toBeNull();
-    }
+  test("has aria-label", async ({ page }) => {
+    const progressbar = page.locator("w-progressbar");
+    const label = await progressbar.getAttribute("aria-label");
+    expect(label).toBeTruthy();
   });
 
-  test('should update aria-valuenow when value changes', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar').first();
+  test("aria-valuenow updates with value", async ({ page }) => {
+    const progressbar = page.locator("w-progressbar");
 
-    if (await progressbar.count() > 0) {
-      // Get initial value
-      const initialValue = await progressbar.getAttribute('aria-valuenow');
+    await progressbar.evaluate((el: HTMLElement & { value: number }) => {
+      el.value = 75;
+    });
 
-      // Change the value via JavaScript
-      await progressbar.evaluate((el: HTMLElement & { value: number }) => {
-        el.value = 75;
-      });
+    await expect(progressbar).toHaveAttribute("aria-valuenow", "75");
+  });
+});
 
-      // Verify aria-valuenow updated
-      await expect(progressbar).toHaveAttribute('aria-valuenow', '75');
-    }
+test.describe("w-progressbar indeterminate", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, PROGRESSBAR_INDETERMINATE, "w-progressbar");
   });
 
-  test('should have aria-label or aria-labelledby', async ({ page }) => {
-    const progressbar = page.locator('w-progressbar').first();
-
-    if (await progressbar.count() > 0) {
-      const ariaLabel = await progressbar.getAttribute('aria-label');
-      const ariaLabelledby = await progressbar.getAttribute('aria-labelledby');
-
-      // Should have one of the label attributes
-      expect(ariaLabel !== null || ariaLabelledby !== null).toBeTruthy();
-    }
+  test("does not have aria-valuenow", async ({ page }) => {
+    const progressbar = page.locator("w-progressbar");
+    const valuenow = await progressbar.getAttribute("aria-valuenow");
+    expect(valuenow).toBeNull();
   });
 });

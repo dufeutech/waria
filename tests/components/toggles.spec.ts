@@ -1,139 +1,136 @@
+/**
+ * w-toggles - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper group role
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-pressed state
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent, testArrowNav } from "../test-utils";
 
-test.describe("w-toggles accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const TOGGLES = `
+<w-toggles label="Formatting options">
+  <button slot="item" name="bold">Bold</button>
+  <button slot="item" name="italic">Italic</button>
+  <button slot="item" name="underline">Underline</button>
+</w-toggles>`;
+
+const TOGGLES_SINGLE = `
+<w-toggles mode="single" label="View mode">
+  <button slot="item" name="list">List</button>
+  <button slot="item" name="grid">Grid</button>
+</w-toggles>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-toggles", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/toggles", { waitUntil: "domcontentloaded" });
+    await renderComponent(page, TOGGLES, "w-toggles");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
+    await checkA11y(page, { selector: "w-toggles" });
+  });
+
+  test('has role="group"', async ({ page }) => {
     const toggles = page.locator("w-toggles");
-    if ((await toggles.count()) > 0) {
-      await checkA11y(page, { selector: "w-toggles" });
+    await expect(toggles).toHaveAttribute("role", "group");
+  });
+
+  test("has aria-label", async ({ page }) => {
+    const toggles = page.locator("w-toggles");
+    const label = await toggles.getAttribute("aria-label");
+    expect(label).toBeTruthy();
+  });
+
+  test("items have aria-pressed", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    const count = await items.count();
+
+    for (let i = 0; i < count; i++) {
+      const pressed = await items.nth(i).getAttribute("aria-pressed");
+      expect(["true", "false"]).toContain(pressed);
     }
   });
 
-  test('should have role="group"', async ({ page }) => {
-    const toggles = page.locator("w-toggles").first();
+  test("click toggles aria-pressed", async ({ page }) => {
+    const item = page.locator('[slot="item"]').first();
 
-    if ((await toggles.count()) > 0) {
-      await expect(toggles).toHaveAttribute("role", "group");
-    }
+    const initialPressed = await item.getAttribute("aria-pressed");
+    await item.click();
+    const newPressed = await item.getAttribute("aria-pressed");
+
+    expect(newPressed).not.toBe(initialPressed);
   });
 
-  test("should have aria-label or aria-labelledby", async ({ page }) => {
-    const toggles = page.locator("w-toggles").first();
-
-    if ((await toggles.count()) > 0) {
-      const ariaLabel = await toggles.getAttribute("aria-label");
-      const ariaLabelledby = await toggles.getAttribute("aria-labelledby");
-      expect(ariaLabel !== null || ariaLabelledby !== null).toBeTruthy();
-    }
+  test("arrow keys navigate items", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    await testArrowNav(page, items, { horizontal: true });
   });
 
-  test("should have toggle items with aria-pressed", async ({ page }) => {
-    const items = page.locator('w-toggles [slot="item"]');
+  test("Enter key toggles item", async ({ page }) => {
+    const item = page.locator('[slot="item"]').first();
 
-    if ((await items.count()) > 0) {
-      const count = await items.count();
-      for (let i = 0; i < count; i++) {
-        const pressed = await items.nth(i).getAttribute("aria-pressed");
-        expect(["true", "false"]).toContain(pressed);
-      }
-    }
+    await item.focus();
+    const initialPressed = await item.getAttribute("aria-pressed");
+    await page.keyboard.press("Enter");
+    const newPressed = await item.getAttribute("aria-pressed");
+
+    expect(newPressed).not.toBe(initialPressed);
   });
 
-  test("should toggle item on click", async ({ page }) => {
-    const item = page.locator('w-toggles [slot="item"]').first();
+  test("Space key toggles item", async ({ page }) => {
+    const item = page.locator('[slot="item"]').first();
 
-    if ((await item.count()) > 0) {
-      const initialPressed = await item.getAttribute("aria-pressed");
-      await item.click();
-      const newPressed = await item.getAttribute("aria-pressed");
-      expect(newPressed).not.toBe(initialPressed);
-    }
+    await item.focus();
+    const initialPressed = await item.getAttribute("aria-pressed");
+    await page.keyboard.press("Space");
+    const newPressed = await item.getAttribute("aria-pressed");
+
+    expect(newPressed).not.toBe(initialPressed);
   });
 
-  test("should navigate items with arrow keys", async ({ page }) => {
-    const items = page.locator('w-toggles [slot="item"]');
+  test("emits change event", async ({ page }) => {
+    const toggles = page.locator("w-toggles");
+    const item = page.locator('[slot="item"]').first();
 
-    if ((await items.count()) > 1) {
-      await items.first().focus();
-      await expect(items.first()).toBeFocused();
-
-      await page.keyboard.press("ArrowRight");
-      await expect(items.nth(1)).toBeFocused();
-
-      await page.keyboard.press("ArrowLeft");
-      await expect(items.first()).toBeFocused();
-    }
-  });
-
-  test("should toggle on Enter key", async ({ page }) => {
-    const item = page.locator('w-toggles [slot="item"]').first();
-
-    if ((await item.count()) > 0) {
-      await item.focus();
-      const initialPressed = await item.getAttribute("aria-pressed");
-      await page.keyboard.press("Enter");
-      const newPressed = await item.getAttribute("aria-pressed");
-      expect(newPressed).not.toBe(initialPressed);
-    }
-  });
-
-  test("should toggle on Space key", async ({ page }) => {
-    const item = page.locator('w-toggles [slot="item"]').first();
-
-    if ((await item.count()) > 0) {
-      await item.focus();
-      const initialPressed = await item.getAttribute("aria-pressed");
-      await page.keyboard.press("Space");
-      const newPressed = await item.getAttribute("aria-pressed");
-      expect(newPressed).not.toBe(initialPressed);
-    }
-  });
-
-  test("should support single selection mode", async ({ page }) => {
-    const toggles = page.locator('w-toggles[mode="single"]');
-
-    if ((await toggles.count()) > 0) {
-      const items = toggles.locator('[slot="item"]');
-      const count = await items.count();
-
-      if (count >= 2) {
-        // Click first item
-        await items.first().click();
-        await expect(items.first()).toHaveAttribute("aria-pressed", "true");
-
-        // Click second item - first should unpress
-        await items.nth(1).click();
-        await expect(items.first()).toHaveAttribute("aria-pressed", "false");
-        await expect(items.nth(1)).toHaveAttribute("aria-pressed", "true");
-      }
-    }
-  });
-
-  test("should emit change event", async ({ page }) => {
-    const toggles = page.locator("w-toggles").first();
-    const items = toggles.locator('[slot="item"]');
-
-    if ((await items.count()) > 0) {
-      const changePromise = toggles.evaluate((el) => {
-        return new Promise<{ value: string[] }>((resolve) => {
-          el.addEventListener(
-            "change",
-            (e: Event) => {
-              resolve((e as CustomEvent).detail);
-            },
-            { once: true }
-          );
-        });
+    const changePromise = toggles.evaluate((el) => {
+      return new Promise<{ value: string[] }>((resolve) => {
+        el.addEventListener("change", (e: Event) => {
+          resolve((e as CustomEvent).detail);
+        }, { once: true });
       });
+    });
 
-      await items.first().click();
+    await item.click();
 
-      const detail = await changePromise;
-      expect(detail.value).toBeDefined();
-    }
+    const detail = await changePromise;
+    expect(detail.value).toBeDefined();
+  });
+});
+
+test.describe("w-toggles single mode", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, TOGGLES_SINGLE, "w-toggles");
+  });
+
+  test("only one item can be pressed", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+
+    await items.first().click();
+    await expect(items.first()).toHaveAttribute("aria-pressed", "true");
+
+    await items.nth(1).click();
+    await expect(items.first()).toHaveAttribute("aria-pressed", "false");
+    await expect(items.nth(1)).toHaveAttribute("aria-pressed", "true");
   });
 });

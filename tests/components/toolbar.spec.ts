@@ -1,60 +1,77 @@
+/**
+ * w-toolbar - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Toolbar role
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-label
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent, testArrowNav } from "../test-utils";
 
-test.describe("w-toolbar accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const TOOLBAR = `
+<w-toolbar label="Text formatting">
+  <button slot="item" name="bold">Bold</button>
+  <button slot="item" name="italic">Italic</button>
+  <div slot="separator"></div>
+  <button slot="item" name="align-left">Left</button>
+  <button slot="item" name="align-center">Center</button>
+</w-toolbar>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-toolbar", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/toolbar", { waitUntil: "domcontentloaded" });
+    await renderComponent(page, TOOLBAR, "w-toolbar");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-toolbar" });
   });
 
-  test("should have correct ARIA role and attributes", async ({ page }) => {
-    const toolbar = page.locator("w-toolbar").first();
-
+  test('has role="toolbar"', async ({ page }) => {
+    const toolbar = page.locator("w-toolbar");
     await expect(toolbar).toHaveAttribute("role", "toolbar");
-    await expect(toolbar).toHaveAttribute("aria-label");
   });
 
-  test("should have separators with correct role", async ({ page }) => {
-    const separator = page.locator('w-toolbar [slot="separator"]').first();
-
-    if ((await separator.count()) > 0) {
-      await expect(separator).toHaveAttribute("role", "separator");
-    }
+  test("has aria-label", async ({ page }) => {
+    const toolbar = page.locator("w-toolbar");
+    await expect(toolbar).toHaveAttribute("aria-label", "Text formatting");
   });
 
-  test("should support keyboard navigation", async ({ page }) => {
-    const items = page.locator('w-toolbar [slot="item"]');
-
-    if ((await items.count()) > 1) {
-      await items.first().focus();
-      await expect(items.first()).toBeFocused();
-
-      await page.keyboard.press("ArrowRight");
-      await expect(items.nth(1)).toBeFocused();
-    }
+  test('separator has role="separator"', async ({ page }) => {
+    const separator = page.locator('[slot="separator"]');
+    await expect(separator).toHaveAttribute("role", "separator");
   });
 
-  test("should emit action event on item click", async ({ page }) => {
-    const toolbar = page.locator("w-toolbar").first();
-    const item = toolbar.locator('[slot="item"]').first();
+  test("arrow keys navigate items", async ({ page }) => {
+    const items = page.locator('[slot="item"]');
+    await testArrowNav(page, items, { horizontal: true });
+  });
 
-    const actionEvent = toolbar.evaluate((el) => {
+  test("emits action event on click", async ({ page }) => {
+    const toolbar = page.locator("w-toolbar");
+    const item = page.locator('[slot="item"]').first();
+
+    const actionPromise = toolbar.evaluate((el) => {
       return new Promise<{ item: string | null }>((resolve) => {
-        el.addEventListener(
-          "action",
-          (e: Event) => {
-            resolve((e as CustomEvent).detail);
-          },
-          { once: true }
-        );
+        el.addEventListener("action", (e: Event) => {
+          resolve((e as CustomEvent).detail);
+        }, { once: true });
       });
     });
 
     await item.click();
-    const detail = await actionEvent;
+
+    const detail = await actionPromise;
     expect(detail).toBeDefined();
   });
 });

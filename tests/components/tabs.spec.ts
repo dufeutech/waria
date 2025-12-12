@@ -1,181 +1,246 @@
+/**
+ * w-tabs - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper ARIA roles/relationships
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 2.4.3 Focus Order: Logical tab sequence
+ * - 4.1.2 Name, Role, Value: Proper ARIA states
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent, testArrowNav, testHomeEnd } from "../test-utils";
 
-test.describe("w-tabs accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const TABS = `
+<w-tabs value="tab1">
+  <div slot="tabs">
+    <button slot="tab" name="tab1">Tab 1</button>
+    <button slot="tab" name="tab2">Tab 2</button>
+    <button slot="tab" name="tab3">Tab 3</button>
+  </div>
+  <div slot="views">
+    <div slot="view" name="tab1">Content 1</div>
+    <div slot="view" name="tab2">Content 2</div>
+    <div slot="view" name="tab3">Content 3</div>
+  </div>
+</w-tabs>`;
+
+const TABS_VERTICAL = `
+<w-tabs value="tab1" orientation="vertical">
+  <div slot="tabs">
+    <button slot="tab" name="tab1">Tab 1</button>
+    <button slot="tab" name="tab2">Tab 2</button>
+    <button slot="tab" name="tab3">Tab 3</button>
+  </div>
+  <div slot="views">
+    <div slot="view" name="tab1">Content 1</div>
+    <div slot="view" name="tab2">Content 2</div>
+    <div slot="view" name="tab3">Content 3</div>
+  </div>
+</w-tabs>`;
+
+const TABS_NESTED = `
+<w-tabs value="outer1">
+  <div slot="tabs">
+    <button slot="tab" name="outer1">Outer 1</button>
+    <button slot="tab" name="outer2">Outer 2</button>
+  </div>
+  <div slot="views">
+    <div slot="view" name="outer1">
+      <w-tabs value="inner1">
+        <div slot="tabs">
+          <button slot="tab" name="inner1">Inner A</button>
+          <button slot="tab" name="inner2">Inner B</button>
+        </div>
+        <div slot="views">
+          <div slot="view" name="inner1">Inner content A</div>
+          <div slot="view" name="inner2">Inner content B</div>
+        </div>
+      </w-tabs>
+    </div>
+    <div slot="view" name="outer2">Outer content 2</div>
+  </div>
+</w-tabs>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests - Horizontal Tabs
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-tabs", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Tabs", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-tabs", { state: "visible" });
+    await renderComponent(page, TABS, "w-tabs");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-tabs" });
   });
 
-  test('should have role="tablist" on tab list container', async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tablist = page.locator("w-tabs").first().locator('[slot="list"]');
+  test("tablist has correct role", async ({ page }) => {
+    const tablist = page.locator('[slot="tabs"]');
     await expect(tablist).toHaveAttribute("role", "tablist");
+    await expect(tablist).toHaveAttribute("aria-orientation", "horizontal");
   });
 
-  test('should have role="tab" on tab triggers', async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
+  test("tabs have correct ARIA attributes", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
+    const count = await tabs.count();
 
-    const count = await tabTriggers.count();
     for (let i = 0; i < count; i++) {
-      await expect(tabTriggers.nth(i)).toHaveAttribute("role", "tab");
+      await expect(tabs.nth(i)).toHaveAttribute("role", "tab");
+    }
+    await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
+    await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "false");
+  });
+
+  test("views have correct ARIA attributes", async ({ page }) => {
+    const views = page.locator('[slot="view"]');
+    const count = await views.count();
+
+    for (let i = 0; i < count; i++) {
+      await expect(views.nth(i)).toHaveAttribute("role", "tabpanel");
     }
   });
 
-  test('should have role="tabpanel" on panels', async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const panels = tabs.locator('[slot="panel"]');
+  test("aria-controls links tab to view", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
+    const views = page.locator('[slot="view"]');
 
-    const count = await panels.count();
-    for (let i = 0; i < count; i++) {
-      await expect(panels.nth(i)).toHaveAttribute("role", "tabpanel");
-    }
+    const ariaControls = await tabs.first().getAttribute("aria-controls");
+    const viewId = await views.first().getAttribute("id");
+    expect(ariaControls).toBe(viewId);
   });
 
-  test("should have aria-selected on active tab", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
+  test("aria-labelledby links view to tab", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
+    const views = page.locator('[slot="view"]');
 
-    // First tab should be selected by default
-    await expect(tabTriggers.first()).toHaveAttribute("aria-selected", "true");
+    const tabId = await tabs.first().getAttribute("id");
+    const labelledby = await views.first().getAttribute("aria-labelledby");
+    expect(labelledby).toBe(tabId);
   });
 
-  test("should switch tabs on click", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
+  test("click switches active tab", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
 
-    // Click second tab
-    await tabTriggers.nth(1).click();
-
-    await expect(tabTriggers.nth(1)).toHaveAttribute("aria-selected", "true");
-    await expect(tabTriggers.first()).toHaveAttribute("aria-selected", "false");
+    await tabs.nth(1).click();
+    await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+    await expect(tabs.first()).toHaveAttribute("aria-selected", "false");
   });
 
-  test("should navigate tabs with arrow keys", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
+  test("non-selected views are hidden", async ({ page }) => {
+    const views = page.locator('[slot="view"]');
 
-    await tabTriggers.first().focus();
-
-    // Arrow right to second tab
-    await page.keyboard.press("ArrowRight");
-    await expect(tabTriggers.nth(1)).toBeFocused();
-
-    // Arrow left back to first
-    await page.keyboard.press("ArrowLeft");
-    await expect(tabTriggers.first()).toBeFocused();
+    await expect(views.first()).not.toHaveAttribute("hidden");
+    await expect(views.nth(1)).toHaveAttribute("hidden", "");
+    await expect(views.nth(2)).toHaveAttribute("hidden", "");
   });
 
-  test("should activate tab on Enter", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
+  test("arrow keys navigate tabs", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
+    await testArrowNav(page, tabs, { horizontal: true });
+  });
 
-    await tabTriggers.first().focus();
+  test("Home/End keys navigate to first/last", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
+    await testHomeEnd(page, tabs);
+  });
+
+  test("Enter activates focused tab", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
+
+    await tabs.first().focus();
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("Enter");
-
-    await expect(tabTriggers.nth(1)).toHaveAttribute("aria-selected", "true");
+    await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
   });
 
-  test("should activate tab on Space", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
+  test("Space activates focused tab", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
 
-    await tabTriggers.first().focus();
+    await tabs.first().focus();
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("Space");
+    await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+  });
+});
 
-    await expect(tabTriggers.nth(1)).toHaveAttribute("aria-selected", "true");
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests - Vertical Tabs
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-tabs vertical", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, TABS_VERTICAL, "w-tabs");
   });
 
-  test("should go to first tab on Home key", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
-
-    await tabTriggers.nth(1).focus();
-    await page.keyboard.press("Home");
-
-    await expect(tabTriggers.first()).toBeFocused();
+  test("has vertical orientation", async ({ page }) => {
+    const tablist = page.locator('[slot="tabs"]');
+    await expect(tablist).toHaveAttribute("aria-orientation", "vertical");
   });
 
-  test("should go to last tab on End key", async ({ page }) => {
-    // Target the first tabs component (horizontal) - has 3 tabs
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
+  test("ArrowUp/Down navigate tabs", async ({ page }) => {
+    const tabs = page.locator('[slot="tab"]');
+    await testArrowNav(page, tabs, { horizontal: false });
+  });
+});
 
-    await tabTriggers.first().focus();
-    await page.keyboard.press("End");
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests - Nested Tabs
+// ═══════════════════════════════════════════════════════════════════════════
 
-    // Last tab in horizontal tabs (tab3)
-    await expect(tabTriggers.nth(2)).toBeFocused();
+test.describe("w-tabs nested", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, TABS_NESTED, "w-tabs");
+    // Wait for both tab groups to initialize
+    await page.waitForFunction(() => {
+      const tablists = document.querySelectorAll('[slot="tabs"][role="tablist"]');
+      return tablists.length === 2;
+    });
   });
 
-  test("should have aria-controls linking tab to panel", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
-    const panels = tabs.locator('[slot="panel"]');
-
-    const ariaControls = await tabTriggers
-      .first()
-      .getAttribute("aria-controls");
-    expect(ariaControls).toBeTruthy();
-
-    const panelId = await panels.first().getAttribute("id");
-    expect(ariaControls).toBe(panelId);
+  test("outer and inner have separate tablists", async ({ page }) => {
+    const tablists = page.locator('[slot="tabs"][role="tablist"]');
+    await expect(tablists).toHaveCount(2);
   });
 
-  test("should have aria-labelledby on panels", async ({ page }) => {
-    // Target the first tabs component (horizontal)
-    const tabs = page.locator("w-tabs").first();
-    const tabTriggers = tabs.locator('[slot="tab"]');
-    const panels = tabs.locator('[slot="panel"]');
+  test("outer tabs control outer views only", async ({ page }) => {
+    const outer = page.locator("w-tabs").first();
+    const outerTabs = outer.locator("> [slot='tabs'] [slot='tab']");
 
-    const tabId = await tabTriggers.first().getAttribute("id");
-    const ariaLabelledby = await panels.first().getAttribute("aria-labelledby");
-
-    expect(ariaLabelledby).toBe(tabId);
+    await expect(outerTabs).toHaveCount(2);
+    await expect(outerTabs.first()).toHaveAttribute("aria-selected", "true");
   });
 
-  test("should support vertical orientation", async ({ page }) => {
-    const verticalTabs = page.locator('w-tabs[orientation="vertical"]');
+  test("inner tabs control inner views only", async ({ page }) => {
+    const inner = page.locator("w-tabs w-tabs");
+    const innerTabs = inner.locator("[slot='tabs'] [slot='tab']");
 
-    if ((await verticalTabs.count()) > 0) {
-      const tablist = verticalTabs.locator('[slot="list"]');
-      await expect(tablist).toHaveAttribute("aria-orientation", "vertical");
-    }
+    await expect(innerTabs).toHaveCount(2);
+    await expect(innerTabs.first()).toHaveAttribute("aria-selected", "true");
   });
 
-  test("should navigate vertical tabs with ArrowUp/ArrowDown", async ({
-    page,
-  }) => {
-    const verticalTabs = page.locator('w-tabs[orientation="vertical"]');
+  test("clicking outer tab does not affect inner", async ({ page }) => {
+    const outer = page.locator("w-tabs").first();
+    const outerTabs = outer.locator("> [slot='tabs'] [slot='tab']");
+    const inner = page.locator("w-tabs w-tabs");
+    const innerTabs = inner.locator("[slot='tabs'] [slot='tab']");
 
-    if ((await verticalTabs.count()) > 0) {
-      const tabTriggers = verticalTabs.locator('[slot="tab"]');
+    await outerTabs.nth(1).click();
+    await expect(innerTabs.first()).toHaveAttribute("aria-selected", "true");
+  });
 
-      await tabTriggers.first().focus();
+  test("clicking inner tab does not affect outer", async ({ page }) => {
+    const outer = page.locator("w-tabs").first();
+    const outerTabs = outer.locator("> [slot='tabs'] [slot='tab']");
+    const inner = page.locator("w-tabs w-tabs");
+    const innerTabs = inner.locator("[slot='tabs'] [slot='tab']");
 
-      // Arrow down to second tab
-      await page.keyboard.press("ArrowDown");
-      await expect(tabTriggers.nth(1)).toBeFocused();
-
-      // Arrow up back to first
-      await page.keyboard.press("ArrowUp");
-      await expect(tabTriggers.first()).toBeFocused();
-    }
+    await innerTabs.nth(1).click();
+    await expect(outerTabs.first()).toHaveAttribute("aria-selected", "true");
   });
 });

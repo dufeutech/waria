@@ -1,6 +1,11 @@
 /**
  * Shared Test Utilities
- * DRY helpers for component testing using library constants
+ * DRY helpers for component testing - WCAG 2.1 AA compliance focus
+ *
+ * Principles:
+ * - DRY: Reusable helpers for common test patterns
+ * - SoC: Each helper has a single purpose
+ * - Composable: Helpers combine without side effects
  */
 
 import { Page, Locator, expect } from "@playwright/test";
@@ -8,168 +13,144 @@ import { Page, Locator, expect } from "@playwright/test";
 // Re-export library constants for tests
 export { SLOT, KEY, ARIA, BOOL } from "../src/constants";
 
-// ─────────────────────────────────────────────────────────────
-// Route helpers - consistent navigation
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixture Rendering - Component testing via test page
+// ═══════════════════════════════════════════════════════════════════════════
 
-/** Navigate to a component example page using hash routing */
-export const gotoComponent = async (
+/** Navigate to test page and inject HTML fixture */
+export async function render(page: Page, html: string): Promise<void> {
+  await page.goto("/tests-runner.html");
+  // Wait for the library to register custom elements
+  await page.waitForFunction(() => customElements.get("w-tabs") !== undefined, {
+    timeout: 10000,
+  });
+  await page.locator("#test-root").evaluate((el, content) => {
+    el.innerHTML = content;
+  }, html);
+}
+
+/** Wait for component to initialize (checks for ARIA attribute) */
+export async function waitForInit(
   page: Page,
-  component: string
-): Promise<void> => {
-  // Ensure first letter is capitalized for route consistency
-  const route = component.charAt(0).toUpperCase() + component.slice(1);
-  await page.goto(`/#/${route}`, { waitUntil: "domcontentloaded" });
-};
+  selector: string,
+  checkAttr = "role"
+): Promise<void> {
+  await page.waitForFunction(
+    ({ sel, attr }) => {
+      const el = document.querySelector(sel);
+      return el?.hasAttribute(attr) || el?.querySelector(`[${attr}]`) !== null;
+    },
+    { sel: selector, attr: checkAttr },
+    { timeout: 10000 }
+  );
+}
 
-/** Wait for a component to be visible on the page
- * Uses a child selector when provided - more reliable with Alpine.js
- * which controls section visibility via x-show
- */
-export const waitForComponent = async (
+/** Render and wait for component initialization */
+export async function renderComponent(
   page: Page,
-  tag: string,
-  childSelector?: string
-): Promise<Locator> => {
-  const locator = page.locator(tag).first();
-  const waitSelector = childSelector ? `${tag} ${childSelector}` : tag;
-  await page.waitForSelector(waitSelector, { state: "visible", timeout: 10000 });
-  return locator;
-};
+  html: string,
+  selector: string,
+  checkAttr = "role"
+): Promise<void> {
+  await render(page, html);
+  await waitForInit(page, selector, checkAttr);
+}
 
-/** Navigate to component page and wait for it to be visible */
-export const setupComponent = async (
-  page: Page,
-  component: string,
-  tag?: string
-): Promise<Locator> => {
-  await gotoComponent(page, component);
-  return waitForComponent(page, tag ?? `w-${component.toLowerCase()}`);
-};
-
-// ─────────────────────────────────────────────────────────────
-// ARIA attribute helpers
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// ARIA Attribute Assertions - WCAG compliance helpers
+// ═══════════════════════════════════════════════════════════════════════════
 
 /** Assert element has expected role */
-export const expectRole = async (
-  locator: Locator,
-  role: string
-): Promise<void> => {
-  await expect(locator).toHaveAttribute("role", role);
-};
+export const expectRole = (locator: Locator, role: string) =>
+  expect(locator).toHaveAttribute("role", role);
 
-/** Assert element has aria-label or aria-labelledby */
-export const expectLabeled = async (locator: Locator): Promise<void> => {
+/** Assert element is labeled (WCAG 1.3.1, 4.1.2) */
+export async function expectLabeled(locator: Locator): Promise<void> {
   const label = await locator.getAttribute("aria-label");
   const labelledby = await locator.getAttribute("aria-labelledby");
   expect(label || labelledby).toBeTruthy();
-};
+}
 
 /** Assert aria-expanded state */
-export const expectExpanded = async (
-  locator: Locator,
-  expanded: boolean
-): Promise<void> => {
-  await expect(locator).toHaveAttribute(
-    "aria-expanded",
-    expanded ? "true" : "false"
-  );
-};
+export const expectExpanded = (locator: Locator, expanded: boolean) =>
+  expect(locator).toHaveAttribute("aria-expanded", String(expanded));
 
 /** Assert aria-selected state */
-export const expectSelected = async (
-  locator: Locator,
-  selected: boolean
-): Promise<void> => {
-  await expect(locator).toHaveAttribute(
-    "aria-selected",
-    selected ? "true" : "false"
-  );
-};
+export const expectSelected = (locator: Locator, selected: boolean) =>
+  expect(locator).toHaveAttribute("aria-selected", String(selected));
 
 /** Assert aria-checked state */
-export const expectChecked = async (
+export const expectChecked = (
   locator: Locator,
   checked: boolean | "mixed"
-): Promise<void> => {
-  const value = checked === "mixed" ? "mixed" : checked ? "true" : "false";
-  await expect(locator).toHaveAttribute("aria-checked", value);
-};
+) =>
+  expect(locator).toHaveAttribute(
+    "aria-checked",
+    checked === "mixed" ? "mixed" : String(checked)
+  );
 
 /** Assert aria-pressed state */
-export const expectPressed = async (
-  locator: Locator,
-  pressed: boolean
-): Promise<void> => {
-  await expect(locator).toHaveAttribute(
-    "aria-pressed",
-    pressed ? "true" : "false"
-  );
-};
+export const expectPressed = (locator: Locator, pressed: boolean) =>
+  expect(locator).toHaveAttribute("aria-pressed", String(pressed));
 
 /** Assert aria-disabled state */
-export const expectDisabled = async (
+export async function expectDisabled(
   locator: Locator,
   disabled: boolean
-): Promise<void> => {
+): Promise<void> {
   if (disabled) {
     await expect(locator).toHaveAttribute("aria-disabled", "true");
   } else {
     const attr = await locator.getAttribute("aria-disabled");
     expect(attr === null || attr === "false").toBeTruthy();
   }
-};
+}
 
 /** Assert aria-current state */
-export const expectCurrent = async (
+export async function expectCurrent(
   locator: Locator,
   value: string | null
-): Promise<void> => {
+): Promise<void> {
   if (value) {
     await expect(locator).toHaveAttribute("aria-current", value);
   } else {
-    const attr = await locator.getAttribute("aria-current");
-    expect(attr).toBeNull();
+    expect(await locator.getAttribute("aria-current")).toBeNull();
   }
-};
+}
 
-// ─────────────────────────────────────────────────────────────
-// Keyboard interaction helpers
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// Keyboard Navigation - WCAG 2.1.1 compliance
+// ═══════════════════════════════════════════════════════════════════════════
 
-/** Press a key and verify focus moved to expected element */
-export const pressKeyAndExpectFocus = async (
+/** Press key and verify focus moved */
+export async function pressAndExpectFocus(
   page: Page,
   key: string,
-  expectedFocused: Locator
-): Promise<void> => {
+  expected: Locator
+): Promise<void> {
   await page.keyboard.press(key);
-  await expect(expectedFocused).toBeFocused();
-};
+  await expect(expected).toBeFocused();
+}
 
 /** Focus element and press key */
-export const focusAndPress = async (
+export async function focusAndPress(
   locator: Locator,
   page: Page,
   key: string
-): Promise<void> => {
+): Promise<void> {
   await locator.focus();
   await page.keyboard.press(key);
-};
+}
 
-/** Test arrow key navigation between items */
-export const testArrowNavigation = async (
+/** Test arrow key navigation (WCAG 2.1.1) */
+export async function testArrowNav(
   page: Page,
   items: Locator,
-  config: {
-    horizontal?: boolean;
-    wrap?: boolean;
-  } = {}
-): Promise<void> => {
-  const { horizontal = true, wrap = false } = config;
-  const forwardKey = horizontal ? "ArrowRight" : "ArrowDown";
-  const backwardKey = horizontal ? "ArrowLeft" : "ArrowUp";
+  opts: { horizontal?: boolean; wrap?: boolean } = {}
+): Promise<void> {
+  const { horizontal = true, wrap = false } = opts;
+  const fwdKey = horizontal ? "ArrowRight" : "ArrowDown";
+  const backKey = horizontal ? "ArrowLeft" : "ArrowUp";
 
   const count = await items.count();
   if (count < 2) return;
@@ -177,128 +158,91 @@ export const testArrowNavigation = async (
   await items.first().focus();
   await expect(items.first()).toBeFocused();
 
-  // Forward navigation
-  await page.keyboard.press(forwardKey);
+  await page.keyboard.press(fwdKey);
   await expect(items.nth(1)).toBeFocused();
 
-  // Backward navigation
-  await page.keyboard.press(backwardKey);
+  await page.keyboard.press(backKey);
   await expect(items.first()).toBeFocused();
 
-  // Wrap behavior
   if (wrap) {
-    await page.keyboard.press(backwardKey);
+    await page.keyboard.press(backKey);
     await expect(items.last()).toBeFocused();
   }
-};
+}
 
-/** Test Home/End key navigation */
-export const testHomeEndNavigation = async (
-  page: Page,
-  items: Locator
-): Promise<void> => {
+/** Test Home/End navigation */
+export async function testHomeEnd(page: Page, items: Locator): Promise<void> {
   const count = await items.count();
   if (count < 2) return;
 
   await items.first().focus();
-
   await page.keyboard.press("End");
   await expect(items.last()).toBeFocused();
 
   await page.keyboard.press("Home");
   await expect(items.first()).toBeFocused();
-};
+}
 
-// ─────────────────────────────────────────────────────────────
-// Event helpers
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// Event Helpers
+// ═══════════════════════════════════════════════════════════════════════════
 
 /** Listen for custom event and return detail */
-export const listenForEvent = async <T = unknown>(
+export async function listenForEvent<T = unknown>(
   locator: Locator,
   eventName: string,
-  action: () => Promise<void>,
-  timeout = 5000
-): Promise<T> => {
+  action: () => Promise<void>
+): Promise<T> {
   const eventPromise = locator.evaluate(
     (el, name) =>
       new Promise<T>((resolve, reject) => {
-        const timeoutId = setTimeout(
-          () => reject(new Error(`Event ${name} not fired`)),
-          5000
-        );
-        el.addEventListener(
-          name,
-          (e: Event) => {
-            clearTimeout(timeoutId);
-            resolve((e as CustomEvent).detail);
-          },
-          { once: true }
-        );
+        const timeout = setTimeout(() => reject(new Error(`Event ${name} not fired`)), 5000);
+        el.addEventListener(name, (e: Event) => {
+          clearTimeout(timeout);
+          resolve((e as CustomEvent).detail);
+        }, { once: true });
       }),
     eventName
   );
-
   await action();
   return eventPromise;
-};
+}
 
-// ─────────────────────────────────────────────────────────────
-// Value helpers for range/spinbutton components
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// Value Helpers - For range/spinbutton components
+// ═══════════════════════════════════════════════════════════════════════════
 
 /** Get numeric ARIA value */
-export const getAriaValue = async (
+export async function getAriaValue(
   locator: Locator,
   attr: "valuenow" | "valuemin" | "valuemax"
-): Promise<number> => {
-  const value = await locator.getAttribute(`aria-${attr}`);
-  return Number(value);
-};
+): Promise<number> {
+  return Number(await locator.getAttribute(`aria-${attr}`));
+}
 
 /** Assert value changed in expected direction */
-export const expectValueChange = async (
+export async function expectValueChange(
   locator: Locator,
   action: () => Promise<void>,
   direction: "increase" | "decrease"
-): Promise<void> => {
+): Promise<void> {
   const before = await getAriaValue(locator, "valuenow");
   await action();
   const after = await getAriaValue(locator, "valuenow");
+  direction === "increase"
+    ? expect(after).toBeGreaterThan(before)
+    : expect(after).toBeLessThan(before);
+}
 
-  if (direction === "increase") {
-    expect(after).toBeGreaterThan(before);
-  } else {
-    expect(after).toBeLessThan(before);
-  }
-};
-
-/** Assert value equals min or max */
-export const expectValueAtBound = async (
-  locator: Locator,
-  bound: "min" | "max"
-): Promise<void> => {
-  const value = await getAriaValue(locator, "valuenow");
-  const boundValue = await getAriaValue(
-    locator,
-    bound === "min" ? "valuemin" : "valuemax"
-  );
-  expect(value).toBe(boundValue);
-};
-
-// ─────────────────────────────────────────────────────────────
-// Component-specific helpers
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// Slot Helpers
+// ═══════════════════════════════════════════════════════════════════════════
 
 /** Get slotted elements */
-export const getSlot = (parent: Locator, slot: string): Locator => {
-  // Handle both raw slot name and [slot="name"] format
-  const selector = slot.startsWith("[") ? slot : `[slot="${slot}"]`;
-  return parent.locator(selector);
-};
+export const getSlot = (parent: Locator, slot: string): Locator =>
+  parent.locator(slot.startsWith("[") ? slot : `[slot="${slot}"]`);
 
-/** Skip test if element not found */
-export const skipIfMissing = async (locator: Locator): Promise<boolean> => {
-  const count = await locator.count();
-  return count === 0;
-};
+/** Check if element exists */
+export async function exists(locator: Locator): Promise<boolean> {
+  return (await locator.count()) > 0;
+}

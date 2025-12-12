@@ -19,9 +19,8 @@ defineComponent({
   ],
 
   children: {
-    list: SLOT.list,
-    tabs: { selector: SLOT.tab, multiple: true },
-    panels: { selector: SLOT.panel, multiple: true },
+    tabs: SLOT.tabs,
+    views: SLOT.views,
   },
 
   events: {
@@ -38,21 +37,41 @@ defineComponent({
   setup(ctx) {
     const el = ctx.element as unknown as TabsElement;
 
-    const getTabs = (): HTMLElement[] => ctx.querySlot<HTMLElement>("tab");
-    const getPanels = (): HTMLElement[] => ctx.querySlot<HTMLElement>("panel");
-    const getList = (): HTMLElement | null => ctx.query<HTMLElement>(SLOT.list);
+    // Get the direct slot="tabs" container (not nested ones)
+    const getTabsContainer = (): HTMLElement | null => {
+      return ctx.query<HTMLElement>(SLOT.tabs);
+    };
+
+    // Get the direct slot="views" container (not nested ones)
+    const getViewsContainer = (): HTMLElement | null => {
+      return ctx.query<HTMLElement>(SLOT.views);
+    };
+
+    const getTabs = (): HTMLElement[] => {
+      const container = getTabsContainer();
+      if (!container) return [];
+      // Get tab buttons inside the tabs container
+      return Array.from(container.querySelectorAll<HTMLElement>(SLOT.tab));
+    };
+
+    const getPanels = (): HTMLElement[] => {
+      const container = getViewsContainer();
+      if (!container) return [];
+      // Get views inside the views container
+      return Array.from(container.querySelectorAll<HTMLElement>(SLOT.view));
+    };
 
     let rovingTabindex: ReturnType<typeof createRovingTabindex> | null = null;
 
     const updateAria = (): void => {
       const tabs = getTabs();
       const panels = getPanels();
-      const list = getList();
+      const tabsContainer = getTabsContainer();
       const value = el.value || tabs[0]?.getAttribute("name") || "";
 
-      if (list) {
-        list.setAttribute("role", "tablist");
-        list.setAttribute(ARIA.orientation, el.orientation);
+      if (tabsContainer) {
+        tabsContainer.setAttribute("role", "tablist");
+        tabsContainer.setAttribute(ARIA.orientation, el.orientation);
       }
 
       tabs.forEach((tab) => {
@@ -113,6 +132,10 @@ defineComponent({
 
     Object.assign(ctx.element, {
       handleTabClick(_e: Event, target: HTMLElement): void {
+        // Only handle if this tab belongs to our tabs container
+        const tabsContainer = getTabsContainer();
+        if (!tabsContainer || !tabsContainer.contains(target)) return;
+
         const tabName = target.getAttribute("name");
 
         if (tabName && tabName !== el.value) {
@@ -123,9 +146,12 @@ defineComponent({
       },
 
       handleKeyDown(e: KeyboardEvent): void {
+        const target = e.target as HTMLElement;
+        const tabsContainer = getTabsContainer();
+        if (!tabsContainer || !tabsContainer.contains(target)) return;
+
         if (e.key === "Enter" || e.key === " ") {
           if (el.activation === "manual") {
-            const target = e.target as HTMLElement;
             const tabName = target.getAttribute("name");
             if (tabName && tabName !== el.value) {
               e.preventDefault();

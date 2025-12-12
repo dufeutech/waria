@@ -1,107 +1,125 @@
+/**
+ * w-toast - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 4.1.3 Status Messages: aria-live for announcements
+ * - 2.2.1 Timing Adjustable: User can dismiss or extend
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
+import { renderComponent } from "../test-utils";
 
-test.describe("w-toast accessibility", () => {
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const TOAST = `<w-toast open>Notification message</w-toast>`;
+const TOAST_DISMISSIBLE = `
+<w-toast open dismissible>
+  Dismissible notification
+  <button slot="close">Close</button>
+</w-toast>`;
+const TOAST_VARIANTS = `
+<w-toast open variant="success">Success message</w-toast>
+<w-toast open variant="error">Error message</w-toast>
+<w-toast open variant="warning">Warning message</w-toast>
+<w-toast open variant="info">Info message</w-toast>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-toast", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/Toast", { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("w-toast", { state: "visible" });
+    await renderComponent(page, TOAST, "w-toast");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
+    await checkA11y(page, { selector: "w-toast" });
+  });
+
+  test('has role="alert" or role="status"', async ({ page }) => {
     const toast = page.locator("w-toast");
-    if ((await toast.count()) > 0) {
-      await checkA11y(page, { selector: "w-toast" });
-    }
+    const role = await toast.getAttribute("role");
+    expect(["alert", "status"]).toContain(role);
   });
 
-  test('should have role="alert" or role="status"', async ({ page }) => {
-    const toast = page.locator("w-toast").first();
-
-    if ((await toast.count()) > 0) {
-      const role = await toast.getAttribute("role");
-      expect(["alert", "status"]).toContain(role);
-    }
+  test("has aria-live attribute", async ({ page }) => {
+    const toast = page.locator("w-toast");
+    const ariaLive = await toast.getAttribute("aria-live");
+    expect(["polite", "assertive"]).toContain(ariaLive);
   });
 
-  test("should have aria-live attribute", async ({ page }) => {
-    const toast = page.locator("w-toast").first();
-
-    if ((await toast.count()) > 0) {
-      const ariaLive = await toast.getAttribute("aria-live");
-      expect(["polite", "assertive"]).toContain(ariaLive);
-    }
+  test('has aria-atomic="true"', async ({ page }) => {
+    const toast = page.locator("w-toast");
+    await expect(toast).toHaveAttribute("aria-atomic", "true");
   });
 
-  test("should be visible when open", async ({ page }) => {
-    const toast = page.locator("w-toast[open]").first();
+  test("is visible when open", async ({ page }) => {
+    const toast = page.locator("w-toast");
+    await expect(toast).toBeVisible();
+  });
+});
 
-    if ((await toast.count()) > 0) {
-      await expect(toast).toBeVisible();
-    }
+test.describe("w-toast dismissible", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, TOAST_DISMISSIBLE, "w-toast");
   });
 
-  test("should support different variants", async ({ page }) => {
-    const successToast = page.locator('w-toast[variant="success"]');
-    const errorToast = page.locator('w-toast[variant="error"]');
-    const warningToast = page.locator('w-toast[variant="warning"]');
-    const infoToast = page.locator('w-toast[variant="info"]');
-
-    // At least one variant should exist or default variant
-    const toast = page.locator("w-toast").first();
-    if ((await toast.count()) > 0) {
-      const variant = await toast.getAttribute("variant");
-      expect(["success", "error", "warning", "info", null]).toContain(variant);
-    }
+  test("has close button", async ({ page }) => {
+    const closeBtn = page.locator('[slot="close"]');
+    await expect(closeBtn).toBeVisible();
   });
 
-  test("should have close button when dismissible", async ({ page }) => {
-    const toast = page.locator("w-toast[dismissible]").first();
+  test("closes on close button click", async ({ page }) => {
+    const toast = page.locator("w-toast");
+    const closeBtn = page.locator('[slot="close"]');
 
-    if ((await toast.count()) > 0) {
-      const closeBtn = toast.locator('[slot="close"]');
-      await expect(closeBtn).toBeVisible();
-    }
+    await expect(toast).toHaveAttribute("open", "");
+    await closeBtn.click();
+    await expect(toast).toBeHidden();
   });
 
-  test("should close on close button click", async ({ page }) => {
-    // Get the first dismissible toast and click its close button
-    const toasts = page.locator("w-toast[dismissible]");
-    if ((await toasts.count()) > 0) {
-      const toast = toasts.first();
-      // Verify it starts open
-      await expect(toast).toHaveAttribute("open", "");
+  test("emits close event when dismissed", async ({ page }) => {
+    const toast = page.locator("w-toast");
+    const closeBtn = page.locator('[slot="close"]');
 
-      const closeBtn = toast.locator('[slot="close"]');
-      await closeBtn.click();
-
-      // After clicking close, the toast should be hidden (no open attribute)
-      await expect(toast).toBeHidden();
-    }
-  });
-
-  test("should emit close event when dismissed", async ({ page }) => {
-    const toast = page.locator("w-toast[dismissible][open]").first();
-
-    if ((await toast.count()) > 0) {
-      const closePromise = toast.evaluate((el) => {
-        return new Promise<boolean>((resolve) => {
-          el.addEventListener("close", () => resolve(true), { once: true });
-        });
+    const closePromise = toast.evaluate((el) => {
+      return new Promise<boolean>((resolve) => {
+        el.addEventListener("close", () => resolve(true), { once: true });
       });
+    });
 
-      const closeBtn = toast.locator('[slot="close"]');
-      await closeBtn.click();
+    await closeBtn.click();
 
-      const closed = await closePromise;
-      expect(closed).toBe(true);
-    }
+    const closed = await closePromise;
+    expect(closed).toBe(true);
+  });
+});
+
+test.describe("w-toast variants", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, TOAST_VARIANTS, "w-toast");
   });
 
-  test('should have aria-atomic="true"', async ({ page }) => {
-    const toast = page.locator("w-toast").first();
+  test("supports success variant", async ({ page }) => {
+    const toast = page.locator('w-toast[variant="success"]');
+    await expect(toast).toHaveAttribute("variant", "success");
+  });
 
-    if ((await toast.count()) > 0) {
-      await expect(toast).toHaveAttribute("aria-atomic", "true");
-    }
+  test("supports error variant", async ({ page }) => {
+    const toast = page.locator('w-toast[variant="error"]');
+    await expect(toast).toHaveAttribute("variant", "error");
+  });
+
+  test("supports warning variant", async ({ page }) => {
+    const toast = page.locator('w-toast[variant="warning"]');
+    await expect(toast).toHaveAttribute("variant", "warning");
+  });
+
+  test("supports info variant", async ({ page }) => {
+    const toast = page.locator('w-toast[variant="info"]');
+    await expect(toast).toHaveAttribute("variant", "info");
   });
 });

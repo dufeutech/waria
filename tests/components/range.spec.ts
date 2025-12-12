@@ -1,155 +1,158 @@
+/**
+ * w-range - WCAG 2.1 AA Compliance Tests
+ *
+ * WCAG Requirements:
+ * - 1.3.1 Info and Relationships: Proper slider role
+ * - 2.1.1 Keyboard: Full keyboard operability
+ * - 4.1.2 Name, Role, Value: aria-valuenow/min/max
+ */
+
 import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
-import {
-  gotoComponent,
-  SLOT,
-  KEY,
-  expectValueChange,
-  expectValueAtBound,
-  getAriaValue,
-} from "../test-utils";
+import { renderComponent } from "../test-utils";
 
-// Selector for demo range component (not the one on Label page)
-const DEMO_RANGE = 'w-range[id="volume"]';
+// ═══════════════════════════════════════════════════════════════════════════
+// Fixtures
+// ═══════════════════════════════════════════════════════════════════════════
 
-test.describe("w-range accessibility", () => {
+const RANGE = `
+<w-range min="0" max="100" value="50" label="Volume">
+  <div slot="track"></div>
+  <div slot="fill"></div>
+  <div slot="thumb"></div>
+</w-range>`;
+
+const RANGE_VERTICAL = `
+<w-range min="0" max="100" value="50" orientation="vertical" label="Volume">
+  <div slot="track"></div>
+  <div slot="fill"></div>
+  <div slot="thumb"></div>
+</w-range>`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+test.describe("w-range", () => {
   test.beforeEach(async ({ page }) => {
-    await gotoComponent(page, "Range");
-    // Wait for the specific demo range's thumb to be visible
-    await page.waitForSelector(`${DEMO_RANGE} ${SLOT.thumb}`, {
-      state: "visible",
-      timeout: 10000,
-    });
+    await renderComponent(page, RANGE, "w-range");
   });
 
-  test("should have no axe violations", async ({ page }) => {
+  test("axe accessibility scan", async ({ page }) => {
     await checkA11y(page, { selector: "w-range" });
   });
 
-  test("should have correct ARIA attributes on thumb", async ({ page }) => {
-    const range = page.locator(DEMO_RANGE);
-    const thumb = range.locator(SLOT.thumb);
+  test("thumb has correct ARIA attributes", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
 
     await expect(thumb).toHaveAttribute("role", "slider");
-    await expect(thumb).toHaveAttribute("aria-valuemin");
-    await expect(thumb).toHaveAttribute("aria-valuemax");
-    await expect(thumb).toHaveAttribute("aria-valuenow");
+    await expect(thumb).toHaveAttribute("aria-valuemin", "0");
+    await expect(thumb).toHaveAttribute("aria-valuemax", "100");
+    await expect(thumb).toHaveAttribute("aria-valuenow", "50");
     await expect(thumb).toHaveAttribute("tabindex", "0");
   });
 
-  test("should increment with ArrowRight key", async ({ page }) => {
-    const range = page.locator(DEMO_RANGE);
-    const thumb = range.locator(SLOT.thumb);
+  test("ArrowRight increments value", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
 
     await thumb.focus();
-    await expectValueChange(thumb, () => page.keyboard.press(KEY.ArrowRight), "increase");
+    const initialValue = Number(await thumb.getAttribute("aria-valuenow"));
+
+    await page.keyboard.press("ArrowRight");
+    const newValue = Number(await thumb.getAttribute("aria-valuenow"));
+
+    expect(newValue).toBeGreaterThan(initialValue);
   });
 
-  test("should decrement with ArrowLeft key", async ({ page }) => {
-    const range = page.locator(DEMO_RANGE);
-    const thumb = range.locator(SLOT.thumb);
-
-    // Set value to middle first
-    await range.evaluate((el: HTMLElement & { setValue: (v: number) => void }) => el.setValue(50));
-    await thumb.focus();
-    await expectValueChange(thumb, () => page.keyboard.press(KEY.ArrowLeft), "decrease");
-  });
-
-  test("should go to min with Home key", async ({ page }) => {
-    const range = page.locator(DEMO_RANGE);
-    const thumb = range.locator(SLOT.thumb);
-
-    await range.evaluate((el: HTMLElement & { setValue: (v: number) => void }) => el.setValue(50));
-    await thumb.focus();
-    await page.keyboard.press(KEY.Home);
-    await expectValueAtBound(thumb, "min");
-  });
-
-  test("should go to max with End key", async ({ page }) => {
-    const range = page.locator(DEMO_RANGE);
-    const thumb = range.locator(SLOT.thumb);
+  test("ArrowLeft decrements value", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
 
     await thumb.focus();
-    await page.keyboard.press(KEY.End);
-    await expectValueAtBound(thumb, "max");
+    const initialValue = Number(await thumb.getAttribute("aria-valuenow"));
+
+    await page.keyboard.press("ArrowLeft");
+    const newValue = Number(await thumb.getAttribute("aria-valuenow"));
+
+    expect(newValue).toBeLessThan(initialValue);
   });
 
-  test("should emit change event on value change", async ({ page }) => {
-    const range = page.locator(DEMO_RANGE);
-    const thumb = range.locator(SLOT.thumb);
+  test("Home key sets to min", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
 
-    await expect(thumb).toHaveAttribute("aria-valuenow");
     await thumb.focus();
-    await expectValueChange(thumb, () => page.keyboard.press(KEY.ArrowRight), "increase");
+    await page.keyboard.press("Home");
+
+    await expect(thumb).toHaveAttribute("aria-valuenow", "0");
   });
 
-  test("should support vertical orientation", async ({ page }) => {
-    const verticalRange = page
-      .locator('w-range[orientation="vertical"]')
-      .first();
+  test("End key sets to max", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
 
-    if ((await verticalRange.count()) > 0) {
-      const thumb = verticalRange.locator('[slot="thumb"]');
-      await expect(thumb).toHaveAttribute("aria-orientation", "vertical");
-    }
+    await thumb.focus();
+    await page.keyboard.press("End");
+
+    await expect(thumb).toHaveAttribute("aria-valuenow", "100");
   });
 
-  test("should increment with ArrowUp key for vertical orientation", async ({
-    page,
-  }) => {
-    const verticalRange = page
-      .locator('w-range[orientation="vertical"]')
-      .first();
+  test("emits change event on value change", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
 
-    if ((await verticalRange.count()) > 0) {
-      const thumb = verticalRange.locator('[slot="thumb"]');
-      await thumb.focus();
-      const initialValue = await thumb.getAttribute("aria-valuenow");
+    // Set up event listener before any action
+    const eventReceived = await page.evaluate(() => {
+      return new Promise<boolean>((resolve) => {
+        const range = document.querySelector("w-range");
+        const thumb = document.querySelector('[slot="thumb"]') as HTMLElement;
 
-      await page.keyboard.press("ArrowUp");
-      const newValue = await thumb.getAttribute("aria-valuenow");
+        if (!range || !thumb) {
+          resolve(false);
+          return;
+        }
 
-      expect(Number(newValue)).toBeGreaterThan(Number(initialValue));
-    }
+        range.addEventListener("change", () => {
+          resolve(true);
+        }, { once: true });
+
+        // Focus and trigger key event
+        thumb.focus();
+        thumb.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+      });
+    });
+
+    expect(eventReceived).toBe(true);
+  });
+});
+
+test.describe("w-range vertical", () => {
+  test.beforeEach(async ({ page }) => {
+    await renderComponent(page, RANGE_VERTICAL, "w-range");
   });
 
-  test("should decrement with ArrowDown key for vertical orientation", async ({
-    page,
-  }) => {
-    const verticalRange = page
-      .locator('w-range[orientation="vertical"]')
-      .first();
-
-    if ((await verticalRange.count()) > 0) {
-      const thumb = verticalRange.locator('[slot="thumb"]');
-
-      // Set to middle first
-      await verticalRange.evaluate((el: any) => el.setValue(50));
-      await thumb.focus();
-      const initialValue = await thumb.getAttribute("aria-valuenow");
-
-      await page.keyboard.press("ArrowDown");
-      const newValue = await thumb.getAttribute("aria-valuenow");
-
-      expect(Number(newValue)).toBeLessThan(Number(initialValue));
-    }
+  test("has vertical orientation", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
+    await expect(thumb).toHaveAttribute("aria-orientation", "vertical");
   });
 
-  test("should position vertical fill from bottom", async ({ page }) => {
-    const verticalRange = page
-      .locator('w-range[orientation="vertical"]')
-      .first();
+  test("ArrowUp increments value", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
 
-    if ((await verticalRange.count()) > 0) {
-      const fill = verticalRange.locator('[slot="fill"]');
+    await thumb.focus();
+    const initialValue = Number(await thumb.getAttribute("aria-valuenow"));
 
-      if ((await fill.count()) > 0) {
-        // Check that fill has bottom: 0 positioning for vertical mode
-        const bottom = await fill.evaluate(
-          (el: HTMLElement) => el.style.bottom
-        );
-        expect(bottom).toBe("0px");
-      }
-    }
+    await page.keyboard.press("ArrowUp");
+    const newValue = Number(await thumb.getAttribute("aria-valuenow"));
+
+    expect(newValue).toBeGreaterThan(initialValue);
+  });
+
+  test("ArrowDown decrements value", async ({ page }) => {
+    const thumb = page.locator('[slot="thumb"]');
+
+    await thumb.focus();
+    const initialValue = Number(await thumb.getAttribute("aria-valuenow"));
+
+    await page.keyboard.press("ArrowDown");
+    const newValue = Number(await thumb.getAttribute("aria-valuenow"));
+
+    expect(newValue).toBeLessThan(initialValue);
   });
 });
