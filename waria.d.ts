@@ -1,4 +1,10 @@
 import type { JSX } from "preact";
+import type { App } from "@dufeut/waria";
+
+// Declare waria as a global variable
+declare global {
+  const waria: typeof App;
+}
 
 // Base attributes for all waria components
 type WariaBaseAttributes = JSX.HTMLAttributes<HTMLElement>;
