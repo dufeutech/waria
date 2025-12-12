@@ -2,6 +2,8 @@
 
 <div align="center">
 
+  <img height="140px" src="https://raw.githubusercontent.com/dufeut/waria/main/docs/static/img/logo.png" alt="logo"/>
+
 **A modern, framework-agnostic UI primitive library built with vanilla JavaScript, Web Components, and native ESM modules**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
@@ -89,15 +91,15 @@ Visit the [documentation site](https://dufeut.github.io/waria/) for full API ref
 
 ## Components
 
-| Category | Components |
-|----------|------------|
-| Core | Accordion, Collapsible, Tabs, Tree |
-| Form | Choice (Radio/Checkbox), Label, Range, Select, Spinbutton, Switch, Toggles |
-| Overlay | Context Menu, Dialog, Hover Card, Menu, Popover, Toast, Tooltip |
-| Layout | Aspect Ratio, Avatar, Carousel, Link, Scrollbar, Separator |
-| Data | Feed, Grid, Treegrid |
-| Feedback | Progressbar |
-| Utility | Breadcrumb, Navigation, Toolbar, View |
+| Category | Components                                                                 |
+| -------- | -------------------------------------------------------------------------- |
+| Core     | Accordion, Collapsible, Tabs, Tree                                         |
+| Form     | Choice (Radio/Checkbox), Label, Range, Select, Spinbutton, Switch, Toggles |
+| Overlay  | Context Menu, Dialog, Hover Card, Menu, Popover, Toast, Tooltip            |
+| Layout   | Aspect Ratio, Avatar, Carousel, Link, Scrollbar, Separator                 |
+| Data     | Feed, Grid, Treegrid                                                       |
+| Feedback | Progressbar                                                                |
+| Utility  | Breadcrumb, Navigation, Toolbar, View                                      |
 
 ## License
 
