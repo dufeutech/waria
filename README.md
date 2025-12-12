@@ -4,7 +4,7 @@
 
   <img height="140px" src="https://raw.githubusercontent.com/dufeut/waria/main/docs/static/img/logo.png" alt="logo"/>
 
-**A modern, framework-agnostic UI primitive library built with vanilla JavaScript, Web Components, and native ESM modules**
+**Framework-agnostic UI primitives via native Web Components (ESM).**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![ESM](https://img.shields.io/badge/ESM-Native-green.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
