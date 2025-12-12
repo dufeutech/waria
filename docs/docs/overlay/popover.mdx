@@ -24,6 +24,7 @@ Non-modal floating content triggered by click.
 |------|------|---------|-------------|
 | `open` | `boolean` | `false` | Whether popover is visible |
 | `placement` | `string` | `"bottom"` | Position relative to trigger |
+| `persistent` | `boolean` | `false` | Prevent closing via Escape or outside click |
 | `closeOnOutsideClick` | `boolean` | `true` | Close when clicking outside |
 | `closeOnEscape` | `boolean` | `true` | Close on Escape key |
 | `portal` | `boolean` | `true` | Teleport to body |
@@ -57,6 +58,23 @@ Non-modal floating content triggered by click.
 |-----|--------|
 | `Enter` / `Space` | Toggle popover (on trigger) |
 | `Escape` | Close popover |
+
+## Examples
+
+### Persistent Popover
+
+A persistent popover stays open until explicitly closed.
+
+```html
+<w-popover persistent>
+  <button slot="trigger">Edit Settings</button>
+  <div slot="content">
+    <h3>Settings</h3>
+    <input type="text" placeholder="Name" />
+    <button onclick="this.closest('w-popover').open = false">Save</button>
+  </div>
+</w-popover>
+```
 
 ## Accessibility
 

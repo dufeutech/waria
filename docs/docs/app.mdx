@@ -45,11 +45,12 @@ App.init();
 
 ## Configuration Options
 
-| Option | Type      | Default | Description                                         |
-| ------ | --------- | ------- | --------------------------------------------------- |
-| `hash` | `boolean` | `false` | Use hash-based URLs (`#/path`) instead of pathname  |
-| `base` | `string`  | `"/"`   | Base path prefix for pathname routing               |
-| `sync` | `boolean` | `true`  | Sync navigation value across all `w-nav` components |
+| Option   | Type      | Default | Description                                         |
+| -------- | --------- | ------- | --------------------------------------------------- |
+| `hash`   | `boolean` | `false` | Use hash-based URLs (`#/path`) instead of pathname  |
+| `base`   | `string`  | `"/"`   | Base path prefix for pathname routing               |
+| `sync`   | `boolean` | `true`  | Sync navigation value across all `w-nav` components |
+| `native` | `boolean` | `false` | Let links navigate normally (server-side routing)   |
 
 ## Routing Modes
 
@@ -80,6 +81,20 @@ Best for:
 - Clean URLs
 - SEO (when combined with SSR)
 - Server-configured routing
+
+### Native Mode (Server-Side Routing)
+
+```ts
+App.start({ native: true });
+```
+
+In native mode, `w-nav` links work like regular HTML links - clicking them triggers a full page navigation to the server. The client-side router is disabled.
+
+Best for:
+
+- Traditional server-rendered applications (Rails, Django, Laravel, etc.)
+- Multi-page apps with backend routing
+- Progressive enhancement on existing sites
 
 ## Example: Full Setup
 

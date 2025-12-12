@@ -26,6 +26,7 @@ Modal dialogs with focus trapping and accessible announcements.
 |------|------|---------|-------------|
 | `open` | `boolean` | `false` | Whether the dialog is open |
 | `modal` | `boolean` | `true` | Trap focus and add backdrop |
+| `persistent` | `boolean` | `false` | Prevent closing via Escape or outside click |
 | `closeOnEscape` | `boolean` | `true` | Close when Escape is pressed |
 | `closeOnOutsideClick` | `boolean` | `true` | Close when clicking outside |
 | `returnFocus` | `boolean` | `true` | Return focus to trigger on close |
@@ -106,6 +107,21 @@ The dialog supports CSS transitions using these classes:
   dialog.showModal(); // Open
   dialog.close();     // Close
 </script>
+```
+
+### Persistent Dialog
+
+A persistent dialog cannot be dismissed by pressing Escape or clicking outside. The user must explicitly close it via the close button or programmatically.
+
+```html
+<w-dialog persistent label="Important Action Required">
+  <button slot="trigger">Open Persistent Dialog</button>
+  <div slot="content">
+    <h2>Action Required</h2>
+    <p>You must complete this action before continuing.</p>
+    <button slot="close">I understand</button>
+  </div>
+</w-dialog>
 ```
 
 ## Accessibility

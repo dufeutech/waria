@@ -67,6 +67,38 @@ Common slots used across components:
 | `close`   | Close button                              |
 | `label`   | Label text                                |
 
+## Event Handlers
+
+Components emit custom events that you can listen to. Use the `w-*` attribute syntax for inline handlers:
+
+```html
+<w-dialog w-open="console.log('opened')" w-close="console.log('closed')">
+  <button slot="trigger">Open</button>
+  <div slot="content">...</div>
+</w-dialog>
+
+<w-menu w-select="handleSelect(event.detail)">
+  <button slot="trigger">Menu</button>
+  <div slot="content">
+    <button slot="item" name="edit">Edit</button>
+  </div>
+</w-menu>
+```
+
+The `event` object is available in the handler with:
+
+- `event.type` - Event name (e.g., "open", "close")
+- `event.detail` - Event data (varies by component)
+- `event.target` - The component element
+
+You can also use `addEventListener`:
+
+```js
+document.querySelector('w-dialog').addEventListener('open', (e) => {
+  console.log('Dialog opened');
+});
+```
+
 ## Keyboard Navigation
 
 All components support full keyboard navigation:

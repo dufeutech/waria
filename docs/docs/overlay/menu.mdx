@@ -25,6 +25,7 @@ Dropdown menus with nested submenus and keyboard navigation.
 |------|------|---------|-------------|
 | `open` | `boolean` | `false` | Whether the menu is open |
 | `placement` | `string` | `"bottom-start"` | Menu position relative to trigger |
+| `persistent` | `boolean` | `false` | Prevent closing via Escape or outside click |
 | `closeOnSelect` | `boolean` | `true` | Close menu when item is selected |
 | `portal` | `boolean` | `true` | Teleport content to body for z-index safety |
 
@@ -112,6 +113,19 @@ Available placements:
 ```html
 <w-menu closeOnSelect="false">
   <!-- Menu stays open after selecting items -->
+</w-menu>
+```
+
+### Persistent Menu
+
+A persistent menu cannot be dismissed by pressing Escape or clicking outside.
+
+```html
+<w-menu persistent>
+  <button slot="trigger">Options</button>
+  <div slot="content">
+    <button slot="item" name="done">Done</button>
+  </div>
 </w-menu>
 ```
 

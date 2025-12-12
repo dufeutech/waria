@@ -6,7 +6,7 @@
 set -e
 
 echo "========================================"
-echo "  Uizy Documentation Test"
+echo "  Waria Documentation Test"
 echo "========================================"
 echo ""
 
@@ -17,7 +17,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Change to docs directory
-cd "$(dirname "$0")/docs"
+cd "$(dirname "$0")/../docs"
 
 echo -e "${YELLOW}[1/3]${NC} Clearing Docusaurus cache..."
 npm run clear 2>/dev/null || true

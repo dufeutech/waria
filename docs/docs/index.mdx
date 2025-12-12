@@ -5,13 +5,24 @@ title: Welcome
 hide_title: true
 ---
 
-import styles from '@site/src/css/welcome.module.css';
+import styles from "@site/src/css/welcome.module.css";
 
 <div className={styles.hero}>
-  <img src="./img/logo.png" alt="Waria Logo" width="280" height="auto" style={{marginBottom: '1rem'}} />
+  <img
+    src="./img/logo.png"
+    alt="Waria Logo"
+    width="280"
+    height="auto"
+    style={{ marginBottom: "1rem" }}
+  />
   <h1 className={styles.heroTitle}>Waria</h1>
-  <p className={styles.heroTagline}>Accessible by default, performant by design</p>
-  <p className={styles.heroDescription}>A <strong>framework-agnostic</strong> web components library with built-in WCAG 2.1 AA compliance</p>
+  <p className={styles.heroTagline}>
+    Accessible by default, performant by design
+  </p>
+  <p className={styles.heroDescription}>
+    A <strong>framework-agnostic</strong> web components library with built-in
+    WCAG 2.1 AA compliance
+  </p>
 </div>
 
 <div className={styles.section}>
@@ -26,9 +37,13 @@ import styles from '@site/src/css/welcome.module.css';
       <h4>❌ The Hard Way (manual ARIA)</h4>
 
 ```html
-<div role="dialog" aria-modal="true"
-     aria-labelledby="title" aria-describedby="desc"
-     tabindex="-1">
+<div
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="title"
+  aria-describedby="desc"
+  tabindex="-1"
+>
   <h2 id="title">Modal</h2>
   <p id="desc">Content here</p>
   <!-- + focus trap, escape key, click outside... -->
@@ -101,7 +116,7 @@ App.start();
 </div>
 
 <div className={styles.section}>
-  <h2 className={styles.sectionTitle}>29 Components</h2>
+  <h2 className={styles.sectionTitle}>29 Web Components</h2>
   <div className={styles.sectionDescription}>Everything you need for accessible interfaces:</div>
 
   <div className={styles.componentGrid}>
