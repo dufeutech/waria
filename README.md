@@ -11,6 +11,9 @@
 [![License](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE)
 [![npm](https://img.shields.io/npm/v/@dufeut/waria)](https://www.npmjs.com/package/@dufeut/waria)
 
+[Documentation](https://dufeut.github.io/waria/) |
+[GitHub](https://github.com/dufeut/waria)
+
 </div>
 
 ## Features
@@ -29,14 +32,6 @@
 
 ```bash
 npm install @dufeut/waria
-```
-
-```bash
-pnpm add @dufeut/waria
-```
-
-```bash
-yarn add @dufeut/waria
 ```
 
 ## Usage
@@ -84,10 +79,6 @@ App.start({
   </div>
 </w-dialog>
 ```
-
-## Documentation
-
-Visit the [documentation site](https://dufeut.github.io/waria/) for full API reference and examples.
 
 ## Components
 
