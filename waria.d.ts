@@ -3,6 +3,16 @@ import type { JSX } from "preact";
 // Base attributes for all waria components
 type WariaBaseAttributes = JSX.HTMLAttributes<HTMLElement>;
 
+// Extend standard HTML elements to support slot and name attributes used by waria
+declare module "preact" {
+  namespace JSX {
+    interface HTMLAttributes<RefType extends EventTarget = EventTarget> {
+      slot?: string;
+      name?: string;
+    }
+  }
+}
+
 declare module "preact" {
   namespace JSX {
     interface IntrinsicElements {
