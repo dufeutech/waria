@@ -1,0 +1,65 @@
+---
+sidebar_position: 17
+---
+
+# Choice
+
+Radio or checkbox group selection.
+
+## Usage
+
+```html
+<w-choice value="option1" label="Select an option">
+  <button slot="option" data-value="option1">Option 1</button>
+  <button slot="option" data-value="option2">Option 2</button>
+  <button slot="option" data-value="option3">Option 3</button>
+</w-choice>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `""` | Selected value(s), comma-separated for multiple |
+| `multiple` | `boolean` | `false` | Allow multiple selection |
+| `label` | `string` | `""` | Group label |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout direction |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `option` | Button | Selectable option (use `data-value`) |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ value }` | Selection changed |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowRight` / `ArrowDown` | Next option |
+| `ArrowLeft` / `ArrowUp` | Previous option |
+| `Space` | Select focused option |
+
+## Examples
+
+### Multiple Selection (Checkboxes)
+
+```html
+<w-choice multiple value="opt1,opt3" label="Select features">
+  <button slot="option" data-value="opt1">Feature A</button>
+  <button slot="option" data-value="opt2">Feature B</button>
+  <button slot="option" data-value="opt3">Feature C</button>
+</w-choice>
+```
+
+## Accessibility
+
+- Single selection: `role="radiogroup"` with `role="radio"` options
+- Multiple selection: Options have `aria-checked`
+- `aria-label` from `label` prop
+- Roving tabindex navigation

@@ -1,0 +1,57 @@
+---
+sidebar_position: 28
+---
+
+# Treegrid
+
+Hierarchical grid combining tree and grid patterns.
+
+## Usage
+
+```html
+<w-treegrid label="File browser">
+  <div slot="row" data-level="1" expandable>
+    <div slot="cell">Documents</div>
+    <div slot="cell">Folder</div>
+  </div>
+  <div slot="row" data-level="2">
+    <div slot="cell">Report.pdf</div>
+    <div slot="cell">File</div>
+  </div>
+</w-treegrid>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | `""` | Accessible label |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `row` | Container | Grid row (use `data-level`, `expandable` attributes) |
+| `cell` | Any | Grid cell |
+
+## Row Attributes
+
+| Attribute | Description |
+|-----------|-------------|
+| `data-level` | Nesting level (1, 2, 3, etc.) |
+| `expandable` | Row can be expanded |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowRight` | Expand row or move right |
+| `ArrowLeft` | Collapse row or move left |
+| `ArrowDown` | Next visible row |
+| `ArrowUp` | Previous visible row |
+
+## Accessibility
+
+- Combines `role="treegrid"` with tree navigation
+- Rows have `aria-expanded` when expandable
+- `aria-level` indicates depth

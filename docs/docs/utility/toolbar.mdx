@@ -1,0 +1,45 @@
+---
+sidebar_position: 26
+---
+
+# Toolbar
+
+Grouped controls with keyboard navigation.
+
+## Usage
+
+```html
+<w-toolbar label="Text formatting">
+  <button slot="item">Bold</button>
+  <button slot="item">Italic</button>
+  <button slot="item">Underline</button>
+</w-toolbar>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | `""` | Accessible label |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Toolbar direction |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `item` | Button | Toolbar buttons/controls |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowRight` / `ArrowDown` | Next item |
+| `ArrowLeft` / `ArrowUp` | Previous item |
+| `Home` | First item |
+| `End` | Last item |
+
+## Accessibility
+
+- Container has `role="toolbar"` with `aria-label`
+- `aria-orientation` for direction
+- Roving tabindex for single-tab-stop navigation

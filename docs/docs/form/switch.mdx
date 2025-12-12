@@ -1,0 +1,129 @@
+---
+sidebar_position: 6
+---
+
+# Switch
+
+Toggle switch for boolean settings.
+
+## Usage
+
+```html
+<w-switch label="Enable notifications">
+  <button slot="trigger">
+    <span class="switch-track">
+      <span class="switch-thumb"></span>
+    </span>
+  </button>
+</w-switch>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `pressed` | `boolean` | `false` | Whether the switch is on |
+| `disabled` | `boolean` | `false` | Disable the switch |
+| `label` | `string` | `""` | Accessible label |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Button | The interactive switch element |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ pressed }` | Fired when state changes |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `toggle()` | Toggle the pressed state |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` | Toggle switch |
+
+## Examples
+
+### Default On
+
+```html
+<w-switch pressed label="Dark mode">
+  <button slot="trigger">...</button>
+</w-switch>
+```
+
+### Disabled
+
+```html
+<w-switch disabled label="Premium feature">
+  <button slot="trigger">...</button>
+</w-switch>
+```
+
+### With Visible Label
+
+```html
+<w-switch label="Notifications">
+  <span>Notifications</span>
+  <button slot="trigger">
+    <span class="switch-track">
+      <span class="switch-thumb"></span>
+    </span>
+  </button>
+</w-switch>
+```
+
+## Styling
+
+```css
+.switch-track {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  background-color: #ccc;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+/* Pressed state */
+w-switch[pressed] .switch-track {
+  background-color: #0056b3;
+}
+
+w-switch[pressed] .switch-thumb {
+  transform: translateX(22px);
+}
+
+/* Disabled state */
+w-switch[disabled] .switch-track {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+```
+
+## Accessibility
+
+- Trigger has `role="button"` with `aria-pressed`
+- `aria-label` from `label` prop
+- `aria-disabled` when disabled
+- Keyboard accessible with Enter/Space

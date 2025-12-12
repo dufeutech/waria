@@ -1,0 +1,49 @@
+---
+sidebar_position: 29
+---
+
+# Feed
+
+Scrollable feed of articles with accessibility.
+
+## Usage
+
+```html
+<w-feed label="News feed">
+  <article slot="item">
+    <h2>Article Title</h2>
+    <p>Article content...</p>
+  </article>
+  <article slot="item">
+    <h2>Another Article</h2>
+    <p>More content...</p>
+  </article>
+</w-feed>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | `""` | Accessible label |
+| `busy` | `boolean` | `false` | Loading more items |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `item` | Article | Feed items |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Page Down` | Next article |
+| `Page Up` | Previous article |
+
+## Accessibility
+
+- Container has `role="feed"`
+- Items have `role="article"` with `aria-posinset` and `aria-setsize`
+- `aria-busy` during loading
+- Screen readers announce article position

@@ -1,0 +1,54 @@
+---
+sidebar_position: 13
+---
+
+# Toast
+
+Notification messages with auto-dismiss.
+
+## Usage
+
+```html
+<w-toast>
+  <div slot="message">Operation completed successfully!</div>
+</w-toast>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether toast is visible |
+| `duration` | `number` | `5000` | Auto-dismiss time (ms), 0 to disable |
+| `position` | `string` | `"bottom-right"` | Screen position |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `message` | Any | Toast content |
+| `close` | Button | Optional close button |
+
+## Events
+
+| Event | Description |
+|-------|-------------|
+| `open` | Toast shown |
+| `close` | Toast dismissed |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `show(message?)` | Show the toast |
+| `hide()` | Dismiss the toast |
+
+## Positions
+
+- `top-left`, `top-center`, `top-right`
+- `bottom-left`, `bottom-center`, `bottom-right`
+
+## Accessibility
+
+- Uses `role="status"` for polite announcements
+- Auto-announces to screen readers via live region

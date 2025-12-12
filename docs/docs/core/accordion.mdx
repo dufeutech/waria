@@ -1,0 +1,93 @@
+---
+sidebar_position: 1
+---
+
+# Accordion
+
+Expandable content sections with accessible keyboard navigation.
+
+## Usage
+
+```html
+<w-accordion value="item1">
+  <div slot="item" name="item1">
+    <button slot="trigger">Section 1</button>
+    <div slot="content">
+      Content for section 1
+    </div>
+  </div>
+
+  <div slot="item" name="item2">
+    <button slot="trigger">Section 2</button>
+    <div slot="content">
+      Content for section 2
+    </div>
+  </div>
+</w-accordion>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `""` | Expanded item name(s), comma-separated for multiple |
+| `multiple` | `boolean` | `false` | Allow multiple items to be expanded |
+| `collapsible` | `boolean` | `true` | Allow all items to be collapsed |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `item` | Container | Wrapper for each accordion item (requires `name` attribute) |
+| `trigger` | Button | Clickable header that toggles the item |
+| `content` | Any | Collapsible content area |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ value, expanded, toggled, isExpanded }` | Fired when an item is toggled |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `expand(name)` | Expand a specific item |
+| `collapse(name)` | Collapse a specific item |
+| `expandAll()` | Expand all items (requires `multiple`) |
+| `collapseAll()` | Collapse all items (requires `collapsible`) |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` | Toggle focused item |
+| `ArrowDown` | Focus next trigger |
+| `ArrowUp` | Focus previous trigger |
+| `Home` | Focus first trigger |
+| `End` | Focus last trigger |
+
+## Examples
+
+### Multiple Selection
+
+```html
+<w-accordion multiple value="item1,item2">
+  <!-- Multiple items can be open -->
+</w-accordion>
+```
+
+### Non-Collapsible
+
+```html
+<w-accordion collapsible="false" value="item1">
+  <!-- At least one item always open -->
+</w-accordion>
+```
+
+## Accessibility
+
+- Uses `aria-expanded` on triggers
+- Uses `aria-controls` to link triggers to content
+- Content regions have `aria-labelledby` pointing to trigger
+- Full keyboard navigation support

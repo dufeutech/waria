@@ -1,0 +1,137 @@
+---
+sidebar_position: 4
+---
+
+# Menu
+
+Dropdown menus with nested submenus and keyboard navigation.
+
+## Usage
+
+```html
+<w-menu>
+  <button slot="trigger">Actions</button>
+  <div slot="content">
+    <button slot="item" name="edit">Edit</button>
+    <button slot="item" name="duplicate">Duplicate</button>
+    <button slot="item" name="delete">Delete</button>
+  </div>
+</w-menu>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether the menu is open |
+| `placement` | `string` | `"bottom-start"` | Menu position relative to trigger |
+| `closeOnSelect` | `boolean` | `true` | Close menu when item is selected |
+| `portal` | `boolean` | `true` | Teleport content to body for z-index safety |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Button | Element that opens the menu |
+| `content` | Container | Menu container |
+| `item` | Button | Menu item (optionally with `name` attribute) |
+| `submenu` | Container | Nested submenu content |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `open` | - | Fired when menu opens |
+| `close` | - | Fired when menu closes |
+| `select` | `{ item, element }` | Fired when an item is selected |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `show()` | Open the menu |
+| `hide()` | Close the menu |
+| `toggle(force?)` | Toggle open state |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` / `ArrowDown` | Open menu (on trigger) |
+| `ArrowUp` | Open menu and focus last item |
+| `ArrowDown` | Focus next item |
+| `ArrowUp` | Focus previous item |
+| `ArrowRight` | Open submenu |
+| `ArrowLeft` | Close submenu, return to parent |
+| `Home` | Focus first item |
+| `End` | Focus last item |
+| `Escape` | Close menu |
+| `Tab` | Close menu |
+
+## Examples
+
+### With Submenus
+
+```html
+<w-menu>
+  <button slot="trigger">File</button>
+  <div slot="content">
+    <button slot="item" name="new">New</button>
+    <button slot="item" name="open">Open</button>
+
+    <div slot="item" name="recent">
+      Recent Files
+      <div slot="submenu">
+        <button slot="item" name="file1">Document.pdf</button>
+        <button slot="item" name="file2">Image.png</button>
+      </div>
+    </div>
+
+    <button slot="item" name="save">Save</button>
+  </div>
+</w-menu>
+```
+
+### Custom Placement
+
+```html
+<w-menu placement="right-start">
+  <button slot="trigger">Options</button>
+  <div slot="content">...</div>
+</w-menu>
+```
+
+Available placements:
+- `top`, `top-start`, `top-end`
+- `bottom`, `bottom-start`, `bottom-end`
+- `left`, `left-start`, `left-end`
+- `right`, `right-start`, `right-end`
+
+### Keep Open on Select
+
+```html
+<w-menu closeOnSelect="false">
+  <!-- Menu stays open after selecting items -->
+</w-menu>
+```
+
+## CSS Transitions
+
+```css
+.menu-enter { }
+.menu-enter-from { opacity: 0; transform: translateY(-4px); }
+.menu-enter-to { opacity: 1; transform: translateY(0); }
+
+.menu-leave { }
+.menu-leave-from { opacity: 1; }
+.menu-leave-to { opacity: 0; }
+```
+
+## Accessibility
+
+- Trigger has `aria-haspopup="menu"` and `aria-expanded`
+- Content has `role="menu"`
+- Items have `role="menuitem"`
+- Submenus linked with `aria-controls`
+- Roving tabindex for navigation
+- Auto-positioned to stay in viewport

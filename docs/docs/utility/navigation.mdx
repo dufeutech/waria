@@ -1,0 +1,121 @@
+---
+sidebar_position: 7
+---
+
+# Navigation
+
+Site navigation with URL synchronization and roving tabindex.
+
+## Usage
+
+```html
+<w-nav label="Main navigation">
+  <a slot="item" href="/home">Home</a>
+  <a slot="item" href="/about">About</a>
+  <a slot="item" href="/contact">Contact</a>
+</w-nav>
+```
+
+## Props
+
+| Prop          | Type                           | Default        | Description                 |
+| ------------- | ------------------------------ | -------------- | --------------------------- |
+| `label`       | `string`                       | `"Navigation"` | Accessible label            |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Navigation layout           |
+| `value`       | `string`                       | `""`           | Currently active item value |
+
+## Slots
+
+| Slot   | Element     | Description                                              |
+| ------ | ----------- | -------------------------------------------------------- |
+| `item` | Link/Button | Navigation items (uses `href` or `data-value` for value) |
+
+## Events
+
+| Event    | Detail      | Description                    |
+| -------- | ----------- | ------------------------------ |
+| `change` | `{ value }` | Fired when active item changes |
+
+## Keyboard
+
+| Key                        | Action              |
+| -------------------------- | ------------------- |
+| `ArrowRight` / `ArrowDown` | Focus next item     |
+| `ArrowLeft` / `ArrowUp`    | Focus previous item |
+| `Home`                     | Focus first item    |
+| `End`                      | Focus last item     |
+
+## Examples
+
+### Vertical Navigation
+
+```html
+<w-nav label="Sidebar" orientation="vertical">
+  <a slot="item" href="/dashboard">Dashboard</a>
+  <a slot="item" href="/profile">Profile</a>
+  <a slot="item" href="/settings">Settings</a>
+</w-nav>
+```
+
+### With Data Values
+
+```html
+<w-nav label="Options" value="option1">
+  <button slot="item" data-value="option1">Option 1</button>
+  <button slot="item" data-value="option2">Option 2</button>
+</w-nav>
+```
+
+## Styling
+
+```css
+w-nav {
+  display: flex;
+  gap: 4px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+w-nav[orientation="vertical"] {
+  flex-direction: column;
+}
+
+w-nav [slot="item"] {
+  padding: 12px 16px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Active state */
+w-nav [aria-current="page"] {
+  background-color: #0056b3;
+  color: white;
+}
+```
+
+## With Views
+
+Navigation works with `w-view` for single-page routing:
+
+```html
+<w-nav label="Navigation">
+  <a slot="item" href="/home">Home</a>
+  <a slot="item" href="/about">About</a>
+</w-nav>
+
+<w-view path="/home">
+  <h1>Home Page</h1>
+</w-view>
+
+<w-view path="/about">
+  <h1>About Page</h1>
+</w-view>
+```
+
+## Accessibility
+
+- `role="navigation"` on container
+- `aria-label` from `label` prop
+- `aria-current="page"` on active item
+- Roving tabindex for keyboard navigation
+- Works with both links and buttons

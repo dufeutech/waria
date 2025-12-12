@@ -1,0 +1,58 @@
+---
+sidebar_position: 27
+---
+
+# Grid
+
+Interactive data grid with keyboard navigation.
+
+## Usage
+
+```html
+<w-grid label="Data table">
+  <div slot="row">
+    <div slot="cell">A1</div>
+    <div slot="cell">B1</div>
+    <div slot="cell">C1</div>
+  </div>
+  <div slot="row">
+    <div slot="cell">A2</div>
+    <div slot="cell">B2</div>
+    <div slot="cell">C2</div>
+  </div>
+</w-grid>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | `""` | Accessible label |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `row` | Container | Grid row |
+| `cell` | Any | Grid cell |
+| `rowheader` | Any | Row header cell |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowRight` | Next cell |
+| `ArrowLeft` | Previous cell |
+| `ArrowDown` | Cell below |
+| `ArrowUp` | Cell above |
+| `Home` | First cell in row |
+| `End` | Last cell in row |
+| `Ctrl+Home` | First cell in grid |
+| `Ctrl+End` | Last cell in grid |
+
+## Accessibility
+
+- Container has `role="grid"`
+- Rows have `role="row"`
+- Cells have `role="gridcell"` or `role="rowheader"`
+- Focusable cells with roving tabindex

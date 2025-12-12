@@ -1,0 +1,65 @@
+---
+sidebar_position: 9
+---
+
+# Popover
+
+Non-modal floating content triggered by click.
+
+## Usage
+
+```html
+<w-popover>
+  <button slot="trigger">More info</button>
+  <div slot="content">
+    <h3>Details</h3>
+    <p>Additional information here.</p>
+  </div>
+</w-popover>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether popover is visible |
+| `placement` | `string` | `"bottom"` | Position relative to trigger |
+| `closeOnOutsideClick` | `boolean` | `true` | Close when clicking outside |
+| `closeOnEscape` | `boolean` | `true` | Close on Escape key |
+| `portal` | `boolean` | `true` | Teleport to body |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Button | Element that opens the popover |
+| `content` | Any | Popover content |
+| `close` | Button | Optional close button |
+
+## Events
+
+| Event | Description |
+|-------|-------------|
+| `open` | Fired when popover opens |
+| `close` | Fired when popover closes |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `show()` | Open the popover |
+| `hide()` | Close the popover |
+| `toggle(force?)` | Toggle open state |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` | Toggle popover (on trigger) |
+| `Escape` | Close popover |
+
+## Accessibility
+
+- Trigger has `aria-haspopup` and `aria-expanded`
+- Content has `aria-label` or `aria-labelledby`
+- Focus management without full trapping

@@ -1,0 +1,77 @@
+---
+sidebar_position: 25
+---
+
+# Label
+
+Accessible label for form controls.
+
+## Usage
+
+```html
+<w-label for="my-input">
+  <label>Email address</label>
+</w-label>
+<input id="my-input" type="email" />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `for` | `string` | `""` | ID of the labeled control |
+| `required` | `boolean` | `false` | Show required indicator |
+| `disabled` | `boolean` | `false` | Style as disabled |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| (default) | Label | Label text content |
+
+## Examples
+
+### With Custom Component
+
+```html
+<w-label for="my-spinbutton">
+  <label>Quantity</label>
+</w-label>
+<w-spinbutton id="my-spinbutton" label="Quantity">
+  ...
+</w-spinbutton>
+```
+
+### Required Field
+
+```html
+<w-label for="name" required>
+  <label>Name</label>
+</w-label>
+<input id="name" required />
+```
+
+## Styling
+
+```css
+w-label {
+  display: block;
+  cursor: pointer;
+}
+
+w-label[required]::after {
+  content: " *";
+  color: red;
+}
+
+w-label[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+```
+
+## Accessibility
+
+- Clicking label focuses the associated control
+- Works with both native inputs and custom components
+- Properly associates via `for` attribute

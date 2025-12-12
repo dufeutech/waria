@@ -1,0 +1,59 @@
+---
+sidebar_position: 23
+---
+
+# Avatar
+
+User avatar with image and fallback.
+
+## Usage
+
+```html
+<w-avatar>
+  <img slot="image" src="user.jpg" alt="John Doe" />
+  <span slot="fallback">JD</span>
+</w-avatar>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `string` | `"md"` | Size variant |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `image` | Image | User's avatar image |
+| `fallback` | Any | Shown when image fails to load |
+
+## Sizes
+
+- `sm` - Small (32px)
+- `md` - Medium (40px)
+- `lg` - Large (48px)
+- `xl` - Extra large (64px)
+
+## Styling
+
+```css
+w-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e0e0e0;
+}
+
+w-avatar[size="sm"] { width: 32px; height: 32px; }
+w-avatar[size="md"] { width: 40px; height: 40px; }
+w-avatar[size="lg"] { width: 48px; height: 48px; }
+w-avatar[size="xl"] { width: 64px; height: 64px; }
+```
+
+## Accessibility
+
+- Image should have meaningful `alt` text
+- Fallback provides visual alternative

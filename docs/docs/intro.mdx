@@ -1,0 +1,85 @@
+---
+sidebar_position: 1
+---
+
+# Getting Started
+
+WC-Aria is a framework-agnostic, accessible web components library built with performance and WCAG 2.1 AA compliance in mind.
+
+## Installation
+
+```bash
+npm install waria
+```
+
+## Quick Start
+
+```ts
+import { App } from "waria";
+
+// Configure and initialize
+App.start({ hash: true });
+```
+
+All components are now registered and ready to use.
+
+## Basic Usage
+
+```html
+<!-- Navigation with URL sync -->
+<w-nav label="Main navigation">
+  <a slot="item" href="/home">Home</a>
+  <a slot="item" href="/about">About</a>
+</w-nav>
+
+<!-- View routing -->
+<w-view path="/home">
+  <h1>Home Page</h1>
+</w-view>
+
+<w-view path="/about">
+  <h1>About Page</h1>
+</w-view>
+```
+
+## Slot-Based Composition
+
+All components use the `slot` attribute for composition:
+
+```html
+<w-dialog>
+  <button slot="trigger">Open Dialog</button>
+  <div slot="content">
+    <h2>Dialog Title</h2>
+    <p>Dialog content goes here.</p>
+    <button slot="close">Close</button>
+  </div>
+</w-dialog>
+```
+
+Common slots used across components:
+
+| Slot      | Purpose                                   |
+| --------- | ----------------------------------------- |
+| `trigger` | Element that activates the component      |
+| `content` | Main content area                         |
+| `item`    | Repeated items (menus, lists, navigation) |
+| `close`   | Close button                              |
+| `label`   | Label text                                |
+
+## Keyboard Navigation
+
+All components support full keyboard navigation:
+
+- **Tab** - Move between focusable elements
+- **Arrow Keys** - Navigate within components
+- **Enter/Space** - Activate buttons and selections
+- **Escape** - Close overlays and cancel operations
+- **Home/End** - Jump to first/last items
+
+## Browser Support
+
+- Chrome 67+
+- Firefox 63+
+- Safari 10.1+
+- Edge 79+

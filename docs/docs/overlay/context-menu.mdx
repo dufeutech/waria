@@ -1,0 +1,57 @@
+---
+sidebar_position: 19
+---
+
+# Context Menu
+
+Right-click context menu.
+
+## Usage
+
+```html
+<w-context-menu>
+  <div slot="trigger">
+    Right-click in this area
+  </div>
+  <div slot="content">
+    <button slot="item" name="cut">Cut</button>
+    <button slot="item" name="copy">Copy</button>
+    <button slot="item" name="paste">Paste</button>
+  </div>
+</w-context-menu>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether menu is visible |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Any | Area that responds to right-click |
+| `content` | Container | Menu content |
+| `item` | Button | Menu items |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `select` | `{ item }` | Item selected |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowDown` | Next item |
+| `ArrowUp` | Previous item |
+| `Enter` | Select item |
+| `Escape` | Close menu |
+
+## Accessibility
+
+- Same accessibility features as regular Menu
+- Opens at cursor position
+- Full keyboard navigation

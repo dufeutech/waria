@@ -1,0 +1,67 @@
+---
+sidebar_position: 12
+---
+
+# Collapsible
+
+Simple expand/collapse container.
+
+## Usage
+
+```html
+<w-collapsible>
+  <button slot="trigger">Toggle content</button>
+  <div slot="content">
+    Hidden content that can be expanded.
+  </div>
+</w-collapsible>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether content is visible |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Button | Element that toggles visibility |
+| `content` | Any | Collapsible content |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ open }` | Visibility changed |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `expand()` | Show content |
+| `collapse()` | Hide content |
+| `toggle()` | Toggle visibility |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` | Toggle (on trigger) |
+
+## Example
+
+### Default Open
+
+```html
+<w-collapsible open>
+  <button slot="trigger">Hide details</button>
+  <div slot="content">Visible by default</div>
+</w-collapsible>
+```
+
+## Accessibility
+
+- Trigger has `aria-expanded` and `aria-controls`
+- Content linked via ID reference

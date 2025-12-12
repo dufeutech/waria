@@ -1,0 +1,64 @@
+---
+sidebar_position: 10
+---
+
+# Select
+
+Custom select dropdown with full keyboard support.
+
+## Usage
+
+```html
+<w-select value="option1">
+  <button slot="trigger">
+    <span slot="display">Option 1</span>
+  </button>
+  <div slot="listbox">
+    <div slot="option" data-value="option1">Option 1</div>
+    <div slot="option" data-value="option2">Option 2</div>
+    <div slot="option" data-value="option3">Option 3</div>
+  </div>
+</w-select>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `""` | Currently selected value |
+| `open` | `boolean` | `false` | Whether dropdown is open |
+| `placeholder` | `string` | `""` | Placeholder text |
+| `disabled` | `boolean` | `false` | Disable the select |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Button | The select button |
+| `display` | Span | Shows selected value text |
+| `listbox` | Container | Options container |
+| `option` | Any | Selectable options (use `data-value`) |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ value }` | Fired when selection changes |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` | Open dropdown / Select option |
+| `ArrowDown` | Open dropdown / Next option |
+| `ArrowUp` | Previous option |
+| `Home` | First option |
+| `End` | Last option |
+| `Escape` | Close dropdown |
+
+## Accessibility
+
+- Trigger has `role="combobox"`
+- Listbox has `role="listbox"`
+- Options have `role="option"` with `aria-selected`
+- Full keyboard navigation support

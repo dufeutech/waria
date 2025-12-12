@@ -1,0 +1,51 @@
+---
+sidebar_position: 32
+---
+
+# Scrollbar
+
+Custom scrollbar with accessible controls.
+
+## Usage
+
+```html
+<w-scrollbar>
+  <div slot="content">
+    <!-- Scrollable content -->
+  </div>
+  <div slot="track">
+    <div slot="thumb"></div>
+  </div>
+</w-scrollbar>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Scroll direction |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `content` | Container | Scrollable content area |
+| `track` | Container | Scrollbar track |
+| `thumb` | Element | Draggable thumb |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowDown` / `ArrowRight` | Scroll forward |
+| `ArrowUp` / `ArrowLeft` | Scroll backward |
+| `Page Down` | Scroll page forward |
+| `Page Up` | Scroll page backward |
+| `Home` | Scroll to start |
+| `End` | Scroll to end |
+
+## Accessibility
+
+- `role="scrollbar"` with proper ARIA
+- Keyboard accessible
+- Thumb position reflects scroll state

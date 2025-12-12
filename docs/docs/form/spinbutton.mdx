@@ -1,0 +1,60 @@
+---
+sidebar_position: 15
+---
+
+# Spinbutton
+
+Numeric input with increment/decrement buttons.
+
+## Usage
+
+```html
+<w-spinbutton value="5" min="0" max="10" label="Quantity">
+  <button slot="decrement">-</button>
+  <input slot="input" type="text" />
+  <button slot="increment">+</button>
+</w-spinbutton>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | `0` | Current value |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Increment/decrement amount |
+| `label` | `string` | `""` | Accessible label |
+| `disabled` | `boolean` | `false` | Disable input |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `input` | Input | Text input for the value |
+| `increment` | Button | Increase value button |
+| `decrement` | Button | Decrease value button |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ value }` | Value changed |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowUp` | Increment value |
+| `ArrowDown` | Decrement value |
+| `Home` | Set to minimum |
+| `End` | Set to maximum |
+| `PageUp` | Increment by step * 10 |
+| `PageDown` | Decrement by step * 10 |
+
+## Accessibility
+
+- Input has `role="spinbutton"`
+- `aria-valuenow`, `aria-valuemin`, `aria-valuemax`
+- `aria-label` from `label` prop
+- Buttons properly labeled

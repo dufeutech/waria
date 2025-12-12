@@ -1,0 +1,118 @@
+---
+sidebar_position: 2
+---
+
+# Dialog
+
+Modal dialogs with focus trapping and accessible announcements.
+
+## Usage
+
+```html
+<w-dialog label="Confirm Action">
+  <button slot="trigger">Open Dialog</button>
+  <div slot="content">
+    <h2>Are you sure?</h2>
+    <p>This action cannot be undone.</p>
+    <button slot="close">Cancel</button>
+    <button>Confirm</button>
+  </div>
+</w-dialog>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether the dialog is open |
+| `modal` | `boolean` | `true` | Trap focus and add backdrop |
+| `closeOnEscape` | `boolean` | `true` | Close when Escape is pressed |
+| `closeOnOutsideClick` | `boolean` | `true` | Close when clicking outside |
+| `returnFocus` | `boolean` | `true` | Return focus to trigger on close |
+| `label` | `string` | `""` | Accessible label for the dialog |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Button | Element that opens the dialog |
+| `content` | Any | Dialog content (teleported to portal) |
+| `close` | Button | Close button inside content |
+
+## Events
+
+| Event | Description |
+|-------|-------------|
+| `open` | Fired when dialog opens |
+| `close` | Fired when dialog closes |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `showModal()` | Open the dialog |
+| `close()` | Close the dialog |
+| `toggle(force?)` | Toggle open state, optionally force a state |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` | Open dialog (on trigger) |
+| `Escape` | Close dialog |
+| `Tab` | Cycle through focusable elements (trapped) |
+
+## CSS Transitions
+
+The dialog supports CSS transitions using these classes:
+
+```css
+/* Enter transition */
+.dialog-enter { }
+.dialog-enter-from { opacity: 0; transform: scale(0.95); }
+.dialog-enter-to { opacity: 1; transform: scale(1); }
+
+/* Leave transition */
+.dialog-leave { }
+.dialog-leave-from { opacity: 1; }
+.dialog-leave-to { opacity: 0; }
+```
+
+## Examples
+
+### Non-Modal Dialog
+
+```html
+<w-dialog modal="false" label="Side Panel">
+  <button slot="trigger">Open Panel</button>
+  <div slot="content">
+    <!-- No focus trap, no backdrop -->
+  </div>
+</w-dialog>
+```
+
+### Programmatic Control
+
+```html
+<w-dialog id="my-dialog" label="Alert">
+  <div slot="content">
+    <p>Something happened!</p>
+    <button slot="close">OK</button>
+  </div>
+</w-dialog>
+
+<script>
+  const dialog = document.getElementById('my-dialog');
+  dialog.showModal(); // Open
+  dialog.close();     // Close
+</script>
+```
+
+## Accessibility
+
+- `role="dialog"` on content
+- `aria-modal="true"` when modal
+- `aria-label` from `label` prop
+- Focus trapped within modal
+- Focus returned to trigger on close
+- Escape key closes dialog

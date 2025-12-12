@@ -1,0 +1,43 @@
+---
+sidebar_position: 31
+---
+
+# Link
+
+Accessible link with external link handling.
+
+## Usage
+
+```html
+<w-link href="https://example.com" external>
+  Visit Example
+</w-link>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `href` | `string` | `""` | Link destination |
+| `external` | `boolean` | `false` | Opens in new tab with security |
+
+## External Links
+
+When `external` is set:
+- Opens in new tab (`target="_blank"`)
+- Adds `rel="noopener noreferrer"` for security
+- Adds visual indicator (optional via CSS)
+
+## Styling
+
+```css
+w-link[external]::after {
+  content: " ↗";
+  font-size: 0.8em;
+}
+```
+
+## Accessibility
+
+- External links announced to screen readers
+- Security attributes prevent tabnabbing attacks

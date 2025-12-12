@@ -1,0 +1,124 @@
+---
+sidebar_position: 5
+---
+
+# Tooltip
+
+Accessible tooltips with hover and focus triggers.
+
+## Usage
+
+```html
+<w-tooltip>
+  <button slot="trigger">Hover me</button>
+  <div slot="content">Helpful information</div>
+</w-tooltip>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether the tooltip is visible |
+| `placement` | `string` | `"top"` | Position relative to trigger |
+| `delay` | `number` | `300` | Delay before showing (ms) |
+| `closeDelay` | `number` | `100` | Delay before hiding (ms) |
+| `portal` | `boolean` | `true` | Teleport to body for z-index safety |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Any | Element that shows tooltip on hover/focus |
+| `content` | Any | Tooltip content |
+
+## Events
+
+| Event | Description |
+|-------|-------------|
+| `show` | Fired when tooltip becomes visible |
+| `hide` | Fired when tooltip is hidden |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `show()` | Show the tooltip immediately |
+| `hide()` | Hide the tooltip immediately |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Escape` | Hide tooltip |
+
+## Examples
+
+### Instant Tooltip
+
+```html
+<w-tooltip delay="0" closeDelay="0">
+  <span slot="trigger">?</span>
+  <div slot="content">Instant help</div>
+</w-tooltip>
+```
+
+### Custom Placement
+
+```html
+<w-tooltip placement="right">
+  <button slot="trigger">Info</button>
+  <div slot="content">Tooltip on the right</div>
+</w-tooltip>
+```
+
+Available placements:
+- `top`, `top-start`, `top-end`
+- `bottom`, `bottom-start`, `bottom-end`
+- `left`, `left-start`, `left-end`
+- `right`, `right-start`, `right-end`
+
+### Rich Content
+
+```html
+<w-tooltip>
+  <button slot="trigger">Details</button>
+  <div slot="content">
+    <strong>Title</strong>
+    <p>Description with multiple lines</p>
+  </div>
+</w-tooltip>
+```
+
+## CSS Transitions
+
+```css
+.tooltip-enter { }
+.tooltip-enter-from { opacity: 0; }
+.tooltip-enter-to { opacity: 1; }
+
+.tooltip-leave { }
+.tooltip-leave-from { opacity: 1; }
+.tooltip-leave-to { opacity: 0; }
+```
+
+## Styling
+
+```css
+w-tooltip [slot="content"] {
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  max-width: 250px;
+}
+```
+
+## Accessibility
+
+- Content has `role="tooltip"`
+- Trigger linked via `aria-describedby`
+- Shows on both hover and focus
+- Dismissible with Escape key
+- Stays visible when hovering over content

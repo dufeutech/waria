@@ -1,0 +1,70 @@
+---
+sidebar_position: 24
+---
+
+# Separator
+
+Visual divider between content sections.
+
+## Usage
+
+```html
+<w-separator></w-separator>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Separator direction |
+| `decorative` | `boolean` | `true` | Whether purely decorative |
+
+## Examples
+
+### Horizontal (default)
+
+```html
+<p>Content above</p>
+<w-separator></w-separator>
+<p>Content below</p>
+```
+
+### Vertical
+
+```html
+<div style="display: flex; align-items: center; gap: 16px;">
+  <span>Left</span>
+  <w-separator orientation="vertical"></w-separator>
+  <span>Right</span>
+</div>
+```
+
+### Semantic Separator
+
+```html
+<w-separator decorative="false"></w-separator>
+```
+
+## Styling
+
+```css
+w-separator {
+  background: #e0e0e0;
+}
+
+w-separator[orientation="horizontal"] {
+  height: 1px;
+  width: 100%;
+}
+
+w-separator[orientation="vertical"] {
+  width: 1px;
+  height: 100%;
+}
+```
+
+## Accessibility
+
+- `role="separator"` when not decorative
+- `role="none"` when decorative (default)
+- `aria-orientation` for direction

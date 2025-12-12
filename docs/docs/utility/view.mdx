@@ -1,0 +1,151 @@
+---
+sidebar_position: 8
+---
+
+# View
+
+URL-based view container for single-page routing.
+
+## Usage
+
+```html
+<w-view path="/home">
+  <h1>Home Page</h1>
+  <p>Welcome to the home page.</p>
+</w-view>
+
+<w-view path="/about">
+  <h1>About Page</h1>
+  <p>Learn more about us.</p>
+</w-view>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `path` | `string` | `""` | URL path that activates this view |
+| `label` | `string` | `""` | Accessible label (adds landmark role) |
+| `active` | `boolean` | `false` | Whether the view is currently visible |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `view-change` | `{ active, path }` | Fired when visibility changes |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `navigate()` | Navigate to this view's path |
+| `isActive()` | Check if currently active |
+| `refresh()` | Force refresh visibility state |
+
+## Examples
+
+### With Navigation
+
+```html
+<w-nav label="Navigation">
+  <a slot="item" href="/home">Home</a>
+  <a slot="item" href="/about">About</a>
+  <a slot="item" href="/contact">Contact</a>
+</w-nav>
+
+<main>
+  <w-view path="/home">
+    <h1>Home</h1>
+  </w-view>
+
+  <w-view path="/about">
+    <h1>About</h1>
+  </w-view>
+
+  <w-view path="/contact">
+    <h1>Contact</h1>
+  </w-view>
+</main>
+```
+
+### With Accessible Label
+
+When you add a `label`, the view becomes a landmark region:
+
+```html
+<w-view path="/dashboard" label="Dashboard content">
+  <h1>Dashboard</h1>
+</w-view>
+```
+
+This renders with `role="region"` and `aria-label="Dashboard content"`.
+
+### Nested Routes
+
+```html
+<w-view path="/settings">
+  <h1>Settings</h1>
+
+  <w-nav label="Settings sections">
+    <a slot="item" href="/settings/profile">Profile</a>
+    <a slot="item" href="/settings/account">Account</a>
+  </w-nav>
+
+  <w-view path="/settings/profile">
+    <h2>Profile Settings</h2>
+  </w-view>
+
+  <w-view path="/settings/account">
+    <h2>Account Settings</h2>
+  </w-view>
+</w-view>
+```
+
+## Routing Modes
+
+Views automatically use the routing mode configured in `App.start()`:
+
+### Hash Mode
+
+```ts
+App.start({ hash: true });
+```
+
+URLs: `https://example.com/#/about`
+
+### Pathname Mode
+
+```ts
+App.start({ hash: false, base: "/app" });
+```
+
+URLs: `https://example.com/app/about`
+
+## Path Matching
+
+- Paths are matched case-insensitively
+- Leading slashes are normalized (`/about` matches `about`)
+- Hyphens are ignored in matching (`/about-us` matches `/aboutus`)
+
+## Styling
+
+Views are hidden with `display: none` when inactive:
+
+```css
+/* Active view styling */
+w-view[active] {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+```
+
+## Accessibility
+
+- Hidden views use `hidden` attribute (removed from accessibility tree)
+- Optional `role="region"` when `label` is provided
+- `aria-label` for landmark navigation
+- No role by default (just a container)

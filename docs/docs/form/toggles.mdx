@@ -1,0 +1,62 @@
+---
+sidebar_position: 18
+---
+
+# Toggles
+
+Single or multiple toggle button group.
+
+## Usage
+
+```html
+<w-toggles value="bold" label="Text formatting">
+  <button slot="item" data-value="bold">B</button>
+  <button slot="item" data-value="italic">I</button>
+  <button slot="item" data-value="underline">U</button>
+</w-toggles>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `""` | Selected value(s), comma-separated |
+| `multiple` | `boolean` | `false` | Allow multiple toggles active |
+| `label` | `string` | `""` | Group label |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `item` | Button | Toggle button (use `data-value`) |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ value }` | Selection changed |
+
+## Examples
+
+### Multiple Selection
+
+```html
+<w-toggles multiple value="bold,italic" label="Formatting">
+  <button slot="item" data-value="bold">B</button>
+  <button slot="item" data-value="italic">I</button>
+</w-toggles>
+```
+
+## Styling
+
+```css
+w-toggles [slot="item"][aria-pressed="true"] {
+  background-color: #0056b3;
+  color: white;
+}
+```
+
+## Accessibility
+
+- Items have `aria-pressed` for toggle state
+- Group has `role="group"` with `aria-label`

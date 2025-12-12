@@ -1,0 +1,63 @@
+---
+sidebar_position: 11
+---
+
+# Tree
+
+Hierarchical tree view with expandable nodes.
+
+## Usage
+
+```html
+<w-tree label="File browser">
+  <div slot="item" name="folder1" expandable>
+    <span>Documents</span>
+    <div slot="item" name="file1">Report.pdf</div>
+    <div slot="item" name="file2">Notes.txt</div>
+  </div>
+  <div slot="item" name="folder2" expandable>
+    <span>Images</span>
+    <div slot="item" name="img1">Photo.jpg</div>
+  </div>
+</w-tree>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `""` | Selected item name |
+| `expanded` | `string` | `""` | Comma-separated expanded item names |
+| `label` | `string` | `""` | Accessible label |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `item` | Container | Tree item (use `name`, optionally `expandable`) |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ value }` | Selection changed |
+| `expand` | `{ item, expanded }` | Item expanded/collapsed |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowDown` | Next visible item |
+| `ArrowUp` | Previous visible item |
+| `ArrowRight` | Expand or move to first child |
+| `ArrowLeft` | Collapse or move to parent |
+| `Home` | First item |
+| `End` | Last visible item |
+| `Enter` / `Space` | Select item |
+
+## Accessibility
+
+- Container has `role="tree"`
+- Items have `role="treeitem"` with `aria-level`
+- Expandable items have `aria-expanded`
+- `aria-selected` for selection state

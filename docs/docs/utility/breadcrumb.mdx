@@ -1,0 +1,56 @@
+---
+sidebar_position: 22
+---
+
+# Breadcrumb
+
+Navigation breadcrumb trail.
+
+## Usage
+
+```html
+<w-breadcrumb label="Breadcrumb">
+  <a slot="item" href="/">Home</a>
+  <span slot="separator">/</span>
+  <a slot="item" href="/products">Products</a>
+  <span slot="separator">/</span>
+  <span slot="item" aria-current="page">Widget</span>
+</w-breadcrumb>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | `"Breadcrumb"` | Accessible label |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `item` | Link/Span | Breadcrumb items |
+| `separator` | Any | Visual separator between items |
+
+## Styling
+
+```css
+w-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+w-breadcrumb [slot="separator"] {
+  color: #666;
+}
+
+w-breadcrumb [aria-current="page"] {
+  font-weight: bold;
+}
+```
+
+## Accessibility
+
+- Container has `role="navigation"` with `aria-label`
+- List structure with `role="list"` and `role="listitem"`
+- Current page marked with `aria-current="page"`

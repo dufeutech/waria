@@ -1,0 +1,100 @@
+---
+sidebar_position: 3
+---
+
+# Tabs
+
+Tabbed interface with automatic or manual activation.
+
+## Usage
+
+```html
+<w-tabs value="tab1">
+  <div slot="list">
+    <button slot="tab" name="tab1">Tab 1</button>
+    <button slot="tab" name="tab2">Tab 2</button>
+    <button slot="tab" name="tab3">Tab 3</button>
+  </div>
+
+  <div slot="panel" name="tab1">Content for Tab 1</div>
+  <div slot="panel" name="tab2">Content for Tab 2</div>
+  <div slot="panel" name="tab3">Content for Tab 3</div>
+</w-tabs>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `""` | Currently selected tab name |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Tab list orientation |
+| `activation` | `"automatic"` \| `"manual"` | `"automatic"` | When tabs activate |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `list` | Container | Wrapper for tab buttons |
+| `tab` | Button | Tab button (requires `name` attribute) |
+| `panel` | Any | Tab panel content (requires matching `name`) |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `change` | `{ value }` | Fired when selected tab changes |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `selectTab(name)` | Select a tab by name |
+| `getSelectedTab()` | Get the currently selected tab name |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `ArrowRight` | Focus next tab (horizontal) |
+| `ArrowLeft` | Focus previous tab (horizontal) |
+| `ArrowDown` | Focus next tab (vertical) |
+| `ArrowUp` | Focus previous tab (vertical) |
+| `Home` | Focus first tab |
+| `End` | Focus last tab |
+| `Enter` / `Space` | Activate focused tab (manual mode) |
+
+## Examples
+
+### Vertical Tabs
+
+```html
+<w-tabs orientation="vertical" value="settings">
+  <div slot="list">
+    <button slot="tab" name="profile">Profile</button>
+    <button slot="tab" name="settings">Settings</button>
+    <button slot="tab" name="notifications">Notifications</button>
+  </div>
+
+  <div slot="panel" name="profile">Profile settings...</div>
+  <div slot="panel" name="settings">General settings...</div>
+  <div slot="panel" name="notifications">Notification preferences...</div>
+</w-tabs>
+```
+
+### Manual Activation
+
+Focus moves but tab doesn't activate until Enter/Space:
+
+```html
+<w-tabs activation="manual" value="tab1">
+  <!-- Tabs only activate on Enter/Space, not arrow keys -->
+</w-tabs>
+```
+
+## Accessibility
+
+- Tab list has `role="tablist"` with `aria-orientation`
+- Tabs have `role="tab"` with `aria-selected`
+- Panels have `role="tabpanel"` with `aria-labelledby`
+- `aria-controls` links tabs to their panels
+- Roving tabindex for keyboard navigation

@@ -1,0 +1,49 @@
+---
+sidebar_position: 20
+---
+
+# Hover Card
+
+Rich hover preview card.
+
+## Usage
+
+```html
+<w-hover-card>
+  <a slot="trigger" href="/user/123">@username</a>
+  <div slot="content">
+    <img src="avatar.jpg" alt="" />
+    <h4>User Name</h4>
+    <p>Bio information...</p>
+  </div>
+</w-hover-card>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether card is visible |
+| `placement` | `string` | `"bottom"` | Card position |
+| `delay` | `number` | `500` | Show delay (ms) |
+| `closeDelay` | `number` | `300` | Hide delay (ms) |
+
+## Slots
+
+| Slot | Element | Description |
+|------|---------|-------------|
+| `trigger` | Any | Element to hover |
+| `content` | Any | Card content |
+
+## Events
+
+| Event | Description |
+|-------|-------------|
+| `show` | Card shown |
+| `hide` | Card hidden |
+
+## Accessibility
+
+- Non-essential preview content
+- Content stays visible when hovered
+- Dismissible with Escape
