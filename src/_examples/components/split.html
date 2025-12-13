@@ -1,0 +1,114 @@
+<w-view class="view" path="/Split">
+    <h2>Split</h2>
+    <h3>Horizontal Split</h3>
+    <w-split direction="horizontal" style="height: 200px; border: 1px solid #ccc;">
+        <w-slot item name="left">
+            <div style="padding: 1rem; background: #f0f4f8; height: 100%; box-sizing: border-box;">
+                <strong>Left Pane</strong>
+                <p>Drag the resizer to adjust panel sizes.</p>
+            </div>
+        </w-slot>
+        <w-slot item name="center">
+            <div style="padding: 1rem; background: #e8f4e8; height: 100%; box-sizing: border-box;">
+                <strong>Center Pane</strong>
+                <p>This is the middle panel.</p>
+            </div>
+        </w-slot>
+        <w-slot item name="right">
+            <div style="padding: 1rem; background: #f4f0e8; height: 100%; box-sizing: border-box;">
+                <strong>Right Pane</strong>
+                <p>Use keyboard: Arrow keys, Home, End, Enter.</p>
+            </div>
+        </w-slot>
+    </w-split>
+
+    <h3 style="margin-top: 2rem;">Vertical Split</h3>
+    <w-split direction="vertical" style="height: 300px; border: 1px solid #ccc;">
+        <w-slot item name="top">
+            <div style="padding: 1rem; background: #e8e8f4; height: 100%; box-sizing: border-box;">
+                <strong>Top Pane</strong>
+                <p>Resizable vertical layout.</p>
+            </div>
+        </w-slot>
+        <w-slot item name="bottom">
+            <div style="padding: 1rem; background: #f4e8f0; height: 100%; box-sizing: border-box;">
+                <strong>Bottom Pane</strong>
+                <p>Drag the horizontal separator up or down.</p>
+            </div>
+        </w-slot>
+    </w-split>
+
+    <h3 style="margin-top: 2rem;">With Initial Sizes</h3>
+    <w-split direction="horizontal" style="height: 150px; border: 1px solid #ccc;">
+        <w-slot item name="sidebar" data-size="200px" data-min="100">
+            <div style="padding: 1rem; background: #f5f5f5; height: 100%; box-sizing: border-box;">
+                <strong>Sidebar (200px)</strong>
+                <p>Fixed initial width, min 100px.</p>
+            </div>
+        </w-slot>
+        <w-slot item name="content" data-size="1fr">
+            <div style="padding: 1rem; background: #fafafa; height: 100%; box-sizing: border-box;">
+                <strong>Content (1fr)</strong>
+                <p>Flexible width panel.</p>
+            </div>
+        </w-slot>
+    </w-split>
+
+    <h3 style="margin-top: 2rem;">Nested Split</h3>
+    <w-split direction="horizontal" style="height: 250px; border: 1px solid #ccc;">
+        <w-slot item name="nav" data-size="180px">
+            <div style="padding: 1rem; background: #e0e7ef; height: 100%; box-sizing: border-box;">
+                <strong>Navigation</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                </ul>
+            </div>
+        </w-slot>
+        <w-slot item name="main">
+            <w-split direction="vertical" style="height: 100%;">
+                <w-slot item name="editor">
+                    <div style="padding: 1rem; background: #fff; height: 100%; box-sizing: border-box;">
+                        <strong>Editor</strong>
+                        <p>Main editing area.</p>
+                    </div>
+                </w-slot>
+                <w-slot item name="terminal" data-size="80px">
+                    <div style="padding: 0.5rem 1rem; background: #1e1e1e; color: #d4d4d4; height: 100%; box-sizing: border-box; font-family: monospace;">
+                        <strong>Terminal</strong>
+                        <div style="margin-top: 0.25rem;">$ npm run build</div>
+                    </div>
+                </w-slot>
+            </w-split>
+        </w-slot>
+    </w-split>
+
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        <strong>Keyboard:</strong> Arrow keys to resize, Home to collapse, End to expand, Enter to toggle collapse.
+    </p>
+</w-view>
+
+<style>
+    w-split {
+        overflow: hidden;
+    }
+
+    .w-split-resizer {
+        background: #e0e0e0;
+        transition: background 0.15s ease;
+    }
+
+    .w-split-resizer:hover,
+    .w-split-resizer:focus {
+        background: #2563eb;
+    }
+
+    w-split[direction="horizontal"] .w-split-resizer {
+        cursor: col-resize;
+    }
+
+    w-split[direction="vertical"] .w-split-resizer {
+        cursor: row-resize;
+    }
+</style>

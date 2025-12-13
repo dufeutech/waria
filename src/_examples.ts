@@ -34,6 +34,7 @@ import toolbar from "./_examples/components/toolbar.html?raw";
 import tooltip from "./_examples/components/tooltip.html?raw";
 import tree from "./_examples/components/tree.html?raw";
 import treegrid from "./_examples/components/treegrid.html?raw";
+import split from "./_examples/components/split.html?raw";
 
 export default {
   style: reset + style,
@@ -62,6 +63,7 @@ export default {
     select,
     separator,
     spinbutton,
+    split,
     switchEl,
     tabs,
     toast,
