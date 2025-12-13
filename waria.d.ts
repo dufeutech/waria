@@ -13,42 +13,46 @@ type WariaBaseAttributes = JSX.HTMLAttributes<HTMLElement> & {
 
 // Available slot names in waria components
 type WariaSlotName =
+  // Universal (12)
   | "trigger"
-  | "content"
+  | "body"
   | "close"
   | "item"
-  | "panel"
   | "label"
-  | "description"
+  | "docs"
   | "icon"
-  | "header"
-  | "footer"
-  | "option"
+  | "head"
+  | "foot"
+  | "opt"
+  | "sep"
+  | "msg"
+  // Tabs (4)
   | "list"
-  | "tabs"
-  | "views"
-  | "view"
-  | "cell"
-  | "row"
-  | "rowheader"
-  | "image"
   | "tab"
+  | "panels"
+  | "panel"
+  // Carousel (4)
   | "prev"
   | "next"
-  | "indicators"
-  | "indicator"
-  | "fallback"
-  | "submenu"
-  | "thumb"
+  | "dots"
+  | "dot"
+  // Grid (2)
+  | "cell"
+  | "row"
+  // Range (3)
+  | "knob"
   | "fill"
-  | "track"
-  | "listbox"
+  | "rail"
+  // Spinbutton (4)
   | "input"
-  | "display"
-  | "increment"
-  | "decrement"
-  | "separator"
-  | "message";
+  | "value"
+  | "up"
+  | "down"
+  // Other (4)
+  | "menu"
+  | "img"
+  | "alt"
+  | "sub";
 
 // Extend standard HTML elements to support slot and name attributes used by waria
 declare module "preact" {
@@ -60,9 +64,56 @@ declare module "preact" {
   }
 }
 
+// w-slot attributes type - all slot names as boolean attributes
+type WSlotAttributes = WariaBaseAttributes & {
+  // Universal slots
+  trigger?: boolean;
+  body?: boolean;
+  close?: boolean;
+  item?: boolean;
+  label?: boolean;
+  docs?: boolean;
+  icon?: boolean;
+  head?: boolean;
+  foot?: boolean;
+  opt?: boolean;
+  sep?: boolean;
+  msg?: boolean;
+  // Tabs slots
+  list?: boolean;
+  tab?: boolean;
+  panels?: boolean;
+  panel?: boolean;
+  // Carousel slots
+  prev?: boolean;
+  next?: boolean;
+  dots?: boolean;
+  dot?: boolean;
+  // Grid slots
+  cell?: boolean;
+  row?: boolean;
+  // Range slots
+  knob?: boolean;
+  fill?: boolean;
+  rail?: boolean;
+  // Spinbutton slots
+  input?: boolean;
+  value?: boolean;
+  up?: boolean;
+  down?: boolean;
+  // Other slots
+  menu?: boolean;
+  img?: boolean;
+  alt?: boolean;
+  sub?: boolean;
+};
+
 declare module "preact" {
   namespace JSX {
     interface IntrinsicElements {
+      // Slot container component
+      "w-slot": WSlotAttributes;
+
       // Tabs
       "w-tabs": WariaBaseAttributes & {
         value?: string;

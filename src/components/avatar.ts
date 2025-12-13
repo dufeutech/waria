@@ -24,8 +24,8 @@ defineComponent({
   ],
 
   children: {
-    image: SLOT.image,
-    fallbackSlot: SLOT.fallback,
+    image: SLOT.img,
+    fallbackSlot: SLOT.alt,
   },
 
   setup(ctx) {
@@ -51,8 +51,8 @@ defineComponent({
 
     const updateDisplay = (): void => {
       // Check for slotted image first
-      const slottedImage = ctx.query<HTMLElement>(SLOT.image);
-      const slottedFallback = ctx.query<HTMLElement>(SLOT.fallback);
+      const slottedImage = ctx.query<HTMLElement>(SLOT.img);
+      const slottedFallback = ctx.query<HTMLElement>(SLOT.alt);
 
       if (slottedImage) {
         slottedImage.hidden = imageFailed;

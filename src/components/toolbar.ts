@@ -18,7 +18,7 @@ defineComponent({
 
   children: {
     items: { selector: SLOT.item, multiple: true },
-    separators: { selector: SLOT.separator, multiple: true },
+    separators: { selector: SLOT.sep, multiple: true },
   },
 
   events: {
@@ -46,7 +46,7 @@ defineComponent({
 
     const getSeparators = (): HTMLElement[] => {
       return Array.from(
-        ctx.element.querySelectorAll<HTMLElement>(SLOT.separator)
+        ctx.element.querySelectorAll<HTMLElement>(SLOT.sep)
       );
     };
 

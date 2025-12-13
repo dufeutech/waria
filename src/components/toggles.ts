@@ -121,7 +121,8 @@ defineComponent({
 
       handleKeyDown(e: KeyboardEvent): void {
         const target = e.target as HTMLElement;
-        if (target.getAttribute("slot") !== "item") return;
+        // Check if target is a w-slot[item] element
+        if (!target.matches(SLOT.item)) return;
 
         const items = Array.from(getItems());
         const currentIndex = items.indexOf(target);

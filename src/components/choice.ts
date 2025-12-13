@@ -22,12 +22,12 @@ defineComponent({
   ],
 
   children: {
-    options: { selector: SLOT.option, multiple: true },
+    options: { selector: SLOT.opt, multiple: true },
   },
 
   events: {
     click: {
-      selector: SLOT.option,
+      selector: SLOT.opt,
       handler: "handleOptionClick",
     },
     keydown: {
@@ -39,7 +39,7 @@ defineComponent({
     const el = ctx.element as unknown as ChoiceElement;
 
     const getOptions = (): HTMLElement[] => {
-      return ctx.querySlot<HTMLElement>("option");
+      return ctx.querySlot<HTMLElement>("opt");
     };
 
     let rovingTabindex: ReturnType<typeof createRovingTabindex> | null = null;
@@ -130,7 +130,8 @@ defineComponent({
 
         if (e.key === " " || e.key === "Enter") {
           const target = e.target as HTMLElement;
-          if (target.getAttribute("slot") === "option") {
+          // Check if target is a w-slot[opt] element
+          if (target.matches(SLOT.opt)) {
             e.preventDefault();
             el.handleOptionClick(e, target);
           }

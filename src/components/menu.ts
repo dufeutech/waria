@@ -19,7 +19,7 @@ defineComponent({
 
   children: {
     trigger: SLOT.trigger,
-    content: SLOT.content,
+    content: SLOT.body,
     items: { selector: SLOT.item, multiple: true },
   },
 
@@ -40,7 +40,7 @@ defineComponent({
         handler: "handleTriggerKeyDown",
       },
       {
-        selector: SLOT.content,
+        selector: SLOT.body,
         handler: "handleContentKeyDown",
       },
     ],
@@ -48,7 +48,7 @@ defineComponent({
 
   transitions: {
     content: {
-      target: SLOT.content,
+      target: SLOT.body,
       enterClass: "menu-enter",
       enterFromClass: "menu-enter-from",
       enterToClass: "menu-enter-to",
@@ -75,7 +75,7 @@ defineComponent({
 
     const getContent = (): HTMLElement | null => {
       // First try local query (when not portaled)
-      const localContent = ctx.query<HTMLElement>(SLOT.content);
+      const localContent = ctx.query<HTMLElement>(SLOT.body);
       if (localContent) {
         contentRef = localContent;
         return localContent;
@@ -86,7 +86,7 @@ defineComponent({
       }
       // Last resort: find by data-portal-owner attribute
       const portaledContent = document.querySelector<HTMLElement>(
-        `${SLOT.content}[data-portal-owner="${ctx.element.id}"]`
+        `${SLOT.body}[data-portal-owner="${ctx.element.id}"]`
       );
       if (portaledContent) {
         contentRef = portaledContent;
@@ -111,12 +111,12 @@ defineComponent({
 
     // Check if an item has a submenu
     const hasSubmenu = (item: HTMLElement): boolean => {
-      return item.querySelector(SLOT.submenu) !== null;
+      return item.querySelector(SLOT.sub) !== null;
     };
 
     // Get the submenu element for an item
     const getSubmenu = (item: HTMLElement): HTMLElement | null => {
-      return item.querySelector<HTMLElement>(SLOT.submenu);
+      return item.querySelector<HTMLElement>(SLOT.sub);
     };
 
     // Get items inside a submenu
@@ -211,8 +211,15 @@ defineComponent({
 
     // Close all sibling submenus at a given level
     const closeSiblingSubmenus = (item: HTMLElement): void => {
-      // Find the parent menu (either main content or a submenu)
-      const parentMenu = item.parentElement;
+      // Find the parent menu container (either main body content or submenu content)
+      // We need to traverse up past w-slot wrappers to find the actual menu container
+      let parentMenu: HTMLElement | null = item.parentElement;
+
+      // Skip w-slot wrappers (they have display: contents)
+      while (parentMenu && parentMenu.tagName.toLowerCase() === 'w-slot') {
+        parentMenu = parentMenu.parentElement;
+      }
+
       if (!parentMenu) return;
 
       // Get all sibling items in this menu level
@@ -526,7 +533,7 @@ defineComponent({
         // ArrowLeft closes current submenu and returns to parent
         if (e.key === KEY.ArrowLeft) {
           // Find if we're inside a submenu
-          const parentSubmenu = target.closest(SLOT.submenu);
+          const parentSubmenu = target.closest(SLOT.sub);
           if (parentSubmenu) {
             e.preventDefault();
             e.stopPropagation();
@@ -542,7 +549,7 @@ defineComponent({
         // Escape closes submenus first, then main menu (unless persistent)
         if (e.key === KEY.Escape) {
           const el = ctx.element as unknown as MenuElement;
-          const parentSubmenu = target.closest(SLOT.submenu);
+          const parentSubmenu = target.closest(SLOT.sub);
           if (parentSubmenu) {
             e.preventDefault();
             e.stopPropagation();

@@ -107,12 +107,37 @@ defineComponent({
 
       const items = getItems();
       items.forEach((item) => {
+        // Handle direct <a> elements
         if (item.tagName === "A" && item.hasAttribute("href")) {
           const href = item.getAttribute("href") || "";
           // Only convert if not already a hash link and not external
           if (href && !href.startsWith("#") && !href.startsWith("http")) {
             const hashHref = "#" + (href.startsWith("/") ? href : "/" + href);
             item.setAttribute("href", hashHref);
+          }
+        }
+        // Handle w-link elements (they have href attribute and contain an <a>)
+        else if (item.tagName === "W-LINK" && item.hasAttribute("href")) {
+          const href = item.getAttribute("href") || "";
+          if (href && !href.startsWith("#") && !href.startsWith("http")) {
+            const hashHref = "#" + (href.startsWith("/") ? href : "/" + href);
+            item.setAttribute("href", hashHref);
+            // Also update the inner anchor if it exists
+            const innerAnchor = item.querySelector("a");
+            if (innerAnchor) {
+              innerAnchor.setAttribute("href", hashHref);
+            }
+          }
+        }
+        // Handle <a> nested inside other elements
+        else {
+          const nestedAnchor = item.querySelector("a[href]");
+          if (nestedAnchor) {
+            const href = nestedAnchor.getAttribute("href") || "";
+            if (href && !href.startsWith("#") && !href.startsWith("http")) {
+              const hashHref = "#" + (href.startsWith("/") ? href : "/" + href);
+              nestedAnchor.setAttribute("href", hashHref);
+            }
           }
         }
       });
@@ -225,7 +250,17 @@ defineComponent({
 
       handleClick(e: MouseEvent): void {
         const target = e.target as HTMLElement;
-        const item = target.closest<HTMLElement>(SLOT.item);
+
+        // Find the item - either the target matches SLOT.item or find closest w-slot[item] and get its child
+        let item: HTMLElement | null = null;
+        if (target.matches(SLOT.item)) {
+          item = target;
+        } else {
+          const slotWrapper = target.closest<HTMLElement>("w-slot[item]");
+          if (slotWrapper) {
+            item = slotWrapper.firstElementChild as HTMLElement;
+          }
+        }
         if (!item) return;
 
         // In native mode, let links work normally (server-side routing)
@@ -241,7 +276,10 @@ defineComponent({
         }
 
         // Prevent default link behavior - let Router handle navigation
-        if (item.tagName === "A") {
+        // Check for anchor elements: direct <a>, w-link, or nested <a>
+        const isLink = item.tagName === "A" || item.tagName === "W-LINK";
+        const anchor = isLink ? item : target.closest("a");
+        if (anchor || item.querySelector("a")) {
           e.preventDefault();
         }
 

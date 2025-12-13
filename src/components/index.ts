@@ -5,6 +5,9 @@
  * Components are registered as custom elements automatically.
  */
 
+// Slot Component (must be first - used by other components)
+import "./slot";
+
 // Core Components
 import "./switch";
 import "./collapsible";
@@ -54,6 +57,7 @@ import "./treegrid";
 import "./view";
 
 // Re-export component registration for selective imports
+export * from "./slot";
 export * from "./switch";
 export * from "./collapsible";
 export * from "./choice";

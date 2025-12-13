@@ -38,11 +38,11 @@
             <span class="ts-2 ml-4">Website</span>
           </div>
           <div class="d-flex gx-5 dx-ce dy-ce">
-            <a slot="item" href="/home?q=1" class="e-ns">Home (q=1)</a>
-            <a slot="item" href="/home?q=2" class="e-ns">Home (q=2)</a>
-            <a slot="item" href="/about" class="e-ns">About</a>
-            <a slot="item" href="/contact" class="e-ns">Contact</a>
-            <a slot="item" href="/admin" class="e-ns">Admin</a>
+            <w-slot item><a href="/home?q=1" class="e-ns">Home (q=1)</a></w-slot>
+            <w-slot item><a href="/home?q=2" class="e-ns">Home (q=2)</a></w-slot>
+            <w-slot item><a href="/about" class="e-ns">About</a></w-slot>
+            <w-slot item><a href="/contact" class="e-ns">Contact</a></w-slot>
+            <w-slot item><a href="/admin" class="e-ns">Admin</a></w-slot>
             <ui-box
               class="ts-2 ta-c e-p e-ns"
               onclick="uizy.emit('app.toggle', 'right')"
@@ -84,42 +84,38 @@
             w-open="$emit('app.command', {name: 'dialog.open'})"
             w-close="console.log('close triggered')"
           >
-            <button
-              class="mt-5"
-              slot="triggerzz"
-              style="cursor: pointer"
-              onclick="$emit('app.open.dialog', 'dialog_one')"
-            >
-              Open Dialog
-            </button>
-            <div
-              slot="content"
-              label="Example Dialog"
-              style="
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: white;
-                padding: 2rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-                max-width: 400px;
-              "
-            >
-              <h3>Dialog Title</h3>
-              <p>
-                This is a modal dialog. Press Escape or click the close button
-                to close it.
-              </p>
-              <button
-                slot="closezz"
-                style="padding: 0.5rem 1rem; cursor: pointer"
-                onclick="$emit('app.close.dialog', 'dialog_one')"
-              >
-                Close
+            <w-slot trigger>
+              <button class="mt-5" style="cursor: pointer">
+                Open Dialog
               </button>
-            </div>
+            </w-slot>
+            <w-slot body>
+              <div
+                label="Example Dialog"
+                style="
+                  position: fixed;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  background: white;
+                  padding: 2rem;
+                  border-radius: 8px;
+                  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+                  max-width: 400px;
+                "
+              >
+                <h3>Dialog Title</h3>
+                <p>
+                  This is a modal dialog. Press Escape or click the close button
+                  to close it.
+                </p>
+                <w-slot close>
+                  <button style="padding: 0.5rem 1rem; cursor: pointer">
+                    Close
+                  </button>
+                </w-slot>
+              </div>
+            </w-slot>
           </w-dialog>
         </main>
       </uizy-main>

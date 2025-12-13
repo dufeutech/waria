@@ -19,8 +19,8 @@ defineComponent({
   ],
 
   children: {
-    tabs: SLOT.tabs,
-    views: SLOT.views,
+    tabs: SLOT.list,
+    views: SLOT.panels,
   },
 
   events: {
@@ -37,14 +37,14 @@ defineComponent({
   setup(ctx) {
     const el = ctx.element as unknown as TabsElement;
 
-    // Get the direct slot="tabs" container (not nested ones)
+    // Get the direct slot="list" container (not nested ones)
     const getTabsContainer = (): HTMLElement | null => {
-      return ctx.query<HTMLElement>(SLOT.tabs);
+      return ctx.query<HTMLElement>(SLOT.list);
     };
 
-    // Get the direct slot="views" container (not nested ones)
+    // Get the direct slot="panels" container (not nested ones)
     const getViewsContainer = (): HTMLElement | null => {
-      return ctx.query<HTMLElement>(SLOT.views);
+      return ctx.query<HTMLElement>(SLOT.panels);
     };
 
     const getTabs = (): HTMLElement[] => {
@@ -57,8 +57,8 @@ defineComponent({
     const getPanels = (): HTMLElement[] => {
       const container = getViewsContainer();
       if (!container) return [];
-      // Get views inside the views container
-      return Array.from(container.querySelectorAll<HTMLElement>(SLOT.view));
+      // Get panels inside the panels container
+      return Array.from(container.querySelectorAll<HTMLElement>(SLOT.panel));
     };
 
     let rovingTabindex: ReturnType<typeof createRovingTabindex> | null = null;

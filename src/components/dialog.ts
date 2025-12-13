@@ -32,7 +32,7 @@ defineComponent({
 
   children: {
     trigger: SLOT.trigger,
-    content: SLOT.content,
+    content: SLOT.body,
     close: SLOT.close,
   },
 
@@ -53,7 +53,7 @@ defineComponent({
 
   transitions: {
     content: {
-      target: SLOT.content,
+      target: SLOT.body,
       enterClass: "dialog-enter",
       enterFromClass: "dialog-enter-from",
       enterToClass: "dialog-enter-to",
@@ -67,7 +67,7 @@ defineComponent({
     const el = ctx.element as unknown as DialogElement;
 
     const getContent = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.content);
+      ctx.query<HTMLElement>(SLOT.body);
     const getTrigger = (): HTMLElement | null =>
       ctx.query<HTMLElement>(SLOT.trigger);
 

@@ -63,7 +63,7 @@ defineComponent({
 
         const cells = getCells(row);
         const rowHeaders = Array.from(
-          row.querySelectorAll<HTMLElement>(SLOT.rowheader)
+          row.querySelectorAll<HTMLElement>(SLOT.head)
         );
 
         rowHeaders.forEach((header) => {

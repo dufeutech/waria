@@ -22,7 +22,7 @@ defineComponent({
   ],
 
   children: {
-    indicator: SLOT.indicator,
+    indicator: SLOT.dot,
   },
 
   aria: {
@@ -33,7 +33,7 @@ defineComponent({
     const el = ctx.element as unknown as ProgressbarElement;
 
     const getIndicator = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.indicator);
+      ctx.query<HTMLElement>(SLOT.dot);
 
     const updateAria = (): void => {
       ctx.element.setAttribute(ARIA.valuemin, String(el.min));

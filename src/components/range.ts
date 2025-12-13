@@ -28,18 +28,18 @@ defineComponent({
   ],
 
   children: {
-    track: SLOT.track,
+    track: SLOT.rail,
     fill: SLOT.fill,
-    thumb: SLOT.thumb,
+    thumb: SLOT.knob,
   },
 
   events: {
     keydown: {
-      selector: SLOT.thumb,
+      selector: SLOT.knob,
       handler: "handleKeyDown",
     },
     pointerdown: {
-      selector: SLOT.thumb,
+      selector: SLOT.knob,
       handler: "handlePointerDown",
     },
     wheel: {
@@ -61,9 +61,9 @@ defineComponent({
     let hiddenInput: HTMLInputElement | null = null;
 
     const getThumb = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.thumb);
+      ctx.query<HTMLElement>(SLOT.knob);
     const getTrack = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.track);
+      ctx.query<HTMLElement>(SLOT.rail);
     const getFill = (): HTMLElement | null => ctx.query<HTMLElement>(SLOT.fill);
 
     // Create hidden input for form compatibility

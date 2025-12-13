@@ -26,7 +26,7 @@ defineComponent({
   ],
 
   children: {
-    message: SLOT.message,
+    message: SLOT.msg,
     close: SLOT.close,
   },
 

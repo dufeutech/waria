@@ -22,11 +22,11 @@ defineComponent({
   ],
 
   children: {
-    content: SLOT.content,
+    content: SLOT.body,
     items: { selector: SLOT.item, multiple: true },
     prev: SLOT.prev,
     next: SLOT.next,
-    indicators: SLOT.indicators,
+    indicators: SLOT.dots,
   },
 
   events: {
@@ -64,7 +64,7 @@ defineComponent({
     };
 
     const getIndicators = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.indicators);
+      ctx.query<HTMLElement>(SLOT.dots);
     const getPrev = (): HTMLElement | null => ctx.query<HTMLElement>(SLOT.prev);
     const getNext = (): HTMLElement | null => ctx.query<HTMLElement>(SLOT.next);
 

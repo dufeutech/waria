@@ -20,7 +20,7 @@ defineComponent({
 
   children: {
     trigger: SLOT.trigger,
-    content: SLOT.content,
+    content: SLOT.body,
   },
 
   events: {
@@ -36,7 +36,7 @@ defineComponent({
 
   transitions: {
     content: {
-      target: SLOT.content,
+      target: SLOT.body,
       enterClass: "collapsible-enter",
       enterFromClass: "collapsible-enter-from",
       enterToClass: "collapsible-enter-to",

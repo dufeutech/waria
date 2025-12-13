@@ -49,7 +49,7 @@ defineComponent({
         const isExpanded = expandedItems.includes(itemName);
 
         const trigger = item.querySelector(SLOT.trigger) as HTMLElement | null;
-        const content = item.querySelector(SLOT.content) as HTMLElement | null;
+        const content = item.querySelector(SLOT.body) as HTMLElement | null;
 
         if (trigger && content) {
           const triggerId = ensureId(trigger, "w-accordion-trigger");

@@ -11,7 +11,7 @@ defineComponent({
   props: [{ name: "ratio", type: String, default: "1/1" }],
 
   children: {
-    content: SLOT.content,
+    content: SLOT.body,
   },
 
   aria: {
@@ -39,7 +39,7 @@ defineComponent({
     };
 
     const updateStyles = (): void => {
-      const content = ctx.query<HTMLElement>(SLOT.content);
+      const content = ctx.query<HTMLElement>(SLOT.body);
       const ratio = parseRatio(el.ratio);
 
       // Apply styles to container using CSS aspect-ratio if supported

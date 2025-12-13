@@ -31,9 +31,9 @@ defineComponent({
 
   children: {
     input: SLOT.input,
-    display: SLOT.display,
-    increment: SLOT.increment,
-    decrement: SLOT.decrement,
+    display: SLOT.value,
+    increment: SLOT.up,
+    decrement: SLOT.down,
   },
 
   events: {
@@ -42,11 +42,11 @@ defineComponent({
     },
     click: [
       {
-        selector: SLOT.increment,
+        selector: SLOT.up,
         handler: "handleIncrement",
       },
       {
-        selector: SLOT.decrement,
+        selector: SLOT.down,
         handler: "handleDecrement",
       },
     ],
@@ -71,11 +71,11 @@ defineComponent({
     const getInput = (): HTMLInputElement | null =>
       ctx.query<HTMLInputElement>(SLOT.input);
     const getDisplay = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.display);
+      ctx.query<HTMLElement>(SLOT.value);
     const getIncrement = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.increment);
+      ctx.query<HTMLElement>(SLOT.up);
     const getDecrement = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.decrement);
+      ctx.query<HTMLElement>(SLOT.down);
 
     // Create hidden input for form compatibility
     const setupHiddenInput = (): void => {

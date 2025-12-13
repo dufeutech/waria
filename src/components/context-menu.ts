@@ -16,7 +16,7 @@ defineComponent({
 
   children: {
     trigger: SLOT.trigger,
-    content: SLOT.content,
+    content: SLOT.body,
     items: { selector: SLOT.item, multiple: true },
   },
 
@@ -30,14 +30,14 @@ defineComponent({
       handler: "handleItemClick",
     },
     keydown: {
-      selector: SLOT.content,
+      selector: SLOT.body,
       handler: "handleContentKeyDown",
     },
   },
 
   transitions: {
     content: {
-      target: SLOT.content,
+      target: SLOT.body,
       enterClass: "context-menu-enter",
       enterFromClass: "context-menu-enter-from",
       enterToClass: "context-menu-enter-to",
@@ -60,7 +60,7 @@ defineComponent({
     let contentRef: HTMLElement | null = null;
 
     const getContent = (): HTMLElement | null => {
-      const localContent = ctx.query<HTMLElement>(SLOT.content);
+      const localContent = ctx.query<HTMLElement>(SLOT.body);
       if (localContent) {
         contentRef = localContent;
         return localContent;
@@ -69,7 +69,7 @@ defineComponent({
         return contentRef;
       }
       const portaledContent = document.querySelector<HTMLElement>(
-        `${SLOT.content}[data-portal-owner="${ctx.element.id}"]`
+        `${SLOT.body}[data-portal-owner="${ctx.element.id}"]`
       );
       if (portaledContent) {
         contentRef = portaledContent;

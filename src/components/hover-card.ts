@@ -18,7 +18,7 @@ defineComponent({
 
   children: {
     trigger: SLOT.trigger,
-    content: SLOT.content,
+    content: SLOT.body,
   },
 
   events: {
@@ -45,7 +45,7 @@ defineComponent({
 
   transitions: {
     content: {
-      target: SLOT.content,
+      target: SLOT.body,
       enterClass: "hover-card-enter",
       enterFromClass: "hover-card-enter-from",
       enterToClass: "hover-card-enter-to",
@@ -70,7 +70,7 @@ defineComponent({
     let contentRef: HTMLElement | null = null;
 
     const getContent = (): HTMLElement | null => {
-      const localContent = ctx.query<HTMLElement>(SLOT.content);
+      const localContent = ctx.query<HTMLElement>(SLOT.body);
       if (localContent) {
         contentRef = localContent;
         return localContent;
@@ -79,7 +79,7 @@ defineComponent({
         return contentRef;
       }
       const portaledContent = document.querySelector<HTMLElement>(
-        `${SLOT.content}[data-portal-owner="${ctx.element.id}"]`
+        `${SLOT.body}[data-portal-owner="${ctx.element.id}"]`
       );
       if (portaledContent) {
         contentRef = portaledContent;

@@ -34,8 +34,8 @@ defineComponent({
 
   children: {
     trigger: SLOT.trigger,
-    listbox: SLOT.listbox,
-    options: { selector: SLOT.option, multiple: true },
+    listbox: SLOT.menu,
+    options: { selector: SLOT.opt, multiple: true },
   },
 
   events: {
@@ -45,7 +45,7 @@ defineComponent({
         handler: "handleTriggerClick",
       },
       {
-        selector: SLOT.option,
+        selector: SLOT.opt,
         handler: "handleOptionClick",
       },
     ],
@@ -72,7 +72,7 @@ defineComponent({
 
     const getListbox = (): HTMLElement | null => {
       // First try local query (when not portaled)
-      const localListbox = ctx.query<HTMLElement>(SLOT.listbox);
+      const localListbox = ctx.query<HTMLElement>(SLOT.menu);
       if (localListbox) {
         listboxRef = localListbox;
         return localListbox;
@@ -83,7 +83,7 @@ defineComponent({
       }
       // Last resort: find by data-portal-owner attribute
       const portaledListbox = document.querySelector<HTMLElement>(
-        `${SLOT.listbox}[data-portal-owner="${ctx.element.id}"]`
+        `${SLOT.menu}[data-portal-owner="${ctx.element.id}"]`
       );
       if (portaledListbox) {
         listboxRef = portaledListbox;
@@ -95,9 +95,9 @@ defineComponent({
     const getOptions = (): NodeListOf<HTMLElement> => {
       const listbox = getListbox();
       if (listbox) {
-        return listbox.querySelectorAll<HTMLElement>(SLOT.option);
+        return listbox.querySelectorAll<HTMLElement>(SLOT.opt);
       }
-      return el.querySelectorAll<HTMLElement>(SLOT.option);
+      return el.querySelectorAll<HTMLElement>(SLOT.opt);
     };
 
     const updateAria = (): void => {
@@ -179,7 +179,7 @@ defineComponent({
         // Attach direct event listeners to portaled content (event delegation doesn't work across portal)
         listboxClickHandler = (e: Event) => {
           const target = (e.target as HTMLElement).closest(
-            SLOT.option
+            SLOT.opt
           ) as HTMLElement | null;
           if (target) {
             (ctx.element as any).handleOptionClick(e, target);

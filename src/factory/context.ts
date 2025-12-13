@@ -119,7 +119,7 @@ export function createContext(config: ContextConfig): ComponentContext {
     },
 
     querySlot<E extends Element = Element>(slot: string): E[] {
-      return cache.query.all<E>(element, `[slot="${slot}"]`);
+      return cache.query.all<E>(element, `w-slot[${slot}] > *`);
     },
 
     emit<D = unknown>(event: string, detail?: D, options?: CustomEventInit): boolean {
