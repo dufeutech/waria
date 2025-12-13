@@ -10,12 +10,16 @@ Custom scrollbar with accessible controls.
 
 ```html
 <w-scrollbar>
-  <div slot="content">
-    <!-- Scrollable content -->
-  </div>
-  <div slot="track">
-    <div slot="thumb"></div>
-  </div>
+  <w-slot body>
+    <div>
+      <!-- Scrollable content -->
+    </div>
+  </w-slot>
+  <w-slot rail>
+    <div>
+      <w-slot knob><div></div></w-slot>
+    </div>
+  </w-slot>
 </w-scrollbar>
 ```
 

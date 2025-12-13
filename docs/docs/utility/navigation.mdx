@@ -10,9 +10,9 @@ Site navigation with URL synchronization and roving tabindex.
 
 ```html
 <w-nav label="Main navigation">
-  <a slot="item" href="/home">Home</a>
-  <a slot="item" href="/about">About</a>
-  <a slot="item" href="/contact">Contact</a>
+  <w-slot item><w-link href="/home">Home</w-link></w-slot>
+  <w-slot item><w-link href="/about">About</w-link></w-slot>
+  <w-slot item><w-link href="/contact">Contact</w-link></w-slot>
 </w-nav>
 ```
 
@@ -26,9 +26,9 @@ Site navigation with URL synchronization and roving tabindex.
 
 ## Slots
 
-| Slot   | Element     | Description                                              |
-| ------ | ----------- | -------------------------------------------------------- |
-| `item` | Link/Button | Navigation items (uses `href` or `data-value` for value) |
+| Slot   | Element               | Description                                              |
+| ------ | --------------------- | -------------------------------------------------------- |
+| `item` | `w-link` / `button`   | Navigation items (uses `href` or `data-value` for value) |
 
 ## Events
 
@@ -51,18 +51,27 @@ Site navigation with URL synchronization and roving tabindex.
 
 ```html
 <w-nav label="Sidebar" orientation="vertical">
-  <a slot="item" href="/dashboard">Dashboard</a>
-  <a slot="item" href="/profile">Profile</a>
-  <a slot="item" href="/settings">Settings</a>
+  <w-slot item><w-link href="/dashboard">Dashboard</w-link></w-slot>
+  <w-slot item><w-link href="/profile">Profile</w-link></w-slot>
+  <w-slot item><w-link href="/settings">Settings</w-link></w-slot>
 </w-nav>
 ```
 
-### With Data Values
+### With Data Values (Buttons)
 
 ```html
 <w-nav label="Options" value="option1">
-  <button slot="item" data-value="option1">Option 1</button>
-  <button slot="item" data-value="option2">Option 2</button>
+  <w-slot item><button data-value="option1">Option 1</button></w-slot>
+  <w-slot item><button data-value="option2">Option 2</button></w-slot>
+</w-nav>
+```
+
+### External Links
+
+```html
+<w-nav label="Resources">
+  <w-slot item><w-link href="/docs">Docs</w-link></w-slot>
+  <w-slot item><w-link href="https://github.com" external>GitHub</w-link></w-slot>
 </w-nav>
 ```
 
@@ -80,7 +89,7 @@ w-nav[orientation="vertical"] {
   flex-direction: column;
 }
 
-w-nav [slot="item"] {
+w-nav w-slot[item] {
   padding: 12px 16px;
   text-decoration: none;
   color: inherit;
@@ -99,8 +108,8 @@ Navigation works with `w-view` for single-page routing:
 
 ```html
 <w-nav label="Navigation">
-  <a slot="item" href="/home">Home</a>
-  <a slot="item" href="/about">About</a>
+  <w-slot item><w-link href="/home">Home</w-link></w-slot>
+  <w-slot item><w-link href="/about">About</w-link></w-slot>
 </w-nav>
 
 <w-view path="/home">
@@ -118,4 +127,4 @@ Navigation works with `w-view` for single-page routing:
 - `aria-label` from `label` prop
 - `aria-current="page"` on active item
 - Roving tabindex for keyboard navigation
-- Works with both links and buttons
+- Works with both `w-link` and buttons

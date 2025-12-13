@@ -10,14 +10,18 @@ Scrollable feed of articles with accessibility.
 
 ```html
 <w-feed label="News feed">
-  <article slot="item">
-    <h2>Article Title</h2>
-    <p>Article content...</p>
-  </article>
-  <article slot="item">
-    <h2>Another Article</h2>
-    <p>More content...</p>
-  </article>
+  <w-slot item>
+    <article>
+      <h2>Article Title</h2>
+      <p>Article content...</p>
+    </article>
+  </w-slot>
+  <w-slot item>
+    <article>
+      <h2>Another Article</h2>
+      <p>More content...</p>
+    </article>
+  </w-slot>
 </w-feed>
 ```
 

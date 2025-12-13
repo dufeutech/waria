@@ -10,10 +10,10 @@ Simple expand/collapse container.
 
 ```html
 <w-collapsible>
-  <button slot="trigger">Toggle content</button>
-  <div slot="content">
-    Hidden content that can be expanded.
-  </div>
+  <w-slot trigger><button>Toggle content</button></w-slot>
+  <w-slot body>
+    <div>Hidden content that can be expanded.</div>
+  </w-slot>
 </w-collapsible>
 ```
 
@@ -56,8 +56,8 @@ Simple expand/collapse container.
 
 ```html
 <w-collapsible open>
-  <button slot="trigger">Hide details</button>
-  <div slot="content">Visible by default</div>
+  <w-slot trigger><button>Hide details</button></w-slot>
+  <w-slot body><div>Visible by default</div></w-slot>
 </w-collapsible>
 ```
 

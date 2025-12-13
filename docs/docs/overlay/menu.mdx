@@ -10,12 +10,14 @@ Dropdown menus with nested submenus and keyboard navigation.
 
 ```html
 <w-menu>
-  <button slot="trigger">Actions</button>
-  <div slot="content">
-    <button slot="item" name="edit">Edit</button>
-    <button slot="item" name="duplicate">Duplicate</button>
-    <button slot="item" name="delete">Delete</button>
-  </div>
+  <w-slot trigger><button>Actions</button></w-slot>
+  <w-slot body>
+    <div>
+      <w-slot item name="edit"><button>Edit</button></w-slot>
+      <w-slot item name="duplicate"><button>Duplicate</button></w-slot>
+      <w-slot item name="delete"><button>Delete</button></w-slot>
+    </div>
+  </w-slot>
 </w-menu>
 ```
 
@@ -75,21 +77,27 @@ Dropdown menus with nested submenus and keyboard navigation.
 
 ```html
 <w-menu>
-  <button slot="trigger">File</button>
-  <div slot="content">
-    <button slot="item" name="new">New</button>
-    <button slot="item" name="open">Open</button>
+  <w-slot trigger><button>File</button></w-slot>
+  <w-slot body>
+    <div>
+      <w-slot item name="new"><button>New</button></w-slot>
+      <w-slot item name="open"><button>Open</button></w-slot>
 
-    <div slot="item" name="recent">
-      Recent Files
-      <div slot="submenu">
-        <button slot="item" name="file1">Document.pdf</button>
-        <button slot="item" name="file2">Image.png</button>
-      </div>
+      <w-slot item name="recent">
+        <div>
+          Recent Files
+          <w-slot sub>
+            <div>
+              <w-slot item name="file1"><button>Document.pdf</button></w-slot>
+              <w-slot item name="file2"><button>Image.png</button></w-slot>
+            </div>
+          </w-slot>
+        </div>
+      </w-slot>
+
+      <w-slot item name="save"><button>Save</button></w-slot>
     </div>
-
-    <button slot="item" name="save">Save</button>
-  </div>
+  </w-slot>
 </w-menu>
 ```
 
@@ -97,8 +105,8 @@ Dropdown menus with nested submenus and keyboard navigation.
 
 ```html
 <w-menu placement="right-start">
-  <button slot="trigger">Options</button>
-  <div slot="content">...</div>
+  <w-slot trigger><button>Options</button></w-slot>
+  <w-slot body><div>...</div></w-slot>
 </w-menu>
 ```
 
@@ -122,10 +130,12 @@ A persistent menu cannot be dismissed by pressing Escape or clicking outside.
 
 ```html
 <w-menu persistent>
-  <button slot="trigger">Options</button>
-  <div slot="content">
-    <button slot="item" name="done">Done</button>
-  </div>
+  <w-slot trigger><button>Options</button></w-slot>
+  <w-slot body>
+    <div>
+      <w-slot item name="done"><button>Done</button></w-slot>
+    </div>
+  </w-slot>
 </w-menu>
 ```
 

@@ -10,19 +10,19 @@ Expandable content sections with accessible keyboard navigation.
 
 ```html
 <w-accordion value="item1">
-  <div slot="item" name="item1">
-    <button slot="trigger">Section 1</button>
-    <div slot="content">
-      Content for section 1
-    </div>
-  </div>
+  <w-slot item name="item1">
+    <w-slot trigger><button>Section 1</button></w-slot>
+    <w-slot body>
+      <div>Content for section 1</div>
+    </w-slot>
+  </w-slot>
 
-  <div slot="item" name="item2">
-    <button slot="trigger">Section 2</button>
-    <div slot="content">
-      Content for section 2
-    </div>
-  </div>
+  <w-slot item name="item2">
+    <w-slot trigger><button>Section 2</button></w-slot>
+    <w-slot body>
+      <div>Content for section 2</div>
+    </w-slot>
+  </w-slot>
 </w-accordion>
 ```
 

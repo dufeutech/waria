@@ -10,10 +10,12 @@ Slider input for selecting a value in a range.
 
 ```html
 <w-range value="50" min="0" max="100" label="Volume">
-  <div slot="track">
-    <div slot="fill"></div>
-    <div slot="thumb"></div>
-  </div>
+  <w-slot rail>
+    <div>
+      <w-slot fill><div></div></w-slot>
+      <w-slot knob><div></div></w-slot>
+    </div>
+  </w-slot>
 </w-range>
 ```
 

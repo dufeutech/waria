@@ -10,14 +10,18 @@ Hierarchical grid combining tree and grid patterns.
 
 ```html
 <w-treegrid label="File browser">
-  <div slot="row" data-level="1" expandable>
-    <div slot="cell">Documents</div>
-    <div slot="cell">Folder</div>
-  </div>
-  <div slot="row" data-level="2">
-    <div slot="cell">Report.pdf</div>
-    <div slot="cell">File</div>
-  </div>
+  <w-slot row data-level="1" expandable>
+    <div>
+      <w-slot cell><div>Documents</div></w-slot>
+      <w-slot cell><div>Folder</div></w-slot>
+    </div>
+  </w-slot>
+  <w-slot row data-level="2">
+    <div>
+      <w-slot cell><div>Report.pdf</div></w-slot>
+      <w-slot cell><div>File</div></w-slot>
+    </div>
+  </w-slot>
 </w-treegrid>
 ```
 

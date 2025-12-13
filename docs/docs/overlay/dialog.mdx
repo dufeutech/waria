@@ -10,13 +10,15 @@ Modal dialogs with focus trapping and accessible announcements.
 
 ```html
 <w-dialog label="Confirm Action">
-  <button slot="trigger">Open Dialog</button>
-  <div slot="content">
-    <h2>Are you sure?</h2>
-    <p>This action cannot be undone.</p>
-    <button slot="close">Cancel</button>
-    <button>Confirm</button>
-  </div>
+  <w-slot trigger><button>Open Dialog</button></w-slot>
+  <w-slot body>
+    <div>
+      <h2>Are you sure?</h2>
+      <p>This action cannot be undone.</p>
+      <w-slot close><button>Cancel</button></w-slot>
+      <button>Confirm</button>
+    </div>
+  </w-slot>
 </w-dialog>
 ```
 
@@ -85,10 +87,12 @@ The dialog supports CSS transitions using these classes:
 
 ```html
 <w-dialog modal="false" label="Side Panel">
-  <button slot="trigger">Open Panel</button>
-  <div slot="content">
-    <!-- No focus trap, no backdrop -->
-  </div>
+  <w-slot trigger><button>Open Panel</button></w-slot>
+  <w-slot body>
+    <div>
+      <!-- No focus trap, no backdrop -->
+    </div>
+  </w-slot>
 </w-dialog>
 ```
 
@@ -96,10 +100,12 @@ The dialog supports CSS transitions using these classes:
 
 ```html
 <w-dialog id="my-dialog" label="Alert">
-  <div slot="content">
-    <p>Something happened!</p>
-    <button slot="close">OK</button>
-  </div>
+  <w-slot body>
+    <div>
+      <p>Something happened!</p>
+      <w-slot close><button>OK</button></w-slot>
+    </div>
+  </w-slot>
 </w-dialog>
 
 <script>
@@ -115,12 +121,14 @@ A persistent dialog cannot be dismissed by pressing Escape or clicking outside. 
 
 ```html
 <w-dialog persistent label="Important Action Required">
-  <button slot="trigger">Open Persistent Dialog</button>
-  <div slot="content">
-    <h2>Action Required</h2>
-    <p>You must complete this action before continuing.</p>
-    <button slot="close">I understand</button>
-  </div>
+  <w-slot trigger><button>Open Persistent Dialog</button></w-slot>
+  <w-slot body>
+    <div>
+      <h2>Action Required</h2>
+      <p>You must complete this action before continuing.</p>
+      <w-slot close><button>I understand</button></w-slot>
+    </div>
+  </w-slot>
 </w-dialog>
 ```
 

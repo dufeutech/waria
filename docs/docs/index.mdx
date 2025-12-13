@@ -56,11 +56,13 @@ import styles from "@site/src/css/welcome.module.css";
 
 ```html
 <w-dialog>
-  <button slot="trigger">Open</button>
-  <div slot="content">
-    <h2>Modal</h2>
-    <p>Content here</p>
-  </div>
+  <w-slot trigger><button>Open</button></w-slot>
+  <w-slot body>
+    <div>
+      <h2>Modal</h2>
+      <p>Content here</p>
+    </div>
+  </w-slot>
 </w-dialog>
 ```
 

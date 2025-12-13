@@ -10,11 +10,13 @@ Toggle switch for boolean settings.
 
 ```html
 <w-switch label="Enable notifications">
-  <button slot="trigger">
-    <span class="switch-track">
-      <span class="switch-thumb"></span>
-    </span>
-  </button>
+  <w-slot trigger>
+    <button>
+      <span class="switch-track">
+        <span class="switch-thumb"></span>
+      </span>
+    </button>
+  </w-slot>
 </w-switch>
 ```
 
@@ -56,7 +58,7 @@ Toggle switch for boolean settings.
 
 ```html
 <w-switch pressed label="Dark mode">
-  <button slot="trigger">...</button>
+  <w-slot trigger><button>...</button></w-slot>
 </w-switch>
 ```
 
@@ -64,7 +66,7 @@ Toggle switch for boolean settings.
 
 ```html
 <w-switch disabled label="Premium feature">
-  <button slot="trigger">...</button>
+  <w-slot trigger><button>...</button></w-slot>
 </w-switch>
 ```
 
@@ -73,11 +75,13 @@ Toggle switch for boolean settings.
 ```html
 <w-switch label="Notifications">
   <span>Notifications</span>
-  <button slot="trigger">
-    <span class="switch-track">
-      <span class="switch-thumb"></span>
-    </span>
-  </button>
+  <w-slot trigger>
+    <button>
+      <span class="switch-track">
+        <span class="switch-thumb"></span>
+      </span>
+    </button>
+  </w-slot>
 </w-switch>
 ```
 

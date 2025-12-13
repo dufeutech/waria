@@ -10,9 +10,9 @@ Single or multiple toggle button group.
 
 ```html
 <w-toggles value="bold" label="Text formatting">
-  <button slot="item" data-value="bold">B</button>
-  <button slot="item" data-value="italic">I</button>
-  <button slot="item" data-value="underline">U</button>
+  <w-slot item data-value="bold"><button>B</button></w-slot>
+  <w-slot item data-value="italic"><button>I</button></w-slot>
+  <w-slot item data-value="underline"><button>U</button></w-slot>
 </w-toggles>
 ```
 
@@ -42,15 +42,15 @@ Single or multiple toggle button group.
 
 ```html
 <w-toggles multiple value="bold,italic" label="Formatting">
-  <button slot="item" data-value="bold">B</button>
-  <button slot="item" data-value="italic">I</button>
+  <w-slot item data-value="bold"><button>B</button></w-slot>
+  <w-slot item data-value="italic"><button>I</button></w-slot>
 </w-toggles>
 ```
 
 ## Styling
 
 ```css
-w-toggles [slot="item"][aria-pressed="true"] {
+w-toggles w-slot[item][aria-pressed="true"] {
   background-color: #0056b3;
   color: white;
 }

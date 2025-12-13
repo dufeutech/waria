@@ -10,8 +10,8 @@ Accessible tooltips with hover and focus triggers.
 
 ```html
 <w-tooltip>
-  <button slot="trigger">Hover me</button>
-  <div slot="content">Helpful information</div>
+  <w-slot trigger><button>Hover me</button></w-slot>
+  <w-slot body><div>Helpful information</div></w-slot>
 </w-tooltip>
 ```
 
@@ -58,8 +58,8 @@ Accessible tooltips with hover and focus triggers.
 
 ```html
 <w-tooltip delay="0" closeDelay="0">
-  <span slot="trigger">?</span>
-  <div slot="content">Instant help</div>
+  <w-slot trigger><span>?</span></w-slot>
+  <w-slot body><div>Instant help</div></w-slot>
 </w-tooltip>
 ```
 
@@ -67,8 +67,8 @@ Accessible tooltips with hover and focus triggers.
 
 ```html
 <w-tooltip placement="right">
-  <button slot="trigger">Info</button>
-  <div slot="content">Tooltip on the right</div>
+  <w-slot trigger><button>Info</button></w-slot>
+  <w-slot body><div>Tooltip on the right</div></w-slot>
 </w-tooltip>
 ```
 
@@ -82,11 +82,13 @@ Available placements:
 
 ```html
 <w-tooltip>
-  <button slot="trigger">Details</button>
-  <div slot="content">
-    <strong>Title</strong>
-    <p>Description with multiple lines</p>
-  </div>
+  <w-slot trigger><button>Details</button></w-slot>
+  <w-slot body>
+    <div>
+      <strong>Title</strong>
+      <p>Description with multiple lines</p>
+    </div>
+  </w-slot>
 </w-tooltip>
 ```
 
@@ -105,7 +107,7 @@ Available placements:
 ## Styling
 
 ```css
-w-tooltip [slot="content"] {
+w-tooltip w-slot[body] {
   background: #333;
   color: white;
   padding: 8px 12px;

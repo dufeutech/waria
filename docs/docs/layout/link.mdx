@@ -4,40 +4,126 @@ sidebar_position: 31
 
 # Link
 
-Accessible link with external link handling.
+Accessible link component with external link handling and router integration.
 
 ## Usage
 
 ```html
-<w-link href="https://example.com" external>
-  Visit Example
-</w-link>
+<w-link href="/about">About Us</w-link>
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `href` | `string` | `""` | Link destination |
-| `external` | `boolean` | `false` | Opens in new tab with security |
+| Prop       | Type      | Default     | Description                           |
+|------------|-----------|-------------|---------------------------------------|
+| `href`     | `string`  | `""`        | Link destination                      |
+| `external` | `boolean` | `false`     | Opens in new tab with security        |
+| `disabled` | `boolean` | `false`     | Disables the link                     |
+| `variant`  | `string`  | `"default"` | Style variant: `default`, `subtle`, `underline` |
 
-## External Links
+## Examples
+
+### Basic Link
+
+```html
+<w-link href="/home">Go Home</w-link>
+```
+
+### External Link
+
+```html
+<w-link href="https://github.com" external>
+  View on GitHub
+</w-link>
+```
 
 When `external` is set:
 - Opens in new tab (`target="_blank"`)
 - Adds `rel="noopener noreferrer"` for security
-- Adds visual indicator (optional via CSS)
+- Prevents tabnabbing attacks
+
+### Disabled Link
+
+```html
+<w-link href="/premium" disabled>
+  Premium Feature (Coming Soon)
+</w-link>
+```
+
+### With Navigation
+
+`w-link` integrates seamlessly with `w-nav` for site navigation:
+
+```html
+<w-nav label="Main navigation">
+  <w-slot item><w-link href="/home">Home</w-link></w-slot>
+  <w-slot item><w-link href="/about">About</w-link></w-slot>
+  <w-slot item><w-link href="https://docs.example.com" external>Docs</w-link></w-slot>
+</w-nav>
+```
+
+### With Breadcrumb
+
+```html
+<w-breadcrumb label="Breadcrumb">
+  <w-slot item><w-link href="/">Home</w-link></w-slot>
+  <w-slot sep><span>/</span></w-slot>
+  <w-slot item><w-link href="/products">Products</w-link></w-slot>
+  <w-slot sep><span>/</span></w-slot>
+  <w-slot item><span aria-current="page">Widget</span></w-slot>
+</w-breadcrumb>
+```
 
 ## Styling
 
 ```css
+/* Base link styles */
+w-link {
+  color: #0066cc;
+}
+
+w-link:hover {
+  text-decoration: underline;
+}
+
+/* External link indicator */
 w-link[external]::after {
   content: " ↗";
   font-size: 0.8em;
 }
+
+/* Disabled state */
+w-link[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Variants */
+w-link[variant="subtle"] {
+  text-decoration: none;
+}
+
+w-link[variant="underline"] {
+  text-decoration: underline;
+}
+```
+
+## Router Integration
+
+When used with `waria.start({ hash: true })`, links inside `w-nav` are automatically converted to hash-based URLs for client-side routing:
+
+```html
+<!-- This link -->
+<w-link href="/about">About</w-link>
+
+<!-- Becomes (in hash mode) -->
+<w-link href="#/about">About</w-link>
 ```
 
 ## Accessibility
 
-- External links announced to screen readers
-- Security attributes prevent tabnabbing attacks
+- Proper link semantics with `<a>` element
+- External links include security attributes
+- Disabled state uses `aria-disabled` and prevents navigation
+- Works with keyboard navigation (Tab, Enter)
+- Screen readers announce external links appropriately

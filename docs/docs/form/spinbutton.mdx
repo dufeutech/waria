@@ -10,9 +10,9 @@ Numeric input with increment/decrement buttons.
 
 ```html
 <w-spinbutton value="5" min="0" max="10" label="Quantity">
-  <button slot="decrement">-</button>
-  <input slot="input" type="text" />
-  <button slot="increment">+</button>
+  <w-slot down><button>-</button></w-slot>
+  <w-slot input><input type="text" /></w-slot>
+  <w-slot up><button>+</button></w-slot>
 </w-spinbutton>
 ```
 

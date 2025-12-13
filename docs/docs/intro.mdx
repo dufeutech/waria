@@ -28,8 +28,8 @@ All components are now registered and ready to use.
 ```html
 <!-- Navigation with URL sync -->
 <w-nav label="Main navigation">
-  <a slot="item" href="/home">Home</a>
-  <a slot="item" href="/about">About</a>
+  <w-slot item><a href="/home">Home</a></w-slot>
+  <w-slot item><a href="/about">About</a></w-slot>
 </w-nav>
 
 <!-- View routing -->
@@ -48,12 +48,14 @@ All components use the `slot` attribute for composition:
 
 ```html
 <w-dialog>
-  <button slot="trigger">Open Dialog</button>
-  <div slot="content">
-    <h2>Dialog Title</h2>
-    <p>Dialog content goes here.</p>
-    <button slot="close">Close</button>
-  </div>
+  <w-slot trigger><button>Open Dialog</button></w-slot>
+  <w-slot body>
+    <div>
+      <h2>Dialog Title</h2>
+      <p>Dialog content goes here.</p>
+      <w-slot close><button>Close</button></w-slot>
+    </div>
+  </w-slot>
 </w-dialog>
 ```
 
@@ -73,15 +75,17 @@ Components emit custom events that you can listen to. Use the `w-*` attribute sy
 
 ```html
 <w-dialog w-open="console.log('opened')" w-close="console.log('closed')">
-  <button slot="trigger">Open</button>
-  <div slot="content">...</div>
+  <w-slot trigger><button>Open</button></w-slot>
+  <w-slot body><div>...</div></w-slot>
 </w-dialog>
 
 <w-menu w-select="handleSelect(event.detail)">
-  <button slot="trigger">Menu</button>
-  <div slot="content">
-    <button slot="item" name="edit">Edit</button>
-  </div>
+  <w-slot trigger><button>Menu</button></w-slot>
+  <w-slot body>
+    <div>
+      <w-slot item name="edit"><button>Edit</button></w-slot>
+    </div>
+  </w-slot>
 </w-menu>
 ```
 

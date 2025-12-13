@@ -10,17 +10,21 @@ Tabbed interface with automatic or manual activation. Supports nested tabs witho
 
 ```html
 <w-tabs value="tab1">
-  <div slot="tabs">
-    <button slot="tab" name="tab1">Tab 1</button>
-    <button slot="tab" name="tab2">Tab 2</button>
-    <button slot="tab" name="tab3">Tab 3</button>
-  </div>
+  <w-slot list>
+    <div>
+      <w-slot tab name="tab1"><button>Tab 1</button></w-slot>
+      <w-slot tab name="tab2"><button>Tab 2</button></w-slot>
+      <w-slot tab name="tab3"><button>Tab 3</button></w-slot>
+    </div>
+  </w-slot>
 
-  <div slot="views">
-    <div slot="view" name="tab1">Content for Tab 1</div>
-    <div slot="view" name="tab2">Content for Tab 2</div>
-    <div slot="view" name="tab3">Content for Tab 3</div>
-  </div>
+  <w-slot panels>
+    <div>
+      <w-slot panel name="tab1"><div>Content for Tab 1</div></w-slot>
+      <w-slot panel name="tab2"><div>Content for Tab 2</div></w-slot>
+      <w-slot panel name="tab3"><div>Content for Tab 3</div></w-slot>
+    </div>
+  </w-slot>
 </w-tabs>
 ```
 
@@ -36,10 +40,10 @@ Tabbed interface with automatic or manual activation. Supports nested tabs witho
 
 | Slot | Element | Description |
 |------|---------|-------------|
-| `tabs` | Container | Wrapper for tab buttons (becomes tablist) |
-| `tab` | Button | Tab button inside `slot="tabs"` (requires `name` attribute) |
-| `views` | Container | Wrapper for all tab panels |
-| `view` | Any | Tab view content inside `slot="views"` (requires matching `name`) |
+| `list` | Container | Wrapper for tab buttons (becomes tablist) |
+| `tab` | Button | Tab button inside `w-slot[list]` (requires `name` attribute) |
+| `panels` | Container | Wrapper for all tab panels |
+| `panel` | Any | Tab panel content inside `w-slot[panels]` (requires matching `name`) |
 
 ## Events
 
@@ -72,17 +76,21 @@ Tabbed interface with automatic or manual activation. Supports nested tabs witho
 
 ```html
 <w-tabs orientation="vertical" value="settings">
-  <div slot="tabs">
-    <button slot="tab" name="profile">Profile</button>
-    <button slot="tab" name="settings">Settings</button>
-    <button slot="tab" name="notifications">Notifications</button>
-  </div>
+  <w-slot list>
+    <div>
+      <w-slot tab name="profile"><button>Profile</button></w-slot>
+      <w-slot tab name="settings"><button>Settings</button></w-slot>
+      <w-slot tab name="notifications"><button>Notifications</button></w-slot>
+    </div>
+  </w-slot>
 
-  <div slot="views">
-    <div slot="view" name="profile">Profile settings...</div>
-    <div slot="view" name="settings">General settings...</div>
-    <div slot="view" name="notifications">Notification preferences...</div>
-  </div>
+  <w-slot panels>
+    <div>
+      <w-slot panel name="profile"><div>Profile settings...</div></w-slot>
+      <w-slot panel name="settings"><div>General settings...</div></w-slot>
+      <w-slot panel name="notifications"><div>Notification preferences...</div></w-slot>
+    </div>
+  </w-slot>
 </w-tabs>
 ```
 
@@ -92,44 +100,58 @@ Focus moves but tab doesn't activate until Enter/Space:
 
 ```html
 <w-tabs activation="manual" value="tab1">
-  <div slot="tabs">
-    <button slot="tab" name="tab1">Tab 1</button>
-    <button slot="tab" name="tab2">Tab 2</button>
-  </div>
-  <div slot="views">
-    <div slot="view" name="tab1">Content 1</div>
-    <div slot="view" name="tab2">Content 2</div>
-  </div>
+  <w-slot list>
+    <div>
+      <w-slot tab name="tab1"><button>Tab 1</button></w-slot>
+      <w-slot tab name="tab2"><button>Tab 2</button></w-slot>
+    </div>
+  </w-slot>
+  <w-slot panels>
+    <div>
+      <w-slot panel name="tab1"><div>Content 1</div></w-slot>
+      <w-slot panel name="tab2"><div>Content 2</div></w-slot>
+    </div>
+  </w-slot>
 </w-tabs>
 ```
 
 ### Nested Tabs
 
-Tabs can be nested without conflicts. Each `w-tabs` component only manages the tabs and panels within its own `slot="tabs"` and `slot="views"` containers:
+Tabs can be nested without conflicts. Each `w-tabs` component only manages the tabs and panels within its own `w-slot[list]` and `w-slot[panels]` containers:
 
 ```html
 <w-tabs value="outer1">
-  <div slot="tabs">
-    <button slot="tab" name="outer1">Outer 1</button>
-    <button slot="tab" name="outer2">Outer 2</button>
-  </div>
-
-  <div slot="views">
-    <div slot="view" name="outer1">
-      <!-- Nested tabs work independently -->
-      <w-tabs value="inner1">
-        <div slot="tabs">
-          <button slot="tab" name="inner1">Inner A</button>
-          <button slot="tab" name="inner2">Inner B</button>
-        </div>
-        <div slot="views">
-          <div slot="view" name="inner1">Inner content A</div>
-          <div slot="view" name="inner2">Inner content B</div>
-        </div>
-      </w-tabs>
+  <w-slot list>
+    <div>
+      <w-slot tab name="outer1"><button>Outer 1</button></w-slot>
+      <w-slot tab name="outer2"><button>Outer 2</button></w-slot>
     </div>
-    <div slot="view" name="outer2">Outer content 2</div>
-  </div>
+  </w-slot>
+
+  <w-slot panels>
+    <div>
+      <w-slot panel name="outer1">
+        <div>
+          <!-- Nested tabs work independently -->
+          <w-tabs value="inner1">
+            <w-slot list>
+              <div>
+                <w-slot tab name="inner1"><button>Inner A</button></w-slot>
+                <w-slot tab name="inner2"><button>Inner B</button></w-slot>
+              </div>
+            </w-slot>
+            <w-slot panels>
+              <div>
+                <w-slot panel name="inner1"><div>Inner content A</div></w-slot>
+                <w-slot panel name="inner2"><div>Inner content B</div></w-slot>
+              </div>
+            </w-slot>
+          </w-tabs>
+        </div>
+      </w-slot>
+      <w-slot panel name="outer2"><div>Outer content 2</div></w-slot>
+    </div>
+  </w-slot>
 </w-tabs>
 ```
 

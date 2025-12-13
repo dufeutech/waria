@@ -10,9 +10,9 @@ Radio or checkbox group selection.
 
 ```html
 <w-choice value="option1" label="Select an option">
-  <button slot="option" data-value="option1">Option 1</button>
-  <button slot="option" data-value="option2">Option 2</button>
-  <button slot="option" data-value="option3">Option 3</button>
+  <w-slot opt data-value="option1"><button>Option 1</button></w-slot>
+  <w-slot opt data-value="option2"><button>Option 2</button></w-slot>
+  <w-slot opt data-value="option3"><button>Option 3</button></w-slot>
 </w-choice>
 ```
 
@@ -51,9 +51,9 @@ Radio or checkbox group selection.
 
 ```html
 <w-choice multiple value="opt1,opt3" label="Select features">
-  <button slot="option" data-value="opt1">Feature A</button>
-  <button slot="option" data-value="opt2">Feature B</button>
-  <button slot="option" data-value="opt3">Feature C</button>
+  <w-slot opt data-value="opt1"><button>Feature A</button></w-slot>
+  <w-slot opt data-value="opt2"><button>Feature B</button></w-slot>
+  <w-slot opt data-value="opt3"><button>Feature C</button></w-slot>
 </w-choice>
 ```
 

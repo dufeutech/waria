@@ -10,11 +10,11 @@ Navigation breadcrumb trail.
 
 ```html
 <w-breadcrumb label="Breadcrumb">
-  <a slot="item" href="/">Home</a>
-  <span slot="separator">/</span>
-  <a slot="item" href="/products">Products</a>
-  <span slot="separator">/</span>
-  <span slot="item" aria-current="page">Widget</span>
+  <w-slot item><w-link href="/">Home</w-link></w-slot>
+  <w-slot sep><span>/</span></w-slot>
+  <w-slot item><w-link href="/products">Products</w-link></w-slot>
+  <w-slot sep><span>/</span></w-slot>
+  <w-slot item><span aria-current="page">Widget</span></w-slot>
 </w-breadcrumb>
 ```
 
@@ -26,10 +26,36 @@ Navigation breadcrumb trail.
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `item` | Link/Span | Breadcrumb items |
-| `separator` | Any | Visual separator between items |
+| Slot   | Element          | Description                    |
+|--------|------------------|--------------------------------|
+| `item` | `w-link` / Span  | Breadcrumb items               |
+| `sep`  | Any              | Visual separator between items |
+
+## Examples
+
+### With Icons
+
+```html
+<w-breadcrumb label="Breadcrumb">
+  <w-slot item><w-link href="/">🏠 Home</w-link></w-slot>
+  <w-slot sep><span>›</span></w-slot>
+  <w-slot item><w-link href="/docs">📚 Docs</w-link></w-slot>
+  <w-slot sep><span>›</span></w-slot>
+  <w-slot item><span aria-current="page">📄 Page</span></w-slot>
+</w-breadcrumb>
+```
+
+### Custom Separator
+
+```html
+<w-breadcrumb label="Breadcrumb">
+  <w-slot item><w-link href="/">Home</w-link></w-slot>
+  <w-slot sep><span>→</span></w-slot>
+  <w-slot item><w-link href="/category">Category</w-link></w-slot>
+  <w-slot sep><span>→</span></w-slot>
+  <w-slot item><span aria-current="page">Current</span></w-slot>
+</w-breadcrumb>
+```
 
 ## Styling
 
@@ -40,12 +66,20 @@ w-breadcrumb {
   gap: 8px;
 }
 
-w-breadcrumb [slot="separator"] {
+w-breadcrumb w-slot[sep] {
   color: #666;
 }
 
 w-breadcrumb [aria-current="page"] {
   font-weight: bold;
+}
+
+w-breadcrumb w-link {
+  color: #0066cc;
+}
+
+w-breadcrumb w-link:hover {
+  text-decoration: underline;
 }
 ```
 
@@ -54,3 +88,4 @@ w-breadcrumb [aria-current="page"] {
 - Container has `role="navigation"` with `aria-label`
 - List structure with `role="list"` and `role="listitem"`
 - Current page marked with `aria-current="page"`
+- Links are keyboard accessible via `w-link`

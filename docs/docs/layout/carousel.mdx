@@ -10,18 +10,20 @@ Image/content carousel with navigation.
 
 ```html
 <w-carousel label="Product images">
-  <button slot="prev">Previous</button>
-  <button slot="next">Next</button>
+  <w-slot prev><button>Previous</button></w-slot>
+  <w-slot next><button>Next</button></w-slot>
 
-  <div slot="item">Slide 1</div>
-  <div slot="item">Slide 2</div>
-  <div slot="item">Slide 3</div>
+  <w-slot item><div>Slide 1</div></w-slot>
+  <w-slot item><div>Slide 2</div></w-slot>
+  <w-slot item><div>Slide 3</div></w-slot>
 
-  <div slot="indicators">
-    <button slot="indicator"></button>
-    <button slot="indicator"></button>
-    <button slot="indicator"></button>
-  </div>
+  <w-slot dots>
+    <div>
+      <w-slot dot><button></button></w-slot>
+      <w-slot dot><button></button></w-slot>
+      <w-slot dot><button></button></w-slot>
+    </div>
+  </w-slot>
 </w-carousel>
 ```
 

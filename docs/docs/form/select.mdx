@@ -10,14 +10,18 @@ Custom select dropdown with full keyboard support.
 
 ```html
 <w-select value="option1">
-  <button slot="trigger">
-    <span slot="display">Option 1</span>
-  </button>
-  <div slot="listbox">
-    <div slot="option" data-value="option1">Option 1</div>
-    <div slot="option" data-value="option2">Option 2</div>
-    <div slot="option" data-value="option3">Option 3</div>
-  </div>
+  <w-slot trigger>
+    <button>
+      <w-slot value><span>Option 1</span></w-slot>
+    </button>
+  </w-slot>
+  <w-slot menu>
+    <div>
+      <w-slot opt data-value="option1"><div>Option 1</div></w-slot>
+      <w-slot opt data-value="option2"><div>Option 2</div></w-slot>
+      <w-slot opt data-value="option3"><div>Option 3</div></w-slot>
+    </div>
+  </w-slot>
 </w-select>
 ```
 

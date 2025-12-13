@@ -10,14 +10,16 @@ Right-click context menu.
 
 ```html
 <w-context-menu>
-  <div slot="trigger">
-    Right-click in this area
-  </div>
-  <div slot="content">
-    <button slot="item" name="cut">Cut</button>
-    <button slot="item" name="copy">Copy</button>
-    <button slot="item" name="paste">Paste</button>
-  </div>
+  <w-slot trigger>
+    <div>Right-click in this area</div>
+  </w-slot>
+  <w-slot body>
+    <div>
+      <w-slot item name="cut"><button>Cut</button></w-slot>
+      <w-slot item name="copy"><button>Copy</button></w-slot>
+      <w-slot item name="paste"><button>Paste</button></w-slot>
+    </div>
+  </w-slot>
 </w-context-menu>
 ```
 

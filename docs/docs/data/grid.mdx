@@ -10,16 +10,20 @@ Interactive data grid with keyboard navigation.
 
 ```html
 <w-grid label="Data table">
-  <div slot="row">
-    <div slot="cell">A1</div>
-    <div slot="cell">B1</div>
-    <div slot="cell">C1</div>
-  </div>
-  <div slot="row">
-    <div slot="cell">A2</div>
-    <div slot="cell">B2</div>
-    <div slot="cell">C2</div>
-  </div>
+  <w-slot row>
+    <div>
+      <w-slot cell><div>A1</div></w-slot>
+      <w-slot cell><div>B1</div></w-slot>
+      <w-slot cell><div>C1</div></w-slot>
+    </div>
+  </w-slot>
+  <w-slot row>
+    <div>
+      <w-slot cell><div>A2</div></w-slot>
+      <w-slot cell><div>B2</div></w-slot>
+      <w-slot cell><div>C2</div></w-slot>
+    </div>
+  </w-slot>
 </w-grid>
 ```
 

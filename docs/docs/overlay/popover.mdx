@@ -10,11 +10,13 @@ Non-modal floating content triggered by click.
 
 ```html
 <w-popover>
-  <button slot="trigger">More info</button>
-  <div slot="content">
-    <h3>Details</h3>
-    <p>Additional information here.</p>
-  </div>
+  <w-slot trigger><button>More info</button></w-slot>
+  <w-slot body>
+    <div>
+      <h3>Details</h3>
+      <p>Additional information here.</p>
+    </div>
+  </w-slot>
 </w-popover>
 ```
 
@@ -67,12 +69,14 @@ A persistent popover stays open until explicitly closed.
 
 ```html
 <w-popover persistent>
-  <button slot="trigger">Edit Settings</button>
-  <div slot="content">
-    <h3>Settings</h3>
-    <input type="text" placeholder="Name" />
-    <button onclick="this.closest('w-popover').open = false">Save</button>
-  </div>
+  <w-slot trigger><button>Edit Settings</button></w-slot>
+  <w-slot body>
+    <div>
+      <h3>Settings</h3>
+      <input type="text" placeholder="Name" />
+      <button onclick="this.closest('w-popover').open = false">Save</button>
+    </div>
+  </w-slot>
 </w-popover>
 ```
 
