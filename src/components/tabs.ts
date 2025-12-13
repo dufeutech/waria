@@ -1,7 +1,7 @@
 import { defineComponent } from "../factory";
 import { ensureId } from "../aria";
 import { createRovingTabindex } from "../infra/focus";
-import { SLOT, ARIA } from "../constants";
+import { SLOT, ARIA, getSlotName } from "../constants";
 
 interface TabsElement extends HTMLElement {
   value: string;
@@ -67,7 +67,7 @@ defineComponent({
       const tabs = getTabs();
       const panels = getPanels();
       const tabsContainer = getTabsContainer();
-      const value = el.value || tabs[0]?.getAttribute("name") || "";
+      const value = el.value || getSlotName(tabs[0]) || "";
 
       if (tabsContainer) {
         tabsContainer.setAttribute("role", "tablist");
@@ -75,11 +75,11 @@ defineComponent({
       }
 
       tabs.forEach((tab) => {
-        const tabName = tab.getAttribute("name") ?? "";
+        const tabName = getSlotName(tab) ?? "";
         const isSelected = tabName === value;
         const tabId = ensureId(tab, "w-tab");
 
-        const panel = panels.find((p) => p.getAttribute("name") === tabName);
+        const panel = panels.find((p) => getSlotName(p) === tabName);
         const panelId = panel ? ensureId(panel, "w-tabpanel") : "";
 
         tab.setAttribute("role", "tab");
@@ -107,7 +107,7 @@ defineComponent({
         onFocus: (index) => {
           if (el.activation === "automatic") {
             const tab = tabs[index];
-            const tabName = tab?.getAttribute("name");
+            const tabName = getSlotName(tab);
             if (tabName && tabName !== el.value) {
               el.value = tabName;
               updateAria();
@@ -118,7 +118,7 @@ defineComponent({
       });
 
       const selectedIndex = tabs.findIndex(
-        (t) => t.getAttribute("name") === el.value
+        (t) => getSlotName(t) === el.value
       );
       if (selectedIndex >= 0) {
         rovingTabindex.focus(selectedIndex);
@@ -136,7 +136,7 @@ defineComponent({
         const tabsContainer = getTabsContainer();
         if (!tabsContainer || !tabsContainer.contains(target)) return;
 
-        const tabName = target.getAttribute("name");
+        const tabName = getSlotName(target);
 
         if (tabName && tabName !== el.value) {
           el.value = tabName;
@@ -152,7 +152,7 @@ defineComponent({
 
         if (e.key === "Enter" || e.key === " ") {
           if (el.activation === "manual") {
-            const tabName = target.getAttribute("name");
+            const tabName = getSlotName(target);
             if (tabName && tabName !== el.value) {
               e.preventDefault();
               el.value = tabName;

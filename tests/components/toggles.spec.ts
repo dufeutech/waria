@@ -17,15 +17,15 @@ import { renderComponent, testArrowNav } from "../test-utils";
 
 const TOGGLES = `
 <w-toggles label="Formatting options">
-  <w-slot item><button name="bold">Bold</button></w-slot>
-  <w-slot item><button name="italic">Italic</button></w-slot>
-  <w-slot item><button name="underline">Underline</button></w-slot>
+  <w-slot item name="bold"><button>Bold</button></w-slot>
+  <w-slot item name="italic"><button>Italic</button></w-slot>
+  <w-slot item name="underline"><button>Underline</button></w-slot>
 </w-toggles>`;
 
 const TOGGLES_SINGLE = `
 <w-toggles mode="single" label="View mode">
-  <w-slot item><button name="list">List</button></w-slot>
-  <w-slot item><button name="grid">Grid</button></w-slot>
+  <w-slot item name="list"><button>List</button></w-slot>
+  <w-slot item name="grid"><button>Grid</button></w-slot>
 </w-toggles>`;
 
 // ═══════════════════════════════════════════════════════════════════════════

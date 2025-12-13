@@ -1,6 +1,6 @@
 import { defineComponent } from "../factory";
 import { onAttributeChange } from "../core/observe";
-import { SLOT, ARIA, KEY } from "../constants";
+import { SLOT, ARIA, KEY, getSlotName } from "../constants";
 
 interface TogglesElement extends HTMLElement {
   value: string;
@@ -64,7 +64,7 @@ defineComponent({
       const selectedValues = getSelectedValues();
 
       items.forEach((item, index) => {
-        const itemName = item.getAttribute("name") || "";
+        const itemName = getSlotName(item) || "";
         const isPressed = selectedValues.includes(itemName);
 
         item.setAttribute(ARIA.pressed, String(isPressed));
@@ -81,7 +81,7 @@ defineComponent({
     const toggleItem = (item: HTMLElement): void => {
       if (el.disabled || item.hasAttribute("disabled")) return;
 
-      const itemName = item.getAttribute("name") || "";
+      const itemName = getSlotName(item) || "";
       const selectedValues = getSelectedValues();
 
       if (!el.multiple) {

@@ -19,20 +19,20 @@ import { renderComponent } from "../test-utils";
 // The component detects children by nested [slot="item"] elements
 const TREE = `
 <w-tree>
-  <w-slot item><div name="folder1">
+  <w-slot item name="folder1"><div>
     Folder 1
     <div role="group">
-      <w-slot item><div name="file1">File 1</div></w-slot>
-      <w-slot item><div name="file2">File 2</div></w-slot>
+      <w-slot item name="file1"><div>File 1</div></w-slot>
+      <w-slot item name="file2"><div>File 2</div></w-slot>
     </div>
   </div></w-slot>
-  <w-slot item><div name="folder2">
+  <w-slot item name="folder2"><div>
     Folder 2
     <div role="group">
-      <w-slot item><div name="file3">File 3</div></w-slot>
+      <w-slot item name="file3"><div>File 3</div></w-slot>
     </div>
   </div></w-slot>
-  <w-slot item><div name="file4">File 4</div></w-slot>
+  <w-slot item name="file4"><div>File 4</div></w-slot>
 </w-tree>`;
 
 // ═══════════════════════════════════════════════════════════════════════════

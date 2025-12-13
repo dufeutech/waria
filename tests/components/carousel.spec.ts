@@ -17,9 +17,9 @@ import { renderComponent } from "../test-utils";
 
 const CAROUSEL = `
 <w-carousel label="Image carousel">
-  <w-slot item><div name="1">Slide 1</div></w-slot>
-  <w-slot item><div name="2">Slide 2</div></w-slot>
-  <w-slot item><div name="3">Slide 3</div></w-slot>
+  <w-slot item name="1"><div>Slide 1</div></w-slot>
+  <w-slot item name="2"><div>Slide 2</div></w-slot>
+  <w-slot item name="3"><div>Slide 3</div></w-slot>
   <w-slot prev><button>Previous</button></w-slot>
   <w-slot next><button>Next</button></w-slot>
 </w-carousel>`;

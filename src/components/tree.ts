@@ -1,6 +1,6 @@
 import { defineComponent } from "../factory";
 import { ensureId } from "../aria";
-import { SLOT, ARIA, KEY } from "../constants";
+import { SLOT, ARIA, KEY, getSlotName } from "../constants";
 
 const TOGGLE_ATTR: string = "toggle";
 
@@ -70,7 +70,7 @@ defineComponent({
 
       while (parent && parent !== ctx.element) {
         if (parent.matches(SLOT.item)) {
-          const parentName = parent.getAttribute("name");
+          const parentName = getSlotName(parent as HTMLElement);
           if (parentName && !expandedItems.has(parentName)) {
             return false;
           }
@@ -93,7 +93,7 @@ defineComponent({
       ctx.element.setAttribute("role", "tree");
 
       allItems.forEach((item) => {
-        const itemName = item.getAttribute("name") ?? "";
+        const itemName = getSlotName(item) ?? "";
         const itemHasChildren = hasChildren(item);
         const isExpanded = expandedItems.has(itemName);
         const isSelected = selectedItems.has(itemName);
@@ -186,7 +186,7 @@ defineComponent({
       handleItemClick(e: Event, target: HTMLElement): void {
         e.stopPropagation();
 
-        const itemName = target.getAttribute("name");
+        const itemName = getSlotName(target);
         if (!itemName) return;
 
         // Check if click was on the expand/collapse indicator
@@ -217,7 +217,7 @@ defineComponent({
         const currentIndex = visibleItems.indexOf(target);
         if (currentIndex === -1) return;
 
-        const itemName = target.getAttribute("name") ?? "";
+        const itemName = getSlotName(target) ?? "";
         const expandedItems = getExpandedItems();
         const itemHasChildren = hasChildren(target);
         const isExpanded = expandedItems.has(itemName);
@@ -301,7 +301,7 @@ defineComponent({
             const currentLevel = getItemLevel(target);
             visibleItems.forEach((item) => {
               if (getItemLevel(item) === currentLevel && hasChildren(item)) {
-                const name = item.getAttribute("name");
+                const name = getSlotName(item);
                 if (name && !expandedItems.has(name)) {
                   expandedItems.add(name);
                 }
@@ -348,7 +348,7 @@ defineComponent({
         const el = ctx.element as unknown as TreeElement;
         const allItems = getAllItems()
           .filter(hasChildren)
-          .map((item) => item.getAttribute("name"))
+          .map((item) => getSlotName(item))
           .filter(Boolean);
         el.expanded = allItems.join(",");
         updateAria();

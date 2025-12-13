@@ -1,6 +1,6 @@
 import { defineComponent } from "../factory";
 import { ensureId } from "../aria";
-import { SLOT, ARIA } from "../constants";
+import { SLOT, ARIA, getSlotName } from "../constants";
 
 defineComponent({
   tag: "w-accordion",
@@ -45,7 +45,7 @@ defineComponent({
       const expandedItems = getExpandedItems();
 
       items.forEach((item) => {
-        const itemName = item.getAttribute("name") ?? "";
+        const itemName = getSlotName(item) ?? "";
         const isExpanded = expandedItems.includes(itemName);
 
         const trigger = item.querySelector(SLOT.trigger) as HTMLElement | null;
@@ -106,7 +106,7 @@ defineComponent({
       handleTriggerClick(e: Event): void {
         const trigger = e.target as HTMLElement;
         const item = trigger.closest(SLOT.item) as HTMLElement | null;
-        const itemName = item?.getAttribute("name");
+        const itemName = getSlotName(item);
 
         if (itemName) {
           toggleItem(itemName);
@@ -188,7 +188,7 @@ defineComponent({
 
         const items = getItems();
         el.value = items
-          .map((item) => item.getAttribute("name"))
+          .map((item) => getSlotName(item))
           .filter(Boolean)
           .join(",");
         updateAria();

@@ -3,7 +3,7 @@ import { ensureId } from "../aria";
 import { onDismiss } from "../infra/click-outside";
 import { createRovingTabindex } from "../infra/focus";
 import { teleport } from "../infra/portal";
-import { SLOT, ARIA, KEY } from "../constants";
+import { SLOT, ARIA, KEY, getSlotName } from "../constants";
 
 defineComponent({
   tag: "w-context-menu",
@@ -258,7 +258,7 @@ defineComponent({
 
       handleItemClick(_e: Event, target: HTMLElement): void {
         const el = ctx.element as unknown as ContextMenuElement;
-        const itemName = target.getAttribute("name");
+        const itemName = getSlotName(target);
 
         ctx.emit("select", { item: itemName, element: target });
 

@@ -19,17 +19,17 @@ import { renderComponent } from "../test-utils";
 // Parent rows have children with higher data-level
 const TREEGRID = `
 <w-treegrid label="File browser">
-  <w-slot row><div name="folder1" data-level="1" data-expanded="false">
-    <w-slot cell><div name="folder1-name">Documents</div></w-slot>
-    <w-slot cell><div name="folder1-size">--</div></w-slot>
+  <w-slot row name="folder1"><div data-level="1" data-expanded="false">
+    <w-slot cell name="folder1-name"><div>Documents</div></w-slot>
+    <w-slot cell name="folder1-size"><div>--</div></w-slot>
   </div></w-slot>
-  <w-slot row><div name="file1" data-level="2">
-    <w-slot cell><div name="file1-name">Report.pdf</div></w-slot>
-    <w-slot cell><div name="file1-size">2.5 MB</div></w-slot>
+  <w-slot row name="file1"><div data-level="2">
+    <w-slot cell name="file1-name"><div>Report.pdf</div></w-slot>
+    <w-slot cell name="file1-size"><div>2.5 MB</div></w-slot>
   </div></w-slot>
-  <w-slot row><div name="file2" data-level="1">
-    <w-slot cell><div name="file2-name">Image.png</div></w-slot>
-    <w-slot cell><div name="file2-size">1.2 MB</div></w-slot>
+  <w-slot row name="file2"><div data-level="1">
+    <w-slot cell name="file2-name"><div>Image.png</div></w-slot>
+    <w-slot cell name="file2-size"><div>1.2 MB</div></w-slot>
   </div></w-slot>
 </w-treegrid>`;
 

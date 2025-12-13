@@ -17,15 +17,15 @@ import { renderComponent } from "../test-utils";
 
 const GRID = `
 <w-grid label="Data grid">
-  <w-slot row><div name="1">
-    <w-slot cell><div name="1-1">Cell 1-1</div></w-slot>
-    <w-slot cell><div name="1-2">Cell 1-2</div></w-slot>
-    <w-slot cell><div name="1-3">Cell 1-3</div></w-slot>
+  <w-slot row name="1"><div>
+    <w-slot cell name="1-1"><div>Cell 1-1</div></w-slot>
+    <w-slot cell name="1-2"><div>Cell 1-2</div></w-slot>
+    <w-slot cell name="1-3"><div>Cell 1-3</div></w-slot>
   </div></w-slot>
-  <w-slot row><div name="2">
-    <w-slot cell><div name="2-1">Cell 2-1</div></w-slot>
-    <w-slot cell><div name="2-2">Cell 2-2</div></w-slot>
-    <w-slot cell><div name="2-3">Cell 2-3</div></w-slot>
+  <w-slot row name="2"><div>
+    <w-slot cell name="2-1"><div>Cell 2-1</div></w-slot>
+    <w-slot cell name="2-2"><div>Cell 2-2</div></w-slot>
+    <w-slot cell name="2-3"><div>Cell 2-3</div></w-slot>
   </div></w-slot>
 </w-grid>`;
 

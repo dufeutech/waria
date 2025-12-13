@@ -18,15 +18,15 @@ import { renderComponent, testArrowNav, testHomeEnd } from "../test-utils";
 
 const ACCORDION = `
 <w-accordion value="item1">
-  <w-slot item><div name="item1">
+  <w-slot item name="item1"><div>
     <w-slot trigger><button>Section 1</button></w-slot>
     <w-slot body><div>Content for section 1</div></w-slot>
   </div></w-slot>
-  <w-slot item><div name="item2">
+  <w-slot item name="item2"><div>
     <w-slot trigger><button>Section 2</button></w-slot>
     <w-slot body><div>Content for section 2</div></w-slot>
   </div></w-slot>
-  <w-slot item><div name="item3">
+  <w-slot item name="item3"><div>
     <w-slot trigger><button>Section 3</button></w-slot>
     <w-slot body><div>Content for section 3</div></w-slot>
   </div></w-slot>
@@ -34,11 +34,11 @@ const ACCORDION = `
 
 const ACCORDION_MULTIPLE = `
 <w-accordion multiple>
-  <w-slot item><div name="item1">
+  <w-slot item name="item1"><div>
     <w-slot trigger><button>Section 1</button></w-slot>
     <w-slot body><div>Content 1</div></w-slot>
   </div></w-slot>
-  <w-slot item><div name="item2">
+  <w-slot item name="item2"><div>
     <w-slot trigger><button>Section 2</button></w-slot>
     <w-slot body><div>Content 2</div></w-slot>
   </div></w-slot>

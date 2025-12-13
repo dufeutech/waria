@@ -19,28 +19,28 @@ import { renderComponent, testArrowNav, testHomeEnd } from "../test-utils";
 const TABS = `
 <w-tabs value="tab1">
   <w-slot list><div>
-    <w-slot tab><button name="tab1">Tab 1</button></w-slot>
-    <w-slot tab><button name="tab2">Tab 2</button></w-slot>
-    <w-slot tab><button name="tab3">Tab 3</button></w-slot>
+    <w-slot tab name="tab1"><button>Tab 1</button></w-slot>
+    <w-slot tab name="tab2"><button>Tab 2</button></w-slot>
+    <w-slot tab name="tab3"><button>Tab 3</button></w-slot>
   </div></w-slot>
   <w-slot panels><div>
-    <w-slot panel><div name="tab1">Content 1</div></w-slot>
-    <w-slot panel><div name="tab2">Content 2</div></w-slot>
-    <w-slot panel><div name="tab3">Content 3</div></w-slot>
+    <w-slot panel name="tab1"><div>Content 1</div></w-slot>
+    <w-slot panel name="tab2"><div>Content 2</div></w-slot>
+    <w-slot panel name="tab3"><div>Content 3</div></w-slot>
   </div></w-slot>
 </w-tabs>`;
 
 const TABS_VERTICAL = `
 <w-tabs value="tab1" orientation="vertical">
   <w-slot list><div>
-    <w-slot tab><button name="tab1">Tab 1</button></w-slot>
-    <w-slot tab><button name="tab2">Tab 2</button></w-slot>
-    <w-slot tab><button name="tab3">Tab 3</button></w-slot>
+    <w-slot tab name="tab1"><button>Tab 1</button></w-slot>
+    <w-slot tab name="tab2"><button>Tab 2</button></w-slot>
+    <w-slot tab name="tab3"><button>Tab 3</button></w-slot>
   </div></w-slot>
   <w-slot panels><div>
-    <w-slot panel><div name="tab1">Content 1</div></w-slot>
-    <w-slot panel><div name="tab2">Content 2</div></w-slot>
-    <w-slot panel><div name="tab3">Content 3</div></w-slot>
+    <w-slot panel name="tab1"><div>Content 1</div></w-slot>
+    <w-slot panel name="tab2"><div>Content 2</div></w-slot>
+    <w-slot panel name="tab3"><div>Content 3</div></w-slot>
   </div></w-slot>
 </w-tabs>`;
 

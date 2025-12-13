@@ -21,9 +21,9 @@ const CONTEXT_MENU = `
     Right-click here
   </div></w-slot>
   <w-slot body><div>
-    <w-slot item><button name="cut">Cut</button></w-slot>
-    <w-slot item><button name="copy">Copy</button></w-slot>
-    <w-slot item><button name="paste">Paste</button></w-slot>
+    <w-slot item name="cut"><button>Cut</button></w-slot>
+    <w-slot item name="copy"><button>Copy</button></w-slot>
+    <w-slot item name="paste"><button>Paste</button></w-slot>
   </div></w-slot>
 </w-context-menu>`;
 

@@ -1,7 +1,7 @@
 import { defineComponent } from "../factory";
 import { setAriaLabel, setAriaOrientation } from "../aria";
 import { createRovingTabindex } from "../infra/focus";
-import { SLOT, ARIA, KEY } from "../constants";
+import { SLOT, ARIA, KEY, getSlotName } from "../constants";
 
 interface ToolbarElement extends HTMLElement {
   label: string;
@@ -104,7 +104,7 @@ defineComponent({
       },
 
       handleItemClick(_e: Event, target: HTMLElement): void {
-        const itemName = target.getAttribute("name");
+        const itemName = getSlotName(target);
 
         ctx.emit("action", {
           item: itemName,

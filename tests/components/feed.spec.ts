@@ -17,15 +17,15 @@ import { renderComponent, testHomeEnd } from "../test-utils";
 
 const FEED = `
 <w-feed label="News feed">
-  <w-slot item><article name="1">
+  <w-slot item name="1"><article>
     <h3>Article 1</h3>
     <p>Content for article 1</p>
   </article></w-slot>
-  <w-slot item><article name="2">
+  <w-slot item name="2"><article>
     <h3>Article 2</h3>
     <p>Content for article 2</p>
   </article></w-slot>
-  <w-slot item><article name="3">
+  <w-slot item name="3"><article>
     <h3>Article 3</h3>
     <p>Content for article 3</p>
   </article></w-slot>

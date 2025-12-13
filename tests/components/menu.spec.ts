@@ -20,9 +20,9 @@ const MENU = `
 <w-menu>
   <w-slot trigger><button>Open Menu</button></w-slot>
   <w-slot body><div>
-    <w-slot item><button name="new">New File</button></w-slot>
-    <w-slot item><button name="open">Open...</button></w-slot>
-    <w-slot item><button name="save">Save</button></w-slot>
+    <w-slot item name="new"><button>New File</button></w-slot>
+    <w-slot item name="open"><button>Open...</button></w-slot>
+    <w-slot item name="save"><button>Save</button></w-slot>
   </div></w-slot>
 </w-menu>`;
 

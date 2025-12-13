@@ -17,16 +17,16 @@ import { renderComponent, testArrowNav } from "../test-utils";
 
 const CHOICE_RADIO = `
 <w-choice mode="radio" label="Select option">
-  <w-slot opt><button name="a">Option A</button></w-slot>
-  <w-slot opt><button name="b">Option B</button></w-slot>
-  <w-slot opt><button name="c">Option C</button></w-slot>
+  <w-slot opt name="a"><button>Option A</button></w-slot>
+  <w-slot opt name="b"><button>Option B</button></w-slot>
+  <w-slot opt name="c"><button>Option C</button></w-slot>
 </w-choice>`;
 
 const CHOICE_CHECKBOX = `
 <w-choice mode="checkbox" label="Select options">
-  <w-slot opt><button name="a">Option A</button></w-slot>
-  <w-slot opt><button name="b">Option B</button></w-slot>
-  <w-slot opt><button name="c">Option C</button></w-slot>
+  <w-slot opt name="a"><button>Option A</button></w-slot>
+  <w-slot opt name="b"><button>Option B</button></w-slot>
+  <w-slot opt name="c"><button>Option C</button></w-slot>
 </w-choice>`;
 
 // ═══════════════════════════════════════════════════════════════════════════

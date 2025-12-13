@@ -17,11 +17,11 @@ import { renderComponent, testArrowNav } from "../test-utils";
 
 const TOOLBAR = `
 <w-toolbar label="Text formatting">
-  <w-slot item><button name="bold">Bold</button></w-slot>
-  <w-slot item><button name="italic">Italic</button></w-slot>
+  <w-slot item name="bold"><button>Bold</button></w-slot>
+  <w-slot item name="italic"><button>Italic</button></w-slot>
   <w-slot sep><div></div></w-slot>
-  <w-slot item><button name="align-left">Left</button></w-slot>
-  <w-slot item><button name="align-center">Center</button></w-slot>
+  <w-slot item name="align-left"><button>Left</button></w-slot>
+  <w-slot item name="align-center"><button>Center</button></w-slot>
 </w-toolbar>`;
 
 // ═══════════════════════════════════════════════════════════════════════════

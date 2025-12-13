@@ -1,6 +1,6 @@
 import { defineComponent } from "../factory";
 import { createRovingTabindex } from "../infra/focus";
-import { SLOT, ARIA } from "../constants";
+import { SLOT, ARIA, getSlotName } from "../constants";
 
 interface ChoiceElement extends HTMLElement {
   value: string;
@@ -61,7 +61,7 @@ defineComponent({
       }
 
       options.forEach((opt) => {
-        const optValue = opt.getAttribute("name") ?? "";
+        const optValue = getSlotName(opt) ?? "";
         const isSelected =
           el.mode === "checkbox"
             ? values.includes(optValue)
@@ -101,7 +101,7 @@ defineComponent({
       handleOptionClick(_e: Event, target: HTMLElement): void {
         if (el.disabled) return;
 
-        const optValue = target.getAttribute("name");
+        const optValue = getSlotName(target);
         if (!optValue) return;
 
         let newValue: string;
@@ -150,7 +150,7 @@ defineComponent({
       getSelectedOptions(): HTMLElement[] {
         const values = el.value ? el.value.split(",").filter(Boolean) : [];
         return getOptions().filter((opt) =>
-          values.includes(opt.getAttribute("name") ?? "")
+          values.includes(getSlotName(opt) ?? "")
         );
       },
     });

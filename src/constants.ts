@@ -52,6 +52,19 @@ export const SLOT = {
   sub: "w-slot[sub] > *",
 } as const;
 
+/**
+ * Get the name attribute from a slot child element.
+ * The name is stored on the parent w-slot element, not the child.
+ */
+export function getSlotName(element: HTMLElement | null | undefined): string | null {
+  if (!element) return null;
+  const slot = element.parentElement;
+  if (slot?.tagName === "W-SLOT") {
+    return slot.getAttribute("name");
+  }
+  return null;
+}
+
 // ─────────────────────────────────────────────────────────────
 // Keyboard Keys
 // ─────────────────────────────────────────────────────────────

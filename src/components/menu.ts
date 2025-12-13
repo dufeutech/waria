@@ -4,7 +4,7 @@ import { autoPosition } from "../infra/position";
 import { onDismiss } from "../infra/click-outside";
 import { createRovingTabindex } from "../infra/focus";
 import { teleport } from "../infra/portal";
-import { SLOT, ARIA, KEY } from "../constants";
+import { SLOT, ARIA, KEY, getSlotName } from "../constants";
 
 defineComponent({
   tag: "w-menu",
@@ -570,7 +570,7 @@ defineComponent({
 
       handleItemClick(_e: Event, target: HTMLElement): void {
         const el = ctx.element as unknown as MenuElement;
-        const itemName = target.getAttribute("name");
+        const itemName = getSlotName(target);
 
         // If item has submenu, toggle it instead of selecting
         if (hasSubmenu(target)) {
