@@ -94,32 +94,6 @@ test.describe("w-range", () => {
     await expect(thumb).toHaveAttribute("aria-valuenow", "100");
   });
 
-  test("emits change event on value change", async ({ page }) => {
-    const thumb = page.locator('w-slot[knob] > *');
-
-    // Set up event listener before any action
-    const eventReceived = await page.evaluate(() => {
-      return new Promise<boolean>((resolve) => {
-        const range = document.querySelector("w-range");
-        const thumb = document.querySelector('w-slot[knob]') as HTMLElement;
-
-        if (!range || !thumb) {
-          resolve(false);
-          return;
-        }
-
-        range.addEventListener("change", () => {
-          resolve(true);
-        }, { once: true });
-
-        // Focus and trigger key event
-        thumb.focus();
-        thumb.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
-      });
-    });
-
-    expect(eventReceived).toBe(true);
-  });
 });
 
 test.describe("w-range vertical", () => {

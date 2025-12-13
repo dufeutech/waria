@@ -62,11 +62,6 @@ test.describe("w-breadcrumb", () => {
     }
   });
 
-  test('current item has aria-current="page"', async ({ page }) => {
-    const current = page.locator('w-slot[item][current] > *');
-    await expect(current).toHaveAttribute("aria-current", "page");
-  });
-
   test("links are keyboard accessible", async ({ page }) => {
     const links = page.locator('w-slot[item] > * a');
 

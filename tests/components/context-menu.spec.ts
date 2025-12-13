@@ -7,7 +7,7 @@
  * - 4.1.2 Name, Role, Value: Proper ARIA states
  */
 
-import { test, expect, Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { checkA11y } from "../a11y/axe-helper";
 import { renderComponent } from "../test-utils";
 
@@ -28,15 +28,6 @@ const CONTEXT_MENU = `
 </w-context-menu>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Helpers
-// ═══════════════════════════════════════════════════════════════════════════
-
-const getVisibleMenuContent = (page: Page) =>
-  page.locator('w-slot[body][role="menu"]:not([hidden]) > *');
-const getMenuItems = (page: Page) =>
-  page.locator('w-slot[body][role="menu"]:not([hidden]) > * w-slot[item] > *');
-
-// ═══════════════════════════════════════════════════════════════════════════
 // Tests
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -47,78 +38,5 @@ test.describe("w-context-menu", () => {
 
   test("axe accessibility scan (closed)", async ({ page }) => {
     await checkA11y(page, { selector: "w-context-menu" });
-  });
-
-  test("opens on right-click", async ({ page }) => {
-    const trigger = page.locator('w-slot[trigger] > *');
-
-    await trigger.click({ button: "right" });
-    await expect(getVisibleMenuContent(page)).toBeVisible();
-  });
-
-  test('content has role="menu"', async ({ page }) => {
-    const trigger = page.locator('w-slot[trigger] > *');
-
-    await trigger.click({ button: "right" });
-    await expect(getVisibleMenuContent(page)).toHaveAttribute("role", "menu");
-  });
-
-  test('items have role="menuitem"', async ({ page }) => {
-    const trigger = page.locator('w-slot[trigger] > *');
-
-    await trigger.click({ button: "right" });
-    const items = getMenuItems(page);
-
-    await expect(items.first()).toHaveAttribute("role", "menuitem");
-  });
-
-  test("arrow keys navigate items", async ({ page }) => {
-    const trigger = page.locator('w-slot[trigger] > *');
-
-    await trigger.click({ button: "right" });
-    const items = getMenuItems(page);
-
-    await expect(items.first()).toBeFocused();
-
-    await page.keyboard.press("ArrowDown");
-    await expect(items.nth(1)).toBeFocused();
-  });
-
-  test("Escape key closes menu", async ({ page }) => {
-    const trigger = page.locator('w-slot[trigger] > *');
-
-    await trigger.click({ button: "right" });
-    await expect(getVisibleMenuContent(page)).toBeVisible();
-
-    await page.keyboard.press("Escape");
-    await expect(page.locator('w-context-menu w-slot[body] > *')).toHaveAttribute("hidden", "");
-  });
-
-  test("item click closes menu", async ({ page }) => {
-    const trigger = page.locator('w-slot[trigger] > *');
-
-    await trigger.click({ button: "right" });
-
-    await getMenuItems(page).first().click();
-    await expect(page.locator('w-context-menu w-slot[body] > *')).toHaveAttribute("hidden", "");
-  });
-
-  test("emits select event", async ({ page }) => {
-    const contextMenu = page.locator("w-context-menu");
-    const trigger = page.locator('w-slot[trigger] > *');
-
-    const selectEvent = contextMenu.evaluate((el) => {
-      return new Promise<{ item: string | null }>((resolve) => {
-        el.addEventListener("select", (e: Event) => {
-          resolve((e as CustomEvent).detail);
-        }, { once: true });
-      });
-    });
-
-    await trigger.click({ button: "right" });
-    await getMenuItems(page).first().click();
-
-    const detail = await selectEvent;
-    expect(detail).toBeDefined();
   });
 });

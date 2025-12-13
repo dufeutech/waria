@@ -6,12 +6,16 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
-  timeout: 60000,
+  reporter: process.env.CI ? 'github' : 'list',
+  timeout: 15000,
+  expect: {
+    timeout: 5000,
+  },
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
-    navigationTimeout: 30000,
+    navigationTimeout: 10000,
+    actionTimeout: 5000,
   },
   projects: [
     {
@@ -23,6 +27,6 @@ export default defineConfig({
     command: 'npx vite --host',
     url: 'http://localhost:5173',
     reuseExistingServer: true,
-    timeout: 120000,
+    timeout: 60000,
   },
 });

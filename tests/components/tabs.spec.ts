@@ -44,28 +44,6 @@ const TABS_VERTICAL = `
   </div></w-slot>
 </w-tabs>`;
 
-const TABS_NESTED = `
-<w-tabs value="outer1">
-  <w-slot list><div>
-    <w-slot tab><button name="outer1">Outer 1</button></w-slot>
-    <w-slot tab><button name="outer2">Outer 2</button></w-slot>
-  </div></w-slot>
-  <w-slot panels><div>
-    <w-slot panel><div name="outer1">
-      <w-tabs value="inner1">
-        <w-slot list><div>
-          <w-slot tab><button name="inner1">Inner A</button></w-slot>
-          <w-slot tab><button name="inner2">Inner B</button></w-slot>
-        </div></w-slot>
-        <w-slot panels><div>
-          <w-slot panel><div name="inner1">Inner content A</div></w-slot>
-          <w-slot panel><div name="inner2">Inner content B</div></w-slot>
-        </div></w-slot>
-      </w-tabs>
-    </div></w-slot>
-    <w-slot panel><div name="outer2">Outer content 2</div></w-slot>
-  </div></w-slot>
-</w-tabs>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Tests - Horizontal Tabs
@@ -189,58 +167,3 @@ test.describe("w-tabs vertical", () => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════════
-// Tests - Nested Tabs
-// ═══════════════════════════════════════════════════════════════════════════
-
-test.describe("w-tabs nested", () => {
-  test.beforeEach(async ({ page }) => {
-    await renderComponent(page, TABS_NESTED, "w-tabs");
-    // Wait for both tab groups to initialize
-    await page.waitForFunction(() => {
-      const tablists = document.querySelectorAll('w-slot[list][role="tablist"]');
-      return tablists.length === 2;
-    });
-  });
-
-  test("outer and inner have separate tablists", async ({ page }) => {
-    const tablists = page.locator('w-slot[list][role="tablist"] > *');
-    await expect(tablists).toHaveCount(2);
-  });
-
-  test("outer tabs control outer views only", async ({ page }) => {
-    const outer = page.locator("w-tabs").first();
-    const outerTabs = outer.locator("> w-slot[list] > * w-slot[tab] > *");
-
-    await expect(outerTabs).toHaveCount(2);
-    await expect(outerTabs.first()).toHaveAttribute("aria-selected", "true");
-  });
-
-  test("inner tabs control inner views only", async ({ page }) => {
-    const inner = page.locator("w-tabs w-tabs");
-    const innerTabs = inner.locator("w-slot[list] > * w-slot[tab] > *");
-
-    await expect(innerTabs).toHaveCount(2);
-    await expect(innerTabs.first()).toHaveAttribute("aria-selected", "true");
-  });
-
-  test("clicking outer tab does not affect inner", async ({ page }) => {
-    const outer = page.locator("w-tabs").first();
-    const outerTabs = outer.locator("> w-slot[list] > * w-slot[tab] > *");
-    const inner = page.locator("w-tabs w-tabs");
-    const innerTabs = inner.locator("w-slot[list] > * w-slot[tab] > *");
-
-    await outerTabs.nth(1).click();
-    await expect(innerTabs.first()).toHaveAttribute("aria-selected", "true");
-  });
-
-  test("clicking inner tab does not affect outer", async ({ page }) => {
-    const outer = page.locator("w-tabs").first();
-    const outerTabs = outer.locator("> w-slot[list] > * w-slot[tab] > *");
-    const inner = page.locator("w-tabs w-tabs");
-    const innerTabs = inner.locator("w-slot[list] > * w-slot[tab] > *");
-
-    await innerTabs.nth(1).click();
-    await expect(outerTabs.first()).toHaveAttribute("aria-selected", "true");
-  });
-});

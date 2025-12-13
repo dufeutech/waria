@@ -53,6 +53,9 @@ import "./scrollbar";
 import "./grid";
 import "./treegrid";
 
+// Layout Components
+import "./split";
+
 // Router(Nav) Views
 import "./view";
 
@@ -89,4 +92,5 @@ export * from "./carousel";
 export * from "./scrollbar";
 export * from "./grid";
 export * from "./treegrid";
+export * from "./split";
 export * from "./view";

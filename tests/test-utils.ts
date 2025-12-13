@@ -22,7 +22,7 @@ export async function render(page: Page, html: string): Promise<void> {
   await page.goto("/tests-runner.html");
   // Wait for the library to register custom elements
   await page.waitForFunction(() => customElements.get("w-tabs") !== undefined, {
-    timeout: 10000,
+    timeout: 5000,
   });
   await page.locator("#test-root").evaluate((el, content) => {
     el.innerHTML = content;
@@ -41,7 +41,7 @@ export async function waitForInit(
       return el?.hasAttribute(attr) || el?.querySelector(`[${attr}]`) !== null;
     },
     { sel: selector, attr: checkAttr },
-    { timeout: 10000 }
+    { timeout: 5000 }
   );
 }
 

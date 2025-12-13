@@ -31,7 +31,9 @@
     "preview": "vite preview",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "test:a11y": "playwright test --grep @a11y"
+    "test:a11y": "playwright test --grep @a11y",
+    "test:fast": "playwright test --grep-invert @slow --workers=8",
+    "test:file": "playwright test --reporter=list"
   },
   "keywords": [
     "web-components",

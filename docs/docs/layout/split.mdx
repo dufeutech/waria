@@ -1,0 +1,174 @@
+---
+sidebar_position: 30
+---
+
+# Split
+
+Resizable nested panel layouts for IDEs, dashboards, and multi-panel applications.
+
+## Usage
+
+```html
+<w-split direction="horizontal">
+  <w-slot item data-size="200px" data-min="100px">
+    <div>Left Panel</div>
+  </w-slot>
+  <w-slot item>
+    <div>Main Content</div>
+  </w-slot>
+</w-split>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `direction` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Split direction |
+| `min` | `number` | `0` | Default minimum size (px) for all panes |
+| `step` | `number` | `10` | Keyboard resize step (px) |
+
+## Pane Attributes
+
+Applied to `w-slot[item]` elements:
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `data-size` | `string` | `1fr` | Initial size (`px`, `fr`, or `%`) |
+| `data-min` | `string` | `0` | Minimum size in px |
+| `name` | `string` | auto | Identifier for state persistence |
+
+## Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `resize` | `{ sizes: Record<string, string> }` | Fired after resize completes |
+
+## Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `getSizes()` | `Record<string, string>` | Get current pane sizes |
+
+## Keyboard
+
+| Key | Action |
+|-----|--------|
+| `Tab` | Focus resizer |
+| `ArrowLeft` / `ArrowRight` | Resize horizontal split |
+| `ArrowUp` / `ArrowDown` | Resize vertical split |
+| `Home` | Collapse pane to minimum |
+| `End` | Expand pane to maximum |
+| `Enter` | Toggle collapse/restore |
+
+## Examples
+
+### Horizontal Split
+
+```html
+<w-split direction="horizontal" style="height: 300px;">
+  <w-slot item name="sidebar" data-size="200px" data-min="150px">
+    <div>Sidebar</div>
+  </w-slot>
+  <w-slot item name="content">
+    <div>Main Content</div>
+  </w-slot>
+</w-split>
+```
+
+### Vertical Split
+
+```html
+<w-split direction="vertical" style="height: 400px;">
+  <w-slot item name="editor">
+    <div>Editor</div>
+  </w-slot>
+  <w-slot item name="terminal" data-size="150px" data-min="100px">
+    <div>Terminal</div>
+  </w-slot>
+</w-split>
+```
+
+### Nested Splits (IDE Layout)
+
+```html
+<w-split direction="horizontal" style="height: 500px;">
+  <w-slot item name="explorer" data-size="200px" data-min="150px">
+    <div>File Explorer</div>
+  </w-slot>
+  <w-slot item name="main">
+    <w-split direction="vertical">
+      <w-slot item name="editor">
+        <div>Code Editor</div>
+      </w-slot>
+      <w-slot item name="panel" data-size="150px" data-min="100px">
+        <div>Output Panel</div>
+      </w-slot>
+    </w-split>
+  </w-slot>
+  <w-slot item name="outline" data-size="180px" data-min="120px">
+    <div>Outline</div>
+  </w-slot>
+</w-split>
+```
+
+### Persisting State
+
+```html
+<w-split id="my-split" direction="horizontal">
+  <w-slot item name="left" data-size="250px">Left</w-slot>
+  <w-slot item name="right">Right</w-slot>
+</w-split>
+
+<script>
+  const split = document.getElementById('my-split');
+
+  // Save on resize
+  split.addEventListener('resize', (e) => {
+    localStorage.setItem('split-sizes', JSON.stringify(e.detail.sizes));
+  });
+
+  // Restore on load (via data-size attributes before init)
+</script>
+```
+
+## Styling
+
+```css
+w-split {
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
+
+.w-split-resizer {
+  background: #e0e0e0;
+  transition: background 0.2s;
+}
+
+.w-split-resizer:hover,
+.w-split-resizer:focus {
+  background: #2196f3;
+  outline: none;
+}
+
+/* Horizontal split resizers */
+w-split[direction="horizontal"] .w-split-resizer {
+  cursor: col-resize;
+}
+
+/* Vertical split resizers */
+w-split[direction="vertical"] .w-split-resizer {
+  cursor: row-resize;
+}
+```
+
+## Accessibility
+
+Follows [WAI-ARIA Window Splitter Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/):
+
+- Resizers have `role="separator"` with `tabindex="0"`
+- `aria-valuenow`, `aria-valuemin`, `aria-valuemax` indicate position
+- `aria-orientation` indicates separator direction
+- `aria-controls` references the primary pane
+- `aria-label` provides accessible name (e.g., "Resize sidebar")
+- Full keyboard navigation support
