@@ -15,12 +15,12 @@ import { renderComponent } from "../test-utils";
 
 const ASPECT_RATIO = `
 <w-aspect-ratio ratio="16/9" style="width: 320px;">
-  <div slot="content">Content</div>
+  <w-slot body><div>Content</div></w-slot>
 </w-aspect-ratio>`;
 
 const ASPECT_RATIO_4_3 = `
 <w-aspect-ratio ratio="4/3" style="width: 320px;">
-  <div slot="content">4:3 Content</div>
+  <w-slot body><div>4:3 Content</div></w-slot>
 </w-aspect-ratio>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -47,7 +47,7 @@ test.describe("w-aspect-ratio", () => {
   });
 
   test("content fills container", async ({ page }) => {
-    const content = page.locator('[slot="content"]');
+    const content = page.locator('w-slot[body] > *');
     await expect(content).toHaveCSS("position", "absolute");
     await expect(content).toHaveCSS("top", "0px");
     await expect(content).toHaveCSS("left", "0px");

@@ -18,28 +18,28 @@ import { renderComponent } from "../test-utils";
 
 const MENU = `
 <w-menu>
-  <button slot="trigger">Open Menu</button>
-  <div slot="content">
-    <button slot="item" name="new">New File</button>
-    <button slot="item" name="open">Open...</button>
-    <button slot="item" name="save">Save</button>
-  </div>
+  <w-slot trigger><button>Open Menu</button></w-slot>
+  <w-slot body><div>
+    <w-slot item><button name="new">New File</button></w-slot>
+    <w-slot item><button name="open">Open...</button></w-slot>
+    <w-slot item><button name="save">Save</button></w-slot>
+  </div></w-slot>
 </w-menu>`;
 
 const MENU_WITH_SUBMENU = `
 <w-menu>
-  <button slot="trigger">Open Menu</button>
-  <div slot="content">
-    <button slot="item" name="new">New File</button>
-    <div slot="item" name="export">
+  <w-slot trigger><button>Open Menu</button></w-slot>
+  <w-slot body><div>
+    <w-slot item><button name="new">New File</button></w-slot>
+    <w-slot item><div name="export">
       <span>Export</span>
-      <div slot="submenu" hidden>
-        <button slot="item" name="export-pdf">PDF</button>
-        <button slot="item" name="export-png">PNG</button>
-      </div>
-    </div>
-    <button slot="item" name="settings">Settings</button>
-  </div>
+      <w-slot sub><div hidden>
+        <w-slot item><button name="export-pdf">PDF</button></w-slot>
+        <w-slot item><button name="export-png">PNG</button></w-slot>
+      </div></w-slot>
+    </div></w-slot>
+    <w-slot item><button name="settings">Settings</button></w-slot>
+  </div></w-slot>
 </w-menu>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -47,11 +47,11 @@ const MENU_WITH_SUBMENU = `
 // ═══════════════════════════════════════════════════════════════════════════
 
 const getVisibleMenuContent = (page: Page) =>
-  page.locator('[slot="content"][role="menu"]:not([hidden])');
+  page.locator('w-slot[body][role="menu"]:not([hidden]) > *');
 const getMenuItems = (page: Page) =>
-  page.locator('[slot="content"][role="menu"]:not([hidden]) > [slot="item"]');
+  page.locator('w-slot[body][role="menu"]:not([hidden]) > * > w-slot[item] > *');
 const getMenuItem = (page: Page, name: string) =>
-  page.locator(`[slot="content"][role="menu"]:not([hidden]) > [slot="item"][name="${name}"]`);
+  page.locator(`w-slot[body][role="menu"]:not([hidden]) > * > w-slot[item][name="${name}"] > *`);
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Tests
@@ -67,14 +67,14 @@ test.describe("w-menu", () => {
   });
 
   test("trigger has correct ARIA attributes", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await expect(trigger).toHaveAttribute("aria-haspopup", "menu");
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
   test("click opens menu", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisibleMenuContent(page)).toBeVisible();
@@ -82,14 +82,14 @@ test.describe("w-menu", () => {
   });
 
   test('content has role="menu"', async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisibleMenuContent(page)).toHaveAttribute("role", "menu");
   });
 
   test('items have role="menuitem"', async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     const items = getMenuItems(page);
@@ -101,24 +101,24 @@ test.describe("w-menu", () => {
   });
 
   test("axe accessibility scan (open)", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await trigger.click();
     await expect(getVisibleMenuContent(page)).toBeVisible();
     await checkA11y(page);
   });
 
   test("Escape key closes menu", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisibleMenuContent(page)).toBeVisible();
 
     await page.keyboard.press("Escape");
-    await expect(page.locator('w-menu [slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-menu w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("arrow keys navigate items", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     const items = getMenuItems(page);
@@ -133,7 +133,7 @@ test.describe("w-menu", () => {
   });
 
   test("Enter key opens menu from trigger", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await page.keyboard.press("Enter");
@@ -141,7 +141,7 @@ test.describe("w-menu", () => {
   });
 
   test("ArrowDown opens menu from trigger", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await page.keyboard.press("ArrowDown");
@@ -150,7 +150,7 @@ test.describe("w-menu", () => {
 
   test("item click closes menu and emits select", async ({ page }) => {
     const menu = page.locator("w-menu");
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
 
@@ -166,11 +166,11 @@ test.describe("w-menu", () => {
 
     const detail = await selectPromise;
     expect(detail.item).toBeTruthy();
-    await expect(page.locator('w-menu [slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-menu w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("focus returns to trigger on close", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisibleMenuContent(page)).toBeVisible();
@@ -186,7 +186,7 @@ test.describe("w-menu with submenu", () => {
   });
 
   test("ArrowRight opens submenu", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
 
@@ -197,19 +197,19 @@ test.describe("w-menu with submenu", () => {
 
     // Open submenu
     await page.keyboard.press("ArrowRight");
-    const submenu = exportItem.locator('[slot="submenu"]');
+    const submenu = exportItem.locator('w-slot[sub] > *');
     await expect(submenu).not.toHaveAttribute("hidden");
   });
 
   test("ArrowLeft closes submenu", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("ArrowRight");
 
     const exportItem = getMenuItem(page, "export");
-    const submenu = exportItem.locator('[slot="submenu"]');
+    const submenu = exportItem.locator('w-slot[sub] > *');
     await expect(submenu).not.toHaveAttribute("hidden");
 
     await page.keyboard.press("ArrowLeft");
@@ -218,14 +218,14 @@ test.describe("w-menu with submenu", () => {
   });
 
   test("Escape closes submenu first", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("ArrowRight");
 
     const exportItem = getMenuItem(page, "export");
-    const submenu = exportItem.locator('[slot="submenu"]');
+    const submenu = exportItem.locator('w-slot[sub] > *');
     await expect(submenu).not.toHaveAttribute("hidden");
 
     await page.keyboard.press("Escape");
@@ -240,18 +240,18 @@ test.describe("w-menu with submenu", () => {
 
 const MENU_NESTED = `
 <w-menu>
-  <button slot="trigger">Outer Menu</button>
-  <div slot="content">
-    <button slot="item" name="outer1">Outer Item 1</button>
+  <w-slot trigger><button>Outer Menu</button></w-slot>
+  <w-slot body><div>
+    <w-slot item><button name="outer1">Outer Item 1</button></w-slot>
     <w-menu>
-      <button slot="trigger" name="nested-trigger">Open Nested</button>
-      <div slot="content">
-        <button slot="item" name="inner1">Inner Item 1</button>
-        <button slot="item" name="inner2">Inner Item 2</button>
-      </div>
+      <w-slot trigger><button name="nested-trigger">Open Nested</button></w-slot>
+      <w-slot body><div>
+        <w-slot item><button name="inner1">Inner Item 1</button></w-slot>
+        <w-slot item><button name="inner2">Inner Item 2</button></w-slot>
+      </div></w-slot>
     </w-menu>
-    <button slot="item" name="outer2">Outer Item 2</button>
-  </div>
+    <w-slot item><button name="outer2">Outer Item 2</button></w-slot>
+  </div></w-slot>
 </w-menu>`;
 
 test.describe("w-menu nested", () => {
@@ -260,16 +260,16 @@ test.describe("w-menu nested", () => {
   });
 
   test("outer and inner menus have independent triggers", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"]').first();
-    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger] > *').first();
+    const innerTrigger = page.locator('w-slot[trigger][name="nested-trigger"] > *');
 
     await expect(outerTrigger).toHaveAttribute("aria-haspopup", "menu");
     await expect(innerTrigger).toHaveAttribute("aria-haspopup", "menu");
   });
 
   test("opening outer menu does not open inner", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"]').first();
-    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger] > *').first();
+    const innerTrigger = page.locator('w-slot[trigger][name="nested-trigger"] > *');
 
     await outerTrigger.click();
     await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
@@ -279,8 +279,8 @@ test.describe("w-menu nested", () => {
   });
 
   test("opening inner menu does not close outer", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"]').first();
-    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger] > *').first();
+    const innerTrigger = page.locator('w-slot[trigger][name="nested-trigger"] > *');
 
     await outerTrigger.click();
     await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
@@ -294,14 +294,14 @@ test.describe("w-menu nested", () => {
 
 
   test("inner menu items have correct role", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"]').first();
-    const innerTrigger = page.locator('[slot="trigger"][name="nested-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger] > *').first();
+    const innerTrigger = page.locator('w-slot[trigger][name="nested-trigger"] > *');
 
     await outerTrigger.click();
     await expect(innerTrigger).toBeVisible();
     await innerTrigger.click();
 
-    const innerItems = page.locator('[slot="item"][name^="inner"]');
+    const innerItems = page.locator('w-slot[item][name^="inner"] > *');
     await expect(innerItems.first()).toHaveAttribute("role", "menuitem");
   });
 });

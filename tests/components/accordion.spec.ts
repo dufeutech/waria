@@ -18,30 +18,30 @@ import { renderComponent, testArrowNav, testHomeEnd } from "../test-utils";
 
 const ACCORDION = `
 <w-accordion value="item1">
-  <div slot="item" name="item1">
-    <button slot="trigger">Section 1</button>
-    <div slot="content">Content for section 1</div>
-  </div>
-  <div slot="item" name="item2">
-    <button slot="trigger">Section 2</button>
-    <div slot="content">Content for section 2</div>
-  </div>
-  <div slot="item" name="item3">
-    <button slot="trigger">Section 3</button>
-    <div slot="content">Content for section 3</div>
-  </div>
+  <w-slot item><div name="item1">
+    <w-slot trigger><button>Section 1</button></w-slot>
+    <w-slot body><div>Content for section 1</div></w-slot>
+  </div></w-slot>
+  <w-slot item><div name="item2">
+    <w-slot trigger><button>Section 2</button></w-slot>
+    <w-slot body><div>Content for section 2</div></w-slot>
+  </div></w-slot>
+  <w-slot item><div name="item3">
+    <w-slot trigger><button>Section 3</button></w-slot>
+    <w-slot body><div>Content for section 3</div></w-slot>
+  </div></w-slot>
 </w-accordion>`;
 
 const ACCORDION_MULTIPLE = `
 <w-accordion multiple>
-  <div slot="item" name="item1">
-    <button slot="trigger">Section 1</button>
-    <div slot="content">Content 1</div>
-  </div>
-  <div slot="item" name="item2">
-    <button slot="trigger">Section 2</button>
-    <div slot="content">Content 2</div>
-  </div>
+  <w-slot item><div name="item1">
+    <w-slot trigger><button>Section 1</button></w-slot>
+    <w-slot body><div>Content 1</div></w-slot>
+  </div></w-slot>
+  <w-slot item><div name="item2">
+    <w-slot trigger><button>Section 2</button></w-slot>
+    <w-slot body><div>Content 2</div></w-slot>
+  </div></w-slot>
 </w-accordion>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -58,7 +58,7 @@ test.describe("w-accordion", () => {
   });
 
   test("triggers have aria-expanded", async ({ page }) => {
-    const triggers = page.locator('[slot="trigger"]');
+    const triggers = page.locator('w-slot[trigger] > *');
     const count = await triggers.count();
 
     for (let i = 0; i < count; i++) {
@@ -68,13 +68,13 @@ test.describe("w-accordion", () => {
   });
 
   test('content has role="region"', async ({ page }) => {
-    const content = page.locator('[slot="content"]').first();
+    const content = page.locator('w-slot[body] > *').first();
     await expect(content).toHaveAttribute("role", "region");
   });
 
   test("click toggles panel", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]').nth(1);
-    const content = page.locator('[slot="content"]').nth(1);
+    const trigger = page.locator('w-slot[trigger] > *').nth(1);
+    const content = page.locator('w-slot[body] > *').nth(1);
 
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await expect(content).toBeHidden();
@@ -89,8 +89,8 @@ test.describe("w-accordion", () => {
   });
 
   test("aria-controls links trigger to content", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]').first();
-    const content = page.locator('[slot="content"]').first();
+    const trigger = page.locator('w-slot[trigger] > *').first();
+    const content = page.locator('w-slot[body] > *').first();
 
     const ariaControls = await trigger.getAttribute("aria-controls");
     expect(ariaControls).toBeTruthy();
@@ -100,8 +100,8 @@ test.describe("w-accordion", () => {
   });
 
   test("aria-labelledby links content to trigger", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]').first();
-    const content = page.locator('[slot="content"]').first();
+    const trigger = page.locator('w-slot[trigger] > *').first();
+    const content = page.locator('w-slot[body] > *').first();
 
     const triggerId = await trigger.getAttribute("id");
     const labelledby = await content.getAttribute("aria-labelledby");
@@ -109,13 +109,13 @@ test.describe("w-accordion", () => {
   });
 
   test("arrow keys navigate triggers", async ({ page }) => {
-    const triggers = page.locator('[slot="trigger"]');
+    const triggers = page.locator('w-slot[trigger] > *');
     await testArrowNav(page, triggers, { horizontal: false });
   });
 
   test("Enter key toggles panel", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]').nth(1);
-    const content = page.locator('[slot="content"]').nth(1);
+    const trigger = page.locator('w-slot[trigger] > *').nth(1);
+    const content = page.locator('w-slot[body] > *').nth(1);
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
@@ -126,8 +126,8 @@ test.describe("w-accordion", () => {
   });
 
   test("Space key toggles panel", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]').nth(1);
-    const content = page.locator('[slot="content"]').nth(1);
+    const trigger = page.locator('w-slot[trigger] > *').nth(1);
+    const content = page.locator('w-slot[body] > *').nth(1);
 
     await trigger.focus();
     await page.keyboard.press("Space");
@@ -137,7 +137,7 @@ test.describe("w-accordion", () => {
   });
 
   test("Home/End keys navigate to first/last", async ({ page }) => {
-    const triggers = page.locator('[slot="trigger"]');
+    const triggers = page.locator('w-slot[trigger] > *');
     await testHomeEnd(page, triggers);
   });
 });
@@ -148,7 +148,7 @@ test.describe("w-accordion multiple", () => {
   });
 
   test("allows multiple panels open", async ({ page }) => {
-    const triggers = page.locator('[slot="trigger"]');
+    const triggers = page.locator('w-slot[trigger] > *');
 
     await triggers.first().click();
     await triggers.nth(1).click();
@@ -164,25 +164,25 @@ test.describe("w-accordion multiple", () => {
 
 const ACCORDION_NESTED = `
 <w-accordion value="outer1">
-  <div slot="item" name="outer1">
-    <button slot="trigger" name="outer1-trigger">Outer Section 1</button>
-    <div slot="content">
+  <w-slot item><div name="outer1">
+    <w-slot trigger><button name="outer1-trigger">Outer Section 1</button></w-slot>
+    <w-slot body><div>
       <w-accordion value="inner1">
-        <div slot="item" name="inner1">
-          <button slot="trigger" name="inner1-trigger">Inner A</button>
-          <div slot="content">Inner content A</div>
-        </div>
-        <div slot="item" name="inner2">
-          <button slot="trigger" name="inner2-trigger">Inner B</button>
-          <div slot="content">Inner content B</div>
-        </div>
+        <w-slot item><div name="inner1">
+          <w-slot trigger><button name="inner1-trigger">Inner A</button></w-slot>
+          <w-slot body><div>Inner content A</div></w-slot>
+        </div></w-slot>
+        <w-slot item><div name="inner2">
+          <w-slot trigger><button name="inner2-trigger">Inner B</button></w-slot>
+          <w-slot body><div>Inner content B</div></w-slot>
+        </div></w-slot>
       </w-accordion>
-    </div>
-  </div>
-  <div slot="item" name="outer2">
-    <button slot="trigger" name="outer2-trigger">Outer Section 2</button>
-    <div slot="content">Outer content 2</div>
-  </div>
+    </div></w-slot>
+  </div></w-slot>
+  <w-slot item><div name="outer2">
+    <w-slot trigger><button name="outer2-trigger">Outer Section 2</button></w-slot>
+    <w-slot body><div>Outer content 2</div></w-slot>
+  </div></w-slot>
 </w-accordion>`;
 
 test.describe("w-accordion nested", () => {
@@ -192,22 +192,22 @@ test.describe("w-accordion nested", () => {
     await page.waitForFunction(() => {
       const accordions = document.querySelectorAll("w-accordion");
       return accordions.length === 2 &&
-        accordions[0].querySelector('[slot="trigger"][aria-expanded]') &&
-        accordions[1].querySelector('[slot="trigger"][aria-expanded]');
+        accordions[0].querySelector('w-slot[trigger][aria-expanded]') &&
+        accordions[1].querySelector('w-slot[trigger][aria-expanded]');
     });
   });
 
   test("outer and inner accordions have separate triggers", async ({ page }) => {
-    const outerTriggers = page.locator('[slot="trigger"][name^="outer"]');
-    const innerTriggers = page.locator('[slot="trigger"][name^="inner"]');
+    const outerTriggers = page.locator('w-slot[trigger][name^="outer"] > *');
+    const innerTriggers = page.locator('w-slot[trigger][name^="inner"] > *');
 
     await expect(outerTriggers).toHaveCount(2);
     await expect(innerTriggers).toHaveCount(2);
   });
 
   test("outer accordion controls outer panels only", async ({ page }) => {
-    const outer1Trigger = page.locator('[slot="trigger"][name="outer1-trigger"]');
-    const outer2Trigger = page.locator('[slot="trigger"][name="outer2-trigger"]');
+    const outer1Trigger = page.locator('w-slot[trigger][name="outer1-trigger"] > *');
+    const outer2Trigger = page.locator('w-slot[trigger][name="outer2-trigger"] > *');
 
     // First outer trigger should be expanded (value="outer1")
     await expect(outer1Trigger).toHaveAttribute("aria-expanded", "true");
@@ -215,8 +215,8 @@ test.describe("w-accordion nested", () => {
   });
 
   test("inner accordion controls inner panels only", async ({ page }) => {
-    const inner1Trigger = page.locator('[slot="trigger"][name="inner1-trigger"]');
-    const inner2Trigger = page.locator('[slot="trigger"][name="inner2-trigger"]');
+    const inner1Trigger = page.locator('w-slot[trigger][name="inner1-trigger"] > *');
+    const inner2Trigger = page.locator('w-slot[trigger][name="inner2-trigger"] > *');
 
     // First inner trigger should be expanded (value="inner1")
     await expect(inner1Trigger).toHaveAttribute("aria-expanded", "true");
@@ -224,9 +224,9 @@ test.describe("w-accordion nested", () => {
   });
 
   test("clicking outer does not affect inner", async ({ page }) => {
-    const outer1Trigger = page.locator('[slot="trigger"][name="outer1-trigger"]');
-    const outer2Trigger = page.locator('[slot="trigger"][name="outer2-trigger"]');
-    const inner1Trigger = page.locator('[slot="trigger"][name="inner1-trigger"]');
+    const outer1Trigger = page.locator('w-slot[trigger][name="outer1-trigger"] > *');
+    const outer2Trigger = page.locator('w-slot[trigger][name="outer2-trigger"] > *');
+    const inner1Trigger = page.locator('w-slot[trigger][name="inner1-trigger"] > *');
 
     // Inner is visible since outer1 is expanded by default
     await expect(inner1Trigger).toBeVisible();
@@ -239,8 +239,8 @@ test.describe("w-accordion nested", () => {
   });
 
   test("inner accordion works independently", async ({ page }) => {
-    const inner1Trigger = page.locator('[slot="trigger"][name="inner1-trigger"]');
-    const inner2Trigger = page.locator('[slot="trigger"][name="inner2-trigger"]');
+    const inner1Trigger = page.locator('w-slot[trigger][name="inner1-trigger"] > *');
+    const inner2Trigger = page.locator('w-slot[trigger][name="inner2-trigger"] > *');
 
     // Inner accordion should have inner1 expanded initially
     await expect(inner1Trigger).toHaveAttribute("aria-expanded", "true");
@@ -252,8 +252,8 @@ test.describe("w-accordion nested", () => {
   });
 
   test("arrow navigation stays within correct accordion", async ({ page }) => {
-    const inner1Trigger = page.locator('[slot="trigger"][name="inner1-trigger"]');
-    const inner2Trigger = page.locator('[slot="trigger"][name="inner2-trigger"]');
+    const inner1Trigger = page.locator('w-slot[trigger][name="inner1-trigger"] > *');
+    const inner2Trigger = page.locator('w-slot[trigger][name="inner2-trigger"] > *');
 
     await inner1Trigger.focus();
     await page.keyboard.press("ArrowDown");

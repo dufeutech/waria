@@ -17,16 +17,16 @@ import { renderComponent } from "../test-utils";
 
 const RANGE = `
 <w-range min="0" max="100" value="50" label="Volume">
-  <div slot="track"></div>
-  <div slot="fill"></div>
-  <div slot="thumb"></div>
+  <w-slot rail><div></div></w-slot>
+  <w-slot fill><div></div></w-slot>
+  <w-slot knob><div></div></w-slot>
 </w-range>`;
 
 const RANGE_VERTICAL = `
 <w-range min="0" max="100" value="50" orientation="vertical" label="Volume">
-  <div slot="track"></div>
-  <div slot="fill"></div>
-  <div slot="thumb"></div>
+  <w-slot rail><div></div></w-slot>
+  <w-slot fill><div></div></w-slot>
+  <w-slot knob><div></div></w-slot>
 </w-range>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -43,7 +43,7 @@ test.describe("w-range", () => {
   });
 
   test("thumb has correct ARIA attributes", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     await expect(thumb).toHaveAttribute("role", "slider");
     await expect(thumb).toHaveAttribute("aria-valuemin", "0");
@@ -53,7 +53,7 @@ test.describe("w-range", () => {
   });
 
   test("ArrowRight increments value", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     await thumb.focus();
     const initialValue = Number(await thumb.getAttribute("aria-valuenow"));
@@ -65,7 +65,7 @@ test.describe("w-range", () => {
   });
 
   test("ArrowLeft decrements value", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     await thumb.focus();
     const initialValue = Number(await thumb.getAttribute("aria-valuenow"));
@@ -77,7 +77,7 @@ test.describe("w-range", () => {
   });
 
   test("Home key sets to min", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     await thumb.focus();
     await page.keyboard.press("Home");
@@ -86,7 +86,7 @@ test.describe("w-range", () => {
   });
 
   test("End key sets to max", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     await thumb.focus();
     await page.keyboard.press("End");
@@ -95,13 +95,13 @@ test.describe("w-range", () => {
   });
 
   test("emits change event on value change", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     // Set up event listener before any action
     const eventReceived = await page.evaluate(() => {
       return new Promise<boolean>((resolve) => {
         const range = document.querySelector("w-range");
-        const thumb = document.querySelector('[slot="thumb"]') as HTMLElement;
+        const thumb = document.querySelector('w-slot[knob]') as HTMLElement;
 
         if (!range || !thumb) {
           resolve(false);
@@ -128,12 +128,12 @@ test.describe("w-range vertical", () => {
   });
 
   test("has vertical orientation", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
     await expect(thumb).toHaveAttribute("aria-orientation", "vertical");
   });
 
   test("ArrowUp increments value", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     await thumb.focus();
     const initialValue = Number(await thumb.getAttribute("aria-valuenow"));
@@ -145,7 +145,7 @@ test.describe("w-range vertical", () => {
   });
 
   test("ArrowDown decrements value", async ({ page }) => {
-    const thumb = page.locator('[slot="thumb"]');
+    const thumb = page.locator('w-slot[knob] > *');
 
     await thumb.focus();
     const initialValue = Number(await thumb.getAttribute("aria-valuenow"));

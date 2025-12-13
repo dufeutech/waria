@@ -17,9 +17,9 @@ import { renderComponent } from "../test-utils";
 
 const SPINBUTTON = `
 <w-spinbutton min="0" max="100" value="50" step="1" label="Quantity">
-  <button slot="decrement">-</button>
-  <input slot="input" type="text" />
-  <button slot="increment">+</button>
+  <w-slot down><button>-</button></w-slot>
+  <w-slot input><input type="text" /></w-slot>
+  <w-slot up><button>+</button></w-slot>
 </w-spinbutton>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -36,7 +36,7 @@ test.describe("w-spinbutton", () => {
   });
 
   test("input has correct ARIA attributes", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
+    const input = page.locator('w-slot[input] > *');
 
     await expect(input).toHaveAttribute("role", "spinbutton");
     await expect(input).toHaveAttribute("aria-valuemin", "0");
@@ -45,7 +45,7 @@ test.describe("w-spinbutton", () => {
   });
 
   test("ArrowUp increments value", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
+    const input = page.locator('w-slot[input] > *');
 
     await input.focus();
     const initialValue = Number(await input.getAttribute("aria-valuenow"));
@@ -57,7 +57,7 @@ test.describe("w-spinbutton", () => {
   });
 
   test("ArrowDown decrements value", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
+    const input = page.locator('w-slot[input] > *');
 
     await input.focus();
     const initialValue = Number(await input.getAttribute("aria-valuenow"));
@@ -69,7 +69,7 @@ test.describe("w-spinbutton", () => {
   });
 
   test("Home key sets to min", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
+    const input = page.locator('w-slot[input] > *');
 
     await input.focus();
     await page.keyboard.press("Home");
@@ -78,7 +78,7 @@ test.describe("w-spinbutton", () => {
   });
 
   test("End key sets to max", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
+    const input = page.locator('w-slot[input] > *');
 
     await input.focus();
     await page.keyboard.press("End");
@@ -87,8 +87,8 @@ test.describe("w-spinbutton", () => {
   });
 
   test("increment button increases value", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
-    const incrementBtn = page.locator('[slot="increment"]');
+    const input = page.locator('w-slot[input] > *');
+    const incrementBtn = page.locator('w-slot[up] > *');
 
     const initialValue = Number(await input.getAttribute("aria-valuenow"));
     await incrementBtn.click();
@@ -98,8 +98,8 @@ test.describe("w-spinbutton", () => {
   });
 
   test("decrement button decreases value", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
-    const decrementBtn = page.locator('[slot="decrement"]');
+    const input = page.locator('w-slot[input] > *');
+    const decrementBtn = page.locator('w-slot[down] > *');
 
     const initialValue = Number(await input.getAttribute("aria-valuenow"));
     await decrementBtn.click();
@@ -109,7 +109,7 @@ test.describe("w-spinbutton", () => {
   });
 
   test("PageUp increments by larger step", async ({ page }) => {
-    const input = page.locator('[slot="input"]');
+    const input = page.locator('w-slot[input] > *');
 
     await input.focus();
     const initialValue = Number(await input.getAttribute("aria-valuenow"));

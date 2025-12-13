@@ -17,11 +17,11 @@ import { renderComponent } from "../test-utils";
 
 const HOVER_CARD = `
 <w-hover-card portal="false" open-delay="0" close-delay="0">
-  <button slot="trigger">Hover over me</button>
-  <div slot="content">
+  <w-slot trigger><button>Hover over me</button></w-slot>
+  <w-slot body><div>
     <h4>Card Title</h4>
     <p>This is the hover card content.</p>
-  </div>
+  </div></w-slot>
 </w-hover-card>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -31,7 +31,7 @@ const HOVER_CARD = `
 test.describe("w-hover-card", () => {
   test.beforeEach(async ({ page }) => {
     // w-hover-card sets aria-expanded on trigger
-    await renderComponent(page, HOVER_CARD, '[slot="trigger"]', "aria-expanded");
+    await renderComponent(page, HOVER_CARD, 'w-slot[trigger]', "aria-expanded");
   });
 
   test("axe accessibility scan (closed)", async ({ page }) => {
@@ -39,14 +39,14 @@ test.describe("w-hover-card", () => {
   });
 
   test("shows content on focus", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
   test("hides content on blur", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
@@ -56,7 +56,7 @@ test.describe("w-hover-card", () => {
   });
 
   test("Escape key closes hover card", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
@@ -66,7 +66,7 @@ test.describe("w-hover-card", () => {
   });
 
   test("trigger has aria-expanded", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await trigger.focus();
@@ -74,7 +74,7 @@ test.describe("w-hover-card", () => {
   });
 
   test("shows content on mouse hover", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.hover();
 
@@ -82,7 +82,7 @@ test.describe("w-hover-card", () => {
   });
 
   test("hides content on mouse leave", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.hover();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
@@ -93,7 +93,7 @@ test.describe("w-hover-card", () => {
   });
 
   test("aria-controls links trigger to content", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");

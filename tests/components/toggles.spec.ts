@@ -17,15 +17,15 @@ import { renderComponent, testArrowNav } from "../test-utils";
 
 const TOGGLES = `
 <w-toggles label="Formatting options">
-  <button slot="item" name="bold">Bold</button>
-  <button slot="item" name="italic">Italic</button>
-  <button slot="item" name="underline">Underline</button>
+  <w-slot item><button name="bold">Bold</button></w-slot>
+  <w-slot item><button name="italic">Italic</button></w-slot>
+  <w-slot item><button name="underline">Underline</button></w-slot>
 </w-toggles>`;
 
 const TOGGLES_SINGLE = `
 <w-toggles mode="single" label="View mode">
-  <button slot="item" name="list">List</button>
-  <button slot="item" name="grid">Grid</button>
+  <w-slot item><button name="list">List</button></w-slot>
+  <w-slot item><button name="grid">Grid</button></w-slot>
 </w-toggles>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -53,7 +53,7 @@ test.describe("w-toggles", () => {
   });
 
   test("items have aria-pressed", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     const count = await items.count();
 
     for (let i = 0; i < count; i++) {
@@ -63,7 +63,7 @@ test.describe("w-toggles", () => {
   });
 
   test("click toggles aria-pressed", async ({ page }) => {
-    const item = page.locator('[slot="item"]').first();
+    const item = page.locator('w-slot[item] > *').first();
 
     const initialPressed = await item.getAttribute("aria-pressed");
     await item.click();
@@ -73,12 +73,12 @@ test.describe("w-toggles", () => {
   });
 
   test("arrow keys navigate items", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     await testArrowNav(page, items, { horizontal: true });
   });
 
   test("Enter key toggles item", async ({ page }) => {
-    const item = page.locator('[slot="item"]').first();
+    const item = page.locator('w-slot[item] > *').first();
 
     await item.focus();
     const initialPressed = await item.getAttribute("aria-pressed");
@@ -89,7 +89,7 @@ test.describe("w-toggles", () => {
   });
 
   test("Space key toggles item", async ({ page }) => {
-    const item = page.locator('[slot="item"]').first();
+    const item = page.locator('w-slot[item] > *').first();
 
     await item.focus();
     const initialPressed = await item.getAttribute("aria-pressed");
@@ -101,7 +101,7 @@ test.describe("w-toggles", () => {
 
   test("emits change event", async ({ page }) => {
     const toggles = page.locator("w-toggles");
-    const item = page.locator('[slot="item"]').first();
+    const item = page.locator('w-slot[item] > *').first();
 
     const changePromise = toggles.evaluate((el) => {
       return new Promise<{ value: string[] }>((resolve) => {
@@ -124,7 +124,7 @@ test.describe("w-toggles single mode", () => {
   });
 
   test("only one item can be pressed", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
 
     await items.first().click();
     await expect(items.first()).toHaveAttribute("aria-pressed", "true");

@@ -17,17 +17,17 @@ import { renderComponent } from "../test-utils";
 
 const SWITCH = `
 <w-switch label="Test Switch">
-  <button slot="trigger">Toggle</button>
+  <w-slot trigger><button>Toggle</button></w-slot>
 </w-switch>`;
 
 const SWITCH_PRESSED = `
 <w-switch pressed label="Pressed Switch">
-  <button slot="trigger">Toggle</button>
+  <w-slot trigger><button>Toggle</button></w-slot>
 </w-switch>`;
 
 const SWITCH_DISABLED = `
 <w-switch disabled label="Disabled Switch">
-  <button slot="trigger">Toggle</button>
+  <w-slot trigger><button>Toggle</button></w-slot>
 </w-switch>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -44,7 +44,7 @@ test.describe("w-switch", () => {
   });
 
   test("trigger has correct ARIA attributes", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await expect(trigger).toHaveAttribute("role", "button");
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
@@ -52,7 +52,7 @@ test.describe("w-switch", () => {
   });
 
   test("click toggles aria-pressed", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
     await trigger.click();
@@ -62,7 +62,7 @@ test.describe("w-switch", () => {
   });
 
   test("Enter key toggles state", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
@@ -71,7 +71,7 @@ test.describe("w-switch", () => {
   });
 
   test("Space key toggles state", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-pressed", "false");
@@ -80,7 +80,7 @@ test.describe("w-switch", () => {
   });
 
   test("trigger is focusable", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await expect(trigger).toHaveAttribute("tabindex", "0");
     await trigger.focus();
@@ -89,7 +89,7 @@ test.describe("w-switch", () => {
 
   test("emits change event with pressed state", async ({ page }) => {
     const switchEl = page.locator("w-switch");
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     const changeEvent = switchEl.evaluate((el) => {
       return new Promise<{ pressed: boolean }>((resolve) => {
@@ -115,7 +115,7 @@ test.describe("w-switch pressed", () => {
   });
 
   test("starts with aria-pressed true", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await expect(trigger).toHaveAttribute("aria-pressed", "true");
   });
 });
@@ -126,7 +126,7 @@ test.describe("w-switch disabled", () => {
   });
 
   test("has aria-disabled attribute", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await expect(trigger).toHaveAttribute("aria-disabled", "true");
   });
 });

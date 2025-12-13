@@ -18,53 +18,53 @@ import { renderComponent, testArrowNav, testHomeEnd } from "../test-utils";
 
 const TABS = `
 <w-tabs value="tab1">
-  <div slot="tabs">
-    <button slot="tab" name="tab1">Tab 1</button>
-    <button slot="tab" name="tab2">Tab 2</button>
-    <button slot="tab" name="tab3">Tab 3</button>
-  </div>
-  <div slot="views">
-    <div slot="view" name="tab1">Content 1</div>
-    <div slot="view" name="tab2">Content 2</div>
-    <div slot="view" name="tab3">Content 3</div>
-  </div>
+  <w-slot list><div>
+    <w-slot tab><button name="tab1">Tab 1</button></w-slot>
+    <w-slot tab><button name="tab2">Tab 2</button></w-slot>
+    <w-slot tab><button name="tab3">Tab 3</button></w-slot>
+  </div></w-slot>
+  <w-slot panels><div>
+    <w-slot panel><div name="tab1">Content 1</div></w-slot>
+    <w-slot panel><div name="tab2">Content 2</div></w-slot>
+    <w-slot panel><div name="tab3">Content 3</div></w-slot>
+  </div></w-slot>
 </w-tabs>`;
 
 const TABS_VERTICAL = `
 <w-tabs value="tab1" orientation="vertical">
-  <div slot="tabs">
-    <button slot="tab" name="tab1">Tab 1</button>
-    <button slot="tab" name="tab2">Tab 2</button>
-    <button slot="tab" name="tab3">Tab 3</button>
-  </div>
-  <div slot="views">
-    <div slot="view" name="tab1">Content 1</div>
-    <div slot="view" name="tab2">Content 2</div>
-    <div slot="view" name="tab3">Content 3</div>
-  </div>
+  <w-slot list><div>
+    <w-slot tab><button name="tab1">Tab 1</button></w-slot>
+    <w-slot tab><button name="tab2">Tab 2</button></w-slot>
+    <w-slot tab><button name="tab3">Tab 3</button></w-slot>
+  </div></w-slot>
+  <w-slot panels><div>
+    <w-slot panel><div name="tab1">Content 1</div></w-slot>
+    <w-slot panel><div name="tab2">Content 2</div></w-slot>
+    <w-slot panel><div name="tab3">Content 3</div></w-slot>
+  </div></w-slot>
 </w-tabs>`;
 
 const TABS_NESTED = `
 <w-tabs value="outer1">
-  <div slot="tabs">
-    <button slot="tab" name="outer1">Outer 1</button>
-    <button slot="tab" name="outer2">Outer 2</button>
-  </div>
-  <div slot="views">
-    <div slot="view" name="outer1">
+  <w-slot list><div>
+    <w-slot tab><button name="outer1">Outer 1</button></w-slot>
+    <w-slot tab><button name="outer2">Outer 2</button></w-slot>
+  </div></w-slot>
+  <w-slot panels><div>
+    <w-slot panel><div name="outer1">
       <w-tabs value="inner1">
-        <div slot="tabs">
-          <button slot="tab" name="inner1">Inner A</button>
-          <button slot="tab" name="inner2">Inner B</button>
-        </div>
-        <div slot="views">
-          <div slot="view" name="inner1">Inner content A</div>
-          <div slot="view" name="inner2">Inner content B</div>
-        </div>
+        <w-slot list><div>
+          <w-slot tab><button name="inner1">Inner A</button></w-slot>
+          <w-slot tab><button name="inner2">Inner B</button></w-slot>
+        </div></w-slot>
+        <w-slot panels><div>
+          <w-slot panel><div name="inner1">Inner content A</div></w-slot>
+          <w-slot panel><div name="inner2">Inner content B</div></w-slot>
+        </div></w-slot>
       </w-tabs>
-    </div>
-    <div slot="view" name="outer2">Outer content 2</div>
-  </div>
+    </div></w-slot>
+    <w-slot panel><div name="outer2">Outer content 2</div></w-slot>
+  </div></w-slot>
 </w-tabs>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -81,13 +81,13 @@ test.describe("w-tabs", () => {
   });
 
   test("tablist has correct role", async ({ page }) => {
-    const tablist = page.locator('[slot="tabs"]');
+    const tablist = page.locator('w-slot[list] > *');
     await expect(tablist).toHaveAttribute("role", "tablist");
     await expect(tablist).toHaveAttribute("aria-orientation", "horizontal");
   });
 
   test("tabs have correct ARIA attributes", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
+    const tabs = page.locator('w-slot[tab] > *');
     const count = await tabs.count();
 
     for (let i = 0; i < count; i++) {
@@ -98,7 +98,7 @@ test.describe("w-tabs", () => {
   });
 
   test("views have correct ARIA attributes", async ({ page }) => {
-    const views = page.locator('[slot="view"]');
+    const views = page.locator('w-slot[panel] > *');
     const count = await views.count();
 
     for (let i = 0; i < count; i++) {
@@ -107,8 +107,8 @@ test.describe("w-tabs", () => {
   });
 
   test("aria-controls links tab to view", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
-    const views = page.locator('[slot="view"]');
+    const tabs = page.locator('w-slot[tab] > *');
+    const views = page.locator('w-slot[panel] > *');
 
     const ariaControls = await tabs.first().getAttribute("aria-controls");
     const viewId = await views.first().getAttribute("id");
@@ -116,8 +116,8 @@ test.describe("w-tabs", () => {
   });
 
   test("aria-labelledby links view to tab", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
-    const views = page.locator('[slot="view"]');
+    const tabs = page.locator('w-slot[tab] > *');
+    const views = page.locator('w-slot[panel] > *');
 
     const tabId = await tabs.first().getAttribute("id");
     const labelledby = await views.first().getAttribute("aria-labelledby");
@@ -125,7 +125,7 @@ test.describe("w-tabs", () => {
   });
 
   test("click switches active tab", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
+    const tabs = page.locator('w-slot[tab] > *');
 
     await tabs.nth(1).click();
     await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
@@ -133,7 +133,7 @@ test.describe("w-tabs", () => {
   });
 
   test("non-selected views are hidden", async ({ page }) => {
-    const views = page.locator('[slot="view"]');
+    const views = page.locator('w-slot[panel] > *');
 
     await expect(views.first()).not.toHaveAttribute("hidden");
     await expect(views.nth(1)).toHaveAttribute("hidden", "");
@@ -141,17 +141,17 @@ test.describe("w-tabs", () => {
   });
 
   test("arrow keys navigate tabs", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
+    const tabs = page.locator('w-slot[tab] > *');
     await testArrowNav(page, tabs, { horizontal: true });
   });
 
   test("Home/End keys navigate to first/last", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
+    const tabs = page.locator('w-slot[tab] > *');
     await testHomeEnd(page, tabs);
   });
 
   test("Enter activates focused tab", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
+    const tabs = page.locator('w-slot[tab] > *');
 
     await tabs.first().focus();
     await page.keyboard.press("ArrowRight");
@@ -160,7 +160,7 @@ test.describe("w-tabs", () => {
   });
 
   test("Space activates focused tab", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
+    const tabs = page.locator('w-slot[tab] > *');
 
     await tabs.first().focus();
     await page.keyboard.press("ArrowRight");
@@ -179,12 +179,12 @@ test.describe("w-tabs vertical", () => {
   });
 
   test("has vertical orientation", async ({ page }) => {
-    const tablist = page.locator('[slot="tabs"]');
+    const tablist = page.locator('w-slot[list] > *');
     await expect(tablist).toHaveAttribute("aria-orientation", "vertical");
   });
 
   test("ArrowUp/Down navigate tabs", async ({ page }) => {
-    const tabs = page.locator('[slot="tab"]');
+    const tabs = page.locator('w-slot[tab] > *');
     await testArrowNav(page, tabs, { horizontal: false });
   });
 });
@@ -198,19 +198,19 @@ test.describe("w-tabs nested", () => {
     await renderComponent(page, TABS_NESTED, "w-tabs");
     // Wait for both tab groups to initialize
     await page.waitForFunction(() => {
-      const tablists = document.querySelectorAll('[slot="tabs"][role="tablist"]');
+      const tablists = document.querySelectorAll('w-slot[list][role="tablist"]');
       return tablists.length === 2;
     });
   });
 
   test("outer and inner have separate tablists", async ({ page }) => {
-    const tablists = page.locator('[slot="tabs"][role="tablist"]');
+    const tablists = page.locator('w-slot[list][role="tablist"] > *');
     await expect(tablists).toHaveCount(2);
   });
 
   test("outer tabs control outer views only", async ({ page }) => {
     const outer = page.locator("w-tabs").first();
-    const outerTabs = outer.locator("> [slot='tabs'] [slot='tab']");
+    const outerTabs = outer.locator("> w-slot[list] > * w-slot[tab] > *");
 
     await expect(outerTabs).toHaveCount(2);
     await expect(outerTabs.first()).toHaveAttribute("aria-selected", "true");
@@ -218,7 +218,7 @@ test.describe("w-tabs nested", () => {
 
   test("inner tabs control inner views only", async ({ page }) => {
     const inner = page.locator("w-tabs w-tabs");
-    const innerTabs = inner.locator("[slot='tabs'] [slot='tab']");
+    const innerTabs = inner.locator("w-slot[list] > * w-slot[tab] > *");
 
     await expect(innerTabs).toHaveCount(2);
     await expect(innerTabs.first()).toHaveAttribute("aria-selected", "true");
@@ -226,9 +226,9 @@ test.describe("w-tabs nested", () => {
 
   test("clicking outer tab does not affect inner", async ({ page }) => {
     const outer = page.locator("w-tabs").first();
-    const outerTabs = outer.locator("> [slot='tabs'] [slot='tab']");
+    const outerTabs = outer.locator("> w-slot[list] > * w-slot[tab] > *");
     const inner = page.locator("w-tabs w-tabs");
-    const innerTabs = inner.locator("[slot='tabs'] [slot='tab']");
+    const innerTabs = inner.locator("w-slot[list] > * w-slot[tab] > *");
 
     await outerTabs.nth(1).click();
     await expect(innerTabs.first()).toHaveAttribute("aria-selected", "true");
@@ -236,9 +236,9 @@ test.describe("w-tabs nested", () => {
 
   test("clicking inner tab does not affect outer", async ({ page }) => {
     const outer = page.locator("w-tabs").first();
-    const outerTabs = outer.locator("> [slot='tabs'] [slot='tab']");
+    const outerTabs = outer.locator("> w-slot[list] > * w-slot[tab] > *");
     const inner = page.locator("w-tabs w-tabs");
-    const innerTabs = inner.locator("[slot='tabs'] [slot='tab']");
+    const innerTabs = inner.locator("w-slot[list] > * w-slot[tab] > *");
 
     await innerTabs.nth(1).click();
     await expect(outerTabs.first()).toHaveAttribute("aria-selected", "true");

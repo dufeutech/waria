@@ -17,11 +17,11 @@ import { renderComponent } from "../test-utils";
 
 const CAROUSEL = `
 <w-carousel label="Image carousel">
-  <div slot="item" name="1">Slide 1</div>
-  <div slot="item" name="2">Slide 2</div>
-  <div slot="item" name="3">Slide 3</div>
-  <button slot="prev">Previous</button>
-  <button slot="next">Next</button>
+  <w-slot item><div name="1">Slide 1</div></w-slot>
+  <w-slot item><div name="2">Slide 2</div></w-slot>
+  <w-slot item><div name="3">Slide 3</div></w-slot>
+  <w-slot prev><button>Previous</button></w-slot>
+  <w-slot next><button>Next</button></w-slot>
 </w-carousel>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -53,14 +53,14 @@ test.describe("w-carousel", () => {
   });
 
   test('slides have role="group" and aria-roledescription="slide"', async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
 
     await expect(items.first()).toHaveAttribute("role", "group");
     await expect(items.first()).toHaveAttribute("aria-roledescription", "slide");
   });
 
   test("ArrowRight navigates to next slide", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
 
     await items.first().focus();
     await page.keyboard.press("ArrowRight");
@@ -69,8 +69,8 @@ test.describe("w-carousel", () => {
   });
 
   test("ArrowLeft navigates to previous slide", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
-    const next = page.locator('[slot="next"]');
+    const items = page.locator('w-slot[item] > *');
+    const next = page.locator('w-slot[next] > *');
 
     // Navigate to second slide first
     await next.click();
@@ -81,9 +81,9 @@ test.describe("w-carousel", () => {
   });
 
   test("prev/next buttons navigate slides", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
-    const next = page.locator('[slot="next"]');
-    const prev = page.locator('[slot="prev"]');
+    const items = page.locator('w-slot[item] > *');
+    const next = page.locator('w-slot[next] > *');
+    const prev = page.locator('w-slot[prev] > *');
 
     await next.click();
     await expect(items.nth(1)).not.toHaveAttribute("hidden");
@@ -94,7 +94,7 @@ test.describe("w-carousel", () => {
 
   test("emits change event on navigation", async ({ page }) => {
     const carousel = page.locator("w-carousel");
-    const next = page.locator('[slot="next"]');
+    const next = page.locator('w-slot[next] > *');
 
     const changePromise = carousel.evaluate((el) => {
       return new Promise<{ current: number; previous: number }>((resolve) => {

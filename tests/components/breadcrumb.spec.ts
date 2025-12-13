@@ -17,11 +17,11 @@ import { renderComponent } from "../test-utils";
 
 const BREADCRUMB = `
 <w-breadcrumb label="Breadcrumb">
-  <ol slot="list">
-    <li slot="item"><a href="/">Home</a></li>
-    <li slot="item"><a href="/products">Products</a></li>
-    <li slot="item" current><span>Current Page</span></li>
-  </ol>
+  <w-slot list><ol>
+    <w-slot item><li><a href="/">Home</a></li></w-slot>
+    <w-slot item><li><a href="/products">Products</a></li></w-slot>
+    <w-slot item><li current><span>Current Page</span></li></w-slot>
+  </ol></w-slot>
 </w-breadcrumb>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -49,12 +49,12 @@ test.describe("w-breadcrumb", () => {
   });
 
   test('list has role="list"', async ({ page }) => {
-    const list = page.locator('[slot="list"]');
+    const list = page.locator('w-slot[list] > *');
     await expect(list).toHaveAttribute("role", "list");
   });
 
   test('items have role="listitem"', async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     const count = await items.count();
 
     for (let i = 0; i < count; i++) {
@@ -63,12 +63,12 @@ test.describe("w-breadcrumb", () => {
   });
 
   test('current item has aria-current="page"', async ({ page }) => {
-    const current = page.locator('[slot="item"][current]');
+    const current = page.locator('w-slot[item][current] > *');
     await expect(current).toHaveAttribute("aria-current", "page");
   });
 
   test("links are keyboard accessible", async ({ page }) => {
-    const links = page.locator('[slot="item"] a');
+    const links = page.locator('w-slot[item] > * a');
 
     await links.first().focus();
     await expect(links.first()).toBeFocused();

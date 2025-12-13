@@ -17,11 +17,11 @@ import { renderComponent, testArrowNav } from "../test-utils";
 
 const TOOLBAR = `
 <w-toolbar label="Text formatting">
-  <button slot="item" name="bold">Bold</button>
-  <button slot="item" name="italic">Italic</button>
-  <div slot="separator"></div>
-  <button slot="item" name="align-left">Left</button>
-  <button slot="item" name="align-center">Center</button>
+  <w-slot item><button name="bold">Bold</button></w-slot>
+  <w-slot item><button name="italic">Italic</button></w-slot>
+  <w-slot sep><div></div></w-slot>
+  <w-slot item><button name="align-left">Left</button></w-slot>
+  <w-slot item><button name="align-center">Center</button></w-slot>
 </w-toolbar>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -48,18 +48,18 @@ test.describe("w-toolbar", () => {
   });
 
   test('separator has role="separator"', async ({ page }) => {
-    const separator = page.locator('[slot="separator"]');
+    const separator = page.locator('w-slot[sep] > *');
     await expect(separator).toHaveAttribute("role", "separator");
   });
 
   test("arrow keys navigate items", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     await testArrowNav(page, items, { horizontal: true });
   });
 
   test("emits action event on click", async ({ page }) => {
     const toolbar = page.locator("w-toolbar");
-    const item = page.locator('[slot="item"]').first();
+    const item = page.locator('w-slot[item] > *').first();
 
     const actionPromise = toolbar.evaluate((el) => {
       return new Promise<{ item: string | null }>((resolve) => {

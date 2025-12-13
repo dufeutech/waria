@@ -18,11 +18,11 @@ import { renderComponent } from "../test-utils";
 
 const POPOVER = `
 <w-popover>
-  <button slot="trigger">Open Popover</button>
-  <div slot="content" label="Popover content">
+  <w-slot trigger><button>Open Popover</button></w-slot>
+  <w-slot body><div label="Popover content">
     <h4>Popover Title</h4>
     <p>This is popover content.</p>
-  </div>
+  </div></w-slot>
 </w-popover>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -30,7 +30,7 @@ const POPOVER = `
 // ═══════════════════════════════════════════════════════════════════════════
 
 const getVisiblePopoverContent = (page: Page) =>
-  page.locator('[slot="content"][role="dialog"]:not([hidden])');
+  page.locator('w-slot[body][role="dialog"]:not([hidden]) > *');
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Tests
@@ -46,17 +46,17 @@ test.describe("w-popover", () => {
   });
 
   test("trigger has aria-haspopup", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
   });
 
   test("trigger has aria-expanded false when closed", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
   test("click opens popover", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisiblePopoverContent(page)).toBeVisible();
@@ -64,34 +64,34 @@ test.describe("w-popover", () => {
   });
 
   test('content has role="dialog"', async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisiblePopoverContent(page)).toHaveAttribute("role", "dialog");
   });
 
   test("Escape key closes popover", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisiblePopoverContent(page)).toBeVisible();
 
     await page.keyboard.press("Escape");
-    await expect(page.locator('w-popover [slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-popover w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("outside click closes popover", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisiblePopoverContent(page)).toBeVisible();
 
     await page.click("body", { position: { x: 10, y: 10 } });
-    await expect(page.locator('w-popover [slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-popover w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("focus returns to trigger on close", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     await expect(getVisiblePopoverContent(page)).toBeVisible();
@@ -101,7 +101,7 @@ test.describe("w-popover", () => {
   });
 
   test("aria-controls links trigger to content", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click();
     const content = getVisiblePopoverContent(page);
@@ -113,7 +113,7 @@ test.describe("w-popover", () => {
   });
 
   test("axe accessibility scan (open)", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await trigger.click();
     await expect(getVisiblePopoverContent(page)).toBeVisible();
     await checkA11y(page);

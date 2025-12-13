@@ -17,16 +17,16 @@ import { renderComponent } from "../test-utils";
 
 const GRID = `
 <w-grid label="Data grid">
-  <div slot="row" name="1">
-    <div slot="cell" name="1-1">Cell 1-1</div>
-    <div slot="cell" name="1-2">Cell 1-2</div>
-    <div slot="cell" name="1-3">Cell 1-3</div>
-  </div>
-  <div slot="row" name="2">
-    <div slot="cell" name="2-1">Cell 2-1</div>
-    <div slot="cell" name="2-2">Cell 2-2</div>
-    <div slot="cell" name="2-3">Cell 2-3</div>
-  </div>
+  <w-slot row><div name="1">
+    <w-slot cell><div name="1-1">Cell 1-1</div></w-slot>
+    <w-slot cell><div name="1-2">Cell 1-2</div></w-slot>
+    <w-slot cell><div name="1-3">Cell 1-3</div></w-slot>
+  </div></w-slot>
+  <w-slot row><div name="2">
+    <w-slot cell><div name="2-1">Cell 2-1</div></w-slot>
+    <w-slot cell><div name="2-2">Cell 2-2</div></w-slot>
+    <w-slot cell><div name="2-3">Cell 2-3</div></w-slot>
+  </div></w-slot>
 </w-grid>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -53,17 +53,17 @@ test.describe("w-grid", () => {
   });
 
   test('rows have role="row"', async ({ page }) => {
-    const rows = page.locator('[slot="row"]');
+    const rows = page.locator('w-slot[row] > *');
     await expect(rows.first()).toHaveAttribute("role", "row");
   });
 
   test('cells have role="gridcell"', async ({ page }) => {
-    const cells = page.locator('[slot="cell"]');
+    const cells = page.locator('w-slot[cell] > *');
     await expect(cells.first()).toHaveAttribute("role", "gridcell");
   });
 
   test("ArrowRight navigates to next cell", async ({ page }) => {
-    const cells = page.locator('[slot="cell"]');
+    const cells = page.locator('w-slot[cell] > *');
 
     await cells.first().focus();
     await page.keyboard.press("ArrowRight");
@@ -72,7 +72,7 @@ test.describe("w-grid", () => {
   });
 
   test("ArrowLeft navigates to previous cell", async ({ page }) => {
-    const cells = page.locator('[slot="cell"]');
+    const cells = page.locator('w-slot[cell] > *');
 
     // First click on cell to set internal index
     await cells.nth(1).click();
@@ -82,7 +82,7 @@ test.describe("w-grid", () => {
   });
 
   test("Home/End keys navigate to first/last cell in row", async ({ page }) => {
-    const cells = page.locator('[slot="cell"]');
+    const cells = page.locator('w-slot[cell] > *');
 
     // Click first cell to set internal index
     await cells.first().click();
@@ -96,7 +96,7 @@ test.describe("w-grid", () => {
   });
 
   test("Enter key selects cell", async ({ page }) => {
-    const cell = page.locator('[slot="cell"]').first();
+    const cell = page.locator('w-slot[cell] > *').first();
 
     await cell.click();
     await page.keyboard.press("Enter");

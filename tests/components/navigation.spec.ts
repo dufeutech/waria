@@ -17,9 +17,9 @@ import { renderComponent, testArrowNav, testHomeEnd } from "../test-utils";
 
 const NAVIGATION = `
 <w-nav label="Main navigation" value="/home">
-  <a slot="item" data-value="/home" href="/home">Home</a>
-  <a slot="item" data-value="/about" href="/about">About</a>
-  <a slot="item" data-value="/contact" href="/contact">Contact</a>
+  <w-slot item><a data-value="/home" href="/home">Home</a></w-slot>
+  <w-slot item><a data-value="/about" href="/about">About</a></w-slot>
+  <w-slot item><a data-value="/contact" href="/contact">Contact</a></w-slot>
 </w-nav>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -46,30 +46,30 @@ test.describe("w-nav", () => {
   });
 
   test("arrow keys navigate items", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     await testArrowNav(page, items, { horizontal: true });
   });
 
   test("Home/End keys navigate to first/last", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     await testHomeEnd(page, items);
   });
 
   test('clicked item has aria-current="page"', async ({ page }) => {
     // Click an item and verify it gets aria-current
-    const aboutItem = page.locator('[slot="item"][data-value="/about"]');
+    const aboutItem = page.locator('w-slot[item][data-value="/about"] > *');
     await aboutItem.click();
     await expect(aboutItem).toHaveAttribute("aria-current", "page");
 
     // Verify only one item has aria-current at a time
-    const homeItem = page.locator('[slot="item"][data-value="/home"]');
+    const homeItem = page.locator('w-slot[item][data-value="/home"] > *');
     await expect(homeItem).not.toHaveAttribute("aria-current");
   });
 
   test('programmatic value sets aria-current="page"', async ({ page }) => {
     // Setting value attribute should update aria-current
     const nav = page.locator("w-nav");
-    const homeItem = page.locator('[slot="item"][data-value="/home"]');
+    const homeItem = page.locator('w-slot[item][data-value="/home"] > *');
 
     await nav.evaluate((el) => {
       el.setAttribute("value", "/home");
@@ -80,7 +80,7 @@ test.describe("w-nav", () => {
 
   test("click updates selection", async ({ page }) => {
     const nav = page.locator("w-nav");
-    const aboutItem = page.locator('[slot="item"][data-value="/about"]');
+    const aboutItem = page.locator('w-slot[item][data-value="/about"] > *');
 
     await aboutItem.click();
 
@@ -90,7 +90,7 @@ test.describe("w-nav", () => {
 
   test("emits change event", async ({ page }) => {
     const nav = page.locator("w-nav");
-    const aboutItem = page.locator('[slot="item"][data-value="/about"]');
+    const aboutItem = page.locator('w-slot[item][data-value="/about"] > *');
 
     const changePromise = nav.evaluate((el) => {
       return new Promise<{ value: string }>((resolve) => {

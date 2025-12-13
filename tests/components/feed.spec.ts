@@ -17,18 +17,18 @@ import { renderComponent, testHomeEnd } from "../test-utils";
 
 const FEED = `
 <w-feed label="News feed">
-  <article slot="item" name="1">
+  <w-slot item><article name="1">
     <h3>Article 1</h3>
     <p>Content for article 1</p>
-  </article>
-  <article slot="item" name="2">
+  </article></w-slot>
+  <w-slot item><article name="2">
     <h3>Article 2</h3>
     <p>Content for article 2</p>
-  </article>
-  <article slot="item" name="3">
+  </article></w-slot>
+  <w-slot item><article name="3">
     <h3>Article 3</h3>
     <p>Content for article 3</p>
-  </article>
+  </article></w-slot>
 </w-feed>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -55,12 +55,12 @@ test.describe("w-feed", () => {
   });
 
   test('items have role="article"', async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     await expect(items.first()).toHaveAttribute("role", "article");
   });
 
   test("items have aria-setsize and aria-posinset", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     const count = await items.count();
 
     await expect(items.first()).toHaveAttribute("aria-setsize", String(count));
@@ -68,7 +68,7 @@ test.describe("w-feed", () => {
   });
 
   test("ArrowDown navigates to next item", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
 
     await items.first().focus();
     await page.keyboard.press("ArrowDown");
@@ -77,7 +77,7 @@ test.describe("w-feed", () => {
   });
 
   test("ArrowUp navigates to previous item", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
 
     await items.nth(1).focus();
     await page.keyboard.press("ArrowUp");
@@ -86,7 +86,7 @@ test.describe("w-feed", () => {
   });
 
   test("Home/End keys navigate to first/last", async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     await testHomeEnd(page, items);
   });
 });

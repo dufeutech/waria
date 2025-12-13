@@ -16,14 +16,14 @@ import { renderComponent } from "../test-utils";
 
 const PROGRESSBAR = `
 <w-progressbar value="50" min="0" max="100" label="Loading progress">
-  <div slot="track"></div>
-  <div slot="fill"></div>
+  <w-slot rail><div></div></w-slot>
+  <w-slot fill><div></div></w-slot>
 </w-progressbar>`;
 
 const PROGRESSBAR_INDETERMINATE = `
 <w-progressbar indeterminate label="Loading...">
-  <div slot="track"></div>
-  <div slot="fill"></div>
+  <w-slot rail><div></div></w-slot>
+  <w-slot fill><div></div></w-slot>
 </w-progressbar>`;
 
 // ═══════════════════════════════════════════════════════════════════════════

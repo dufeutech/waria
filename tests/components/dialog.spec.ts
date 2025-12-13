@@ -19,21 +19,21 @@ import { renderComponent } from "../test-utils";
 
 const DIALOG = `
 <w-dialog>
-  <button slot="trigger">Open Dialog</button>
-  <div slot="content" label="Test Dialog">
+  <w-slot trigger><button>Open Dialog</button></w-slot>
+  <w-slot body><div label="Test Dialog">
     <h3>Dialog Title</h3>
     <p>Dialog content goes here.</p>
-    <button slot="close">Close</button>
-  </div>
+    <w-slot close><button>Close</button></w-slot>
+  </div></w-slot>
 </w-dialog>`;
 
 const DIALOG_PERSISTENT = `
 <w-dialog persistent>
-  <button slot="trigger">Open Persistent Dialog</button>
-  <div slot="content" label="Persistent Dialog">
+  <w-slot trigger><button>Open Persistent Dialog</button></w-slot>
+  <w-slot body><div label="Persistent Dialog">
     <p>This dialog cannot be closed by clicking outside.</p>
-    <button slot="close">Close</button>
-  </div>
+    <w-slot close><button>Close</button></w-slot>
+  </div></w-slot>
 </w-dialog>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -50,14 +50,14 @@ test.describe("w-dialog", () => {
   });
 
   test("trigger has correct ARIA attributes", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
   test("click opens dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await expect(dialog).toHaveAttribute("hidden", "");
@@ -67,7 +67,7 @@ test.describe("w-dialog", () => {
   });
 
   test('content has role="dialog" and aria-modal', async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await trigger.click();
@@ -77,14 +77,14 @@ test.describe("w-dialog", () => {
   });
 
   test("axe accessibility scan (open)", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await trigger.click();
     await expect(page.locator('[role="dialog"]')).not.toHaveAttribute("hidden");
     await checkA11y(page);
   });
 
   test("Escape key closes dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await trigger.click();
@@ -95,9 +95,9 @@ test.describe("w-dialog", () => {
   });
 
   test("close button closes dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
-    const closeBtn = dialog.locator('[slot="close"]');
+    const closeBtn = dialog.locator('w-slot[close] > *');
 
     await trigger.click();
     await expect(dialog).not.toHaveAttribute("hidden");
@@ -107,7 +107,7 @@ test.describe("w-dialog", () => {
   });
 
   test("focus is trapped within dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await trigger.click();
@@ -120,7 +120,7 @@ test.describe("w-dialog", () => {
   });
 
   test("focus returns to trigger on close", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await trigger.click();
@@ -133,7 +133,7 @@ test.describe("w-dialog", () => {
   });
 
   test("Enter key opens dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await trigger.focus();
@@ -142,7 +142,7 @@ test.describe("w-dialog", () => {
   });
 
   test("Space key opens dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await trigger.focus();
@@ -157,7 +157,7 @@ test.describe("w-dialog persistent", () => {
   });
 
   test("Escape key does not close persistent dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
 
     await trigger.click();
@@ -169,9 +169,9 @@ test.describe("w-dialog persistent", () => {
   });
 
   test("close button closes persistent dialog", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     const dialog = page.locator('[role="dialog"][aria-modal="true"]');
-    const closeBtn = dialog.locator('[slot="close"]');
+    const closeBtn = dialog.locator('w-slot[close] > *');
 
     await trigger.click();
     await expect(dialog).not.toHaveAttribute("hidden");
@@ -187,20 +187,20 @@ test.describe("w-dialog persistent", () => {
 
 const DIALOG_NESTED = `
 <w-dialog>
-  <button slot="trigger" name="outer-trigger">Open Outer Dialog</button>
-  <div slot="content" label="Outer Dialog">
+  <w-slot trigger><button name="outer-trigger">Open Outer Dialog</button></w-slot>
+  <w-slot body><div label="Outer Dialog">
     <h3>Outer Dialog</h3>
     <p>This is the outer dialog.</p>
     <w-dialog>
-      <button slot="trigger" name="inner-trigger">Open Inner Dialog</button>
-      <div slot="content" label="Inner Dialog" name="inner-content">
+      <w-slot trigger><button name="inner-trigger">Open Inner Dialog</button></w-slot>
+      <w-slot body><div label="Inner Dialog" name="inner-content">
         <h4>Inner Dialog</h4>
         <p>This is nested inside the outer.</p>
-        <button slot="close">Close Inner</button>
-      </div>
+        <w-slot close><button>Close Inner</button></w-slot>
+      </div></w-slot>
     </w-dialog>
-    <button slot="close">Close Outer</button>
-  </div>
+    <w-slot close><button>Close Outer</button></w-slot>
+  </div></w-slot>
 </w-dialog>`;
 
 test.describe("w-dialog nested", () => {
@@ -209,8 +209,8 @@ test.describe("w-dialog nested", () => {
   });
 
   test("outer and inner dialogs have independent triggers", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
 
     await expect(outerTrigger).toHaveAttribute("aria-haspopup", "dialog");
     await expect(innerTrigger).toHaveAttribute("aria-haspopup", "dialog");
@@ -219,8 +219,8 @@ test.describe("w-dialog nested", () => {
   });
 
   test("opening outer dialog does not open inner", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
 
     await outerTrigger.click();
     await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
@@ -230,8 +230,8 @@ test.describe("w-dialog nested", () => {
   });
 
   test("opening inner dialog does not close outer", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
 
     await outerTrigger.click();
     await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
@@ -244,9 +244,9 @@ test.describe("w-dialog nested", () => {
   });
 
   test("inner dialog has correct ARIA attributes", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
-    const innerDialog = page.locator('[slot="content"][name="inner-content"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
+    const innerDialog = page.locator('w-slot[body][name="inner-content"] > *');
 
     await outerTrigger.click();
     await expect(innerTrigger).toBeVisible();

@@ -17,14 +17,14 @@ import { renderComponent } from "../test-utils";
 
 const CONTEXT_MENU = `
 <w-context-menu>
-  <div slot="trigger" style="padding: 2rem; background: #f0f0f0;">
+  <w-slot trigger><div style="padding: 2rem; background: #f0f0f0;">
     Right-click here
-  </div>
-  <div slot="content">
-    <button slot="item" name="cut">Cut</button>
-    <button slot="item" name="copy">Copy</button>
-    <button slot="item" name="paste">Paste</button>
-  </div>
+  </div></w-slot>
+  <w-slot body><div>
+    <w-slot item><button name="cut">Cut</button></w-slot>
+    <w-slot item><button name="copy">Copy</button></w-slot>
+    <w-slot item><button name="paste">Paste</button></w-slot>
+  </div></w-slot>
 </w-context-menu>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -32,9 +32,9 @@ const CONTEXT_MENU = `
 // ═══════════════════════════════════════════════════════════════════════════
 
 const getVisibleMenuContent = (page: Page) =>
-  page.locator('[slot="content"][role="menu"]:not([hidden])');
+  page.locator('w-slot[body][role="menu"]:not([hidden]) > *');
 const getMenuItems = (page: Page) =>
-  page.locator('[slot="content"][role="menu"]:not([hidden]) [slot="item"]');
+  page.locator('w-slot[body][role="menu"]:not([hidden]) > * w-slot[item] > *');
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Tests
@@ -50,21 +50,21 @@ test.describe("w-context-menu", () => {
   });
 
   test("opens on right-click", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click({ button: "right" });
     await expect(getVisibleMenuContent(page)).toBeVisible();
   });
 
   test('content has role="menu"', async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click({ button: "right" });
     await expect(getVisibleMenuContent(page)).toHaveAttribute("role", "menu");
   });
 
   test('items have role="menuitem"', async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click({ button: "right" });
     const items = getMenuItems(page);
@@ -73,7 +73,7 @@ test.describe("w-context-menu", () => {
   });
 
   test("arrow keys navigate items", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click({ button: "right" });
     const items = getMenuItems(page);
@@ -85,27 +85,27 @@ test.describe("w-context-menu", () => {
   });
 
   test("Escape key closes menu", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click({ button: "right" });
     await expect(getVisibleMenuContent(page)).toBeVisible();
 
     await page.keyboard.press("Escape");
-    await expect(page.locator('w-context-menu [slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-context-menu w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("item click closes menu", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.click({ button: "right" });
 
     await getMenuItems(page).first().click();
-    await expect(page.locator('w-context-menu [slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-context-menu w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("emits select event", async ({ page }) => {
     const contextMenu = page.locator("w-context-menu");
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     const selectEvent = contextMenu.evaluate((el) => {
       return new Promise<{ item: string | null }>((resolve) => {

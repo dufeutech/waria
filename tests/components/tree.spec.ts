@@ -19,20 +19,20 @@ import { renderComponent } from "../test-utils";
 // The component detects children by nested [slot="item"] elements
 const TREE = `
 <w-tree>
-  <div slot="item" name="folder1">
+  <w-slot item><div name="folder1">
     Folder 1
     <div role="group">
-      <div slot="item" name="file1">File 1</div>
-      <div slot="item" name="file2">File 2</div>
+      <w-slot item><div name="file1">File 1</div></w-slot>
+      <w-slot item><div name="file2">File 2</div></w-slot>
     </div>
-  </div>
-  <div slot="item" name="folder2">
+  </div></w-slot>
+  <w-slot item><div name="folder2">
     Folder 2
     <div role="group">
-      <div slot="item" name="file3">File 3</div>
+      <w-slot item><div name="file3">File 3</div></w-slot>
     </div>
-  </div>
-  <div slot="item" name="file4">File 4</div>
+  </div></w-slot>
+  <w-slot item><div name="file4">File 4</div></w-slot>
 </w-tree>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -54,7 +54,7 @@ test.describe("w-tree", () => {
   });
 
   test('items have role="treeitem"', async ({ page }) => {
-    const items = page.locator('[slot="item"]');
+    const items = page.locator('w-slot[item] > *');
     const count = await items.count();
 
     for (let i = 0; i < Math.min(count, 3); i++) {
@@ -63,7 +63,7 @@ test.describe("w-tree", () => {
   });
 
   test("items have aria-level", async ({ page }) => {
-    const firstItem = page.locator('[slot="item"]').first();
+    const firstItem = page.locator('w-slot[item] > *').first();
     const level = await firstItem.getAttribute("aria-level");
     expect(level).toBeTruthy();
     expect(parseInt(level!)).toBeGreaterThan(0);
@@ -71,23 +71,23 @@ test.describe("w-tree", () => {
 
   test("items with children have aria-expanded", async ({ page }) => {
     // Folder1 has children, so it should have aria-expanded
-    const folder = page.locator('[slot="item"][name="folder1"]');
+    const folder = page.locator('w-slot[item][name="folder1"] > *');
     const expanded = await folder.getAttribute("aria-expanded");
     expect(["true", "false"]).toContain(expanded);
   });
 
   test("ArrowDown navigates to next item", async ({ page }) => {
-    const items = page.locator('w-tree > [slot="item"]');
+    const items = page.locator('w-tree > w-slot[item] > *');
 
     await items.first().focus();
     await page.keyboard.press("ArrowDown");
 
     const focused = page.locator(":focus");
-    await expect(focused).toHaveAttribute("slot", "item");
+    await expect(focused).toHaveAttribute("item", "");
   });
 
   test("ArrowRight expands item with children", async ({ page }) => {
-    const folder = page.locator('[slot="item"][name="folder1"]');
+    const folder = page.locator('w-slot[item][name="folder1"] > *');
 
     await folder.focus();
     // Item may start collapsed
@@ -98,7 +98,7 @@ test.describe("w-tree", () => {
   });
 
   test("ArrowLeft collapses item with children", async ({ page }) => {
-    const folder = page.locator('[slot="item"][name="folder1"]');
+    const folder = page.locator('w-slot[item][name="folder1"] > *');
 
     await folder.focus();
     await page.keyboard.press("ArrowRight"); // expand first
@@ -109,7 +109,7 @@ test.describe("w-tree", () => {
   });
 
   test("Enter selects item", async ({ page }) => {
-    const item = page.locator('[slot="item"]').first();
+    const item = page.locator('w-slot[item] > *').first();
 
     await item.focus();
     await page.keyboard.press("Enter");
@@ -118,14 +118,14 @@ test.describe("w-tree", () => {
   });
 
   test("click selects item", async ({ page }) => {
-    const item = page.locator('[slot="item"][name="file4"]');
+    const item = page.locator('w-slot[item][name="file4"] > *');
 
     await item.click();
     await expect(item).toHaveAttribute("aria-selected", "true");
   });
 
   test("Home goes to first item", async ({ page }) => {
-    const items = page.locator('w-tree > [slot="item"]');
+    const items = page.locator('w-tree > w-slot[item] > *');
 
     await items.nth(1).focus();
     await page.keyboard.press("Home");
@@ -135,7 +135,7 @@ test.describe("w-tree", () => {
 
   test("emits select event", async ({ page }) => {
     const tree = page.locator("w-tree");
-    const item = page.locator('[slot="item"]').first();
+    const item = page.locator('w-slot[item] > *').first();
 
     const selectPromise = tree.evaluate((el) => {
       return new Promise<{ value: string }>((resolve) => {

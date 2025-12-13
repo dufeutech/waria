@@ -18,8 +18,8 @@ import { renderComponent } from "../test-utils";
 
 const TOOLTIP = `
 <w-tooltip>
-  <button slot="trigger">Hover me</button>
-  <div slot="content">This is a tooltip!</div>
+  <w-slot trigger><button>Hover me</button></w-slot>
+  <w-slot body><div>This is a tooltip!</div></w-slot>
 </w-tooltip>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -27,7 +27,7 @@ const TOOLTIP = `
 // ═══════════════════════════════════════════════════════════════════════════
 
 const getVisibleTooltipContent = (page: Page) =>
-  page.locator('[slot="content"][role="tooltip"]:not([hidden])');
+  page.locator('w-slot[body][role="tooltip"]:not([hidden]) > *');
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Tests
@@ -43,14 +43,14 @@ test.describe("w-tooltip", () => {
   });
 
   test('content has role="tooltip"', async ({ page }) => {
-    const content = page.locator('[slot="content"]');
+    const content = page.locator('w-slot[body] > *');
     await expect(content).toHaveAttribute("role", "tooltip");
   });
 
   test("tooltip shows on hover", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
-    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-slot[body] > *')).toHaveAttribute("hidden", "");
 
     await trigger.hover();
     await page.waitForTimeout(400); // Wait for delay
@@ -59,7 +59,7 @@ test.describe("w-tooltip", () => {
   });
 
   test("tooltip hides on mouse leave", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.hover();
     await page.waitForTimeout(400);
@@ -68,38 +68,38 @@ test.describe("w-tooltip", () => {
     await page.mouse.move(0, 0);
     await page.waitForTimeout(200);
 
-    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("tooltip shows on focus", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(getVisibleTooltipContent(page)).toBeVisible();
   });
 
   test("tooltip hides on blur", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(getVisibleTooltipContent(page)).toBeVisible();
 
     await trigger.blur();
-    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("Escape key closes tooltip", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(getVisibleTooltipContent(page)).toBeVisible();
 
     await page.keyboard.press("Escape");
-    await expect(page.locator('[slot="content"]')).toHaveAttribute("hidden", "");
+    await expect(page.locator('w-slot[body] > *')).toHaveAttribute("hidden", "");
   });
 
   test("aria-describedby links trigger to tooltip when open", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     const content = getVisibleTooltipContent(page);
@@ -113,7 +113,7 @@ test.describe("w-tooltip", () => {
   });
 
   test("axe accessibility scan (open)", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await trigger.focus();
     await page.waitForTimeout(100);
     await checkA11y(page);

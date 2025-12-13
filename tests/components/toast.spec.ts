@@ -18,7 +18,7 @@ const TOAST = `<w-toast open>Notification message</w-toast>`;
 const TOAST_DISMISSIBLE = `
 <w-toast open dismissible>
   Dismissible notification
-  <button slot="close">Close</button>
+  <w-slot close><button>Close</button></w-slot>
 </w-toast>`;
 const TOAST_VARIANTS = `
 <w-toast open variant="success">Success message</w-toast>
@@ -68,13 +68,13 @@ test.describe("w-toast dismissible", () => {
   });
 
   test("has close button", async ({ page }) => {
-    const closeBtn = page.locator('[slot="close"]');
+    const closeBtn = page.locator('w-slot[close] > *');
     await expect(closeBtn).toBeVisible();
   });
 
   test("closes on close button click", async ({ page }) => {
     const toast = page.locator("w-toast");
-    const closeBtn = page.locator('[slot="close"]');
+    const closeBtn = page.locator('w-slot[close] > *');
 
     await expect(toast).toHaveAttribute("open", "");
     await closeBtn.click();
@@ -83,7 +83,7 @@ test.describe("w-toast dismissible", () => {
 
   test("emits close event when dismissed", async ({ page }) => {
     const toast = page.locator("w-toast");
-    const closeBtn = page.locator('[slot="close"]');
+    const closeBtn = page.locator('w-slot[close] > *');
 
     const closePromise = toast.evaluate((el) => {
       return new Promise<boolean>((resolve) => {

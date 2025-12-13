@@ -17,16 +17,16 @@ import { renderComponent, testArrowNav } from "../test-utils";
 
 const CHOICE_RADIO = `
 <w-choice mode="radio" label="Select option">
-  <button slot="option" name="a">Option A</button>
-  <button slot="option" name="b">Option B</button>
-  <button slot="option" name="c">Option C</button>
+  <w-slot opt><button name="a">Option A</button></w-slot>
+  <w-slot opt><button name="b">Option B</button></w-slot>
+  <w-slot opt><button name="c">Option C</button></w-slot>
 </w-choice>`;
 
 const CHOICE_CHECKBOX = `
 <w-choice mode="checkbox" label="Select options">
-  <button slot="option" name="a">Option A</button>
-  <button slot="option" name="b">Option B</button>
-  <button slot="option" name="c">Option C</button>
+  <w-slot opt><button name="a">Option A</button></w-slot>
+  <w-slot opt><button name="b">Option B</button></w-slot>
+  <w-slot opt><button name="c">Option C</button></w-slot>
 </w-choice>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -48,7 +48,7 @@ test.describe("w-choice radio", () => {
   });
 
   test('options have role="radio"', async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
     const count = await options.count();
 
     for (let i = 0; i < count; i++) {
@@ -57,7 +57,7 @@ test.describe("w-choice radio", () => {
   });
 
   test("options have aria-checked", async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
     const count = await options.count();
 
     for (let i = 0; i < count; i++) {
@@ -67,7 +67,7 @@ test.describe("w-choice radio", () => {
   });
 
   test("click updates aria-checked", async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
 
     await options.first().click();
     await expect(options.first()).toHaveAttribute("aria-checked", "true");
@@ -78,12 +78,12 @@ test.describe("w-choice radio", () => {
   });
 
   test("arrow keys navigate options", async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
     await testArrowNav(page, options, { horizontal: false });
   });
 
   test("Enter key selects option", async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
 
     await options.first().focus();
     await page.keyboard.press("Enter");
@@ -92,7 +92,7 @@ test.describe("w-choice radio", () => {
   });
 
   test("Space key selects option", async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
 
     await options.first().focus();
     await page.keyboard.press("Space");
@@ -108,7 +108,7 @@ test.describe("w-choice radio", () => {
 
   test("emits change event", async ({ page }) => {
     const choice = page.locator("w-choice");
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
 
     const changePromise = choice.evaluate((el) => {
       return new Promise<{ value: string }>((resolve) => {
@@ -136,13 +136,13 @@ test.describe("w-choice checkbox", () => {
   });
 
   test('options have role="checkbox"', async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
 
     await expect(options.first()).toHaveAttribute("role", "checkbox");
   });
 
   test("allows multiple selections", async ({ page }) => {
-    const options = page.locator('[slot="option"]');
+    const options = page.locator('w-slot[opt] > *');
 
     await options.first().click();
     await options.nth(1).click();

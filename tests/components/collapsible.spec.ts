@@ -17,18 +17,18 @@ import { renderComponent } from "../test-utils";
 
 const COLLAPSIBLE = `
 <w-collapsible>
-  <button slot="trigger">Toggle Content</button>
-  <div slot="content">
+  <w-slot trigger><button>Toggle Content</button></w-slot>
+  <w-slot body><div>
     <p>Collapsible content goes here.</p>
-  </div>
+  </div></w-slot>
 </w-collapsible>`;
 
 const COLLAPSIBLE_OPEN = `
 <w-collapsible open>
-  <button slot="trigger">Toggle Content</button>
-  <div slot="content">
+  <w-slot trigger><button>Toggle Content</button></w-slot>
+  <w-slot body><div>
     <p>Expanded content is visible.</p>
-  </div>
+  </div></w-slot>
 </w-collapsible>`;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -45,13 +45,13 @@ test.describe("w-collapsible", () => {
   });
 
   test("trigger has aria-expanded attribute", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
   test("aria-controls links trigger to content", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
-    const content = page.locator('[slot="content"]');
+    const trigger = page.locator('w-slot[trigger] > *');
+    const content = page.locator('w-slot[body] > *');
 
     const ariaControls = await trigger.getAttribute("aria-controls");
     expect(ariaControls).toBeTruthy();
@@ -61,7 +61,7 @@ test.describe("w-collapsible", () => {
   });
 
   test("click toggles content", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await trigger.click();
@@ -71,7 +71,7 @@ test.describe("w-collapsible", () => {
   });
 
   test("Enter key toggles content", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
@@ -80,7 +80,7 @@ test.describe("w-collapsible", () => {
   });
 
   test("Space key toggles content", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     await trigger.focus();
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
@@ -89,8 +89,8 @@ test.describe("w-collapsible", () => {
   });
 
   test('content has role="region" when expanded', async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
-    const content = page.locator('[slot="content"]');
+    const trigger = page.locator('w-slot[trigger] > *');
+    const content = page.locator('w-slot[body] > *');
 
     await trigger.click();
     await expect(content).toHaveAttribute("role", "region");
@@ -98,7 +98,7 @@ test.describe("w-collapsible", () => {
 
   test("emits toggle event", async ({ page }) => {
     const collapsible = page.locator("w-collapsible");
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
 
     const togglePromise = collapsible.evaluate((el) => {
       return new Promise<{ open: boolean }>((resolve) => {
@@ -124,12 +124,12 @@ test.describe("w-collapsible open", () => {
   });
 
   test("starts with aria-expanded true", async ({ page }) => {
-    const trigger = page.locator('[slot="trigger"]');
+    const trigger = page.locator('w-slot[trigger] > *');
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
   test("content is visible when open", async ({ page }) => {
-    const content = page.locator('[slot="content"]');
+    const content = page.locator('w-slot[body] > *');
     await expect(content).toBeVisible();
   });
 });
@@ -140,16 +140,16 @@ test.describe("w-collapsible open", () => {
 
 const COLLAPSIBLE_NESTED = `
 <w-collapsible>
-  <button slot="trigger" name="outer-trigger">Outer Toggle</button>
-  <div slot="content" name="outer-content">
+  <w-slot trigger><button name="outer-trigger">Outer Toggle</button></w-slot>
+  <w-slot body><div name="outer-content">
     <p>Outer content</p>
     <w-collapsible>
-      <button slot="trigger" name="inner-trigger">Inner Toggle</button>
-      <div slot="content" name="inner-content">
+      <w-slot trigger><button name="inner-trigger">Inner Toggle</button></w-slot>
+      <w-slot body><div name="inner-content">
         <p>Inner content - deeply nested</p>
-      </div>
+      </div></w-slot>
     </w-collapsible>
-  </div>
+  </div></w-slot>
 </w-collapsible>`;
 
 test.describe("w-collapsible nested", () => {
@@ -158,16 +158,16 @@ test.describe("w-collapsible nested", () => {
   });
 
   test("outer and inner have independent triggers", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
 
     await expect(outerTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(innerTrigger).toHaveAttribute("aria-expanded", "false");
   });
 
   test("expanding outer does not expand inner", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
 
     await outerTrigger.click();
     await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
@@ -175,8 +175,8 @@ test.describe("w-collapsible nested", () => {
   });
 
   test("inner collapsible works independently", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
 
     // First expand outer to access inner
     await outerTrigger.click();
@@ -188,10 +188,10 @@ test.describe("w-collapsible nested", () => {
   });
 
   test("inner aria-controls is independent from outer", async ({ page }) => {
-    const outerTrigger = page.locator('[slot="trigger"][name="outer-trigger"]');
-    const outerContent = page.locator('[slot="content"][name="outer-content"]');
-    const innerTrigger = page.locator('[slot="trigger"][name="inner-trigger"]');
-    const innerContent = page.locator('[slot="content"][name="inner-content"]');
+    const outerTrigger = page.locator('w-slot[trigger][name="outer-trigger"] > *');
+    const outerContent = page.locator('w-slot[body][name="outer-content"] > *');
+    const innerTrigger = page.locator('w-slot[trigger][name="inner-trigger"] > *');
+    const innerContent = page.locator('w-slot[body][name="inner-content"] > *');
 
     // Expand outer to initialize inner
     await outerTrigger.click();
