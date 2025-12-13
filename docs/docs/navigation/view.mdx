@@ -48,9 +48,9 @@ URL-based view container for single-page routing.
 
 ```html
 <w-nav label="Navigation">
-  <w-slot item><a href="/home">Home</a></w-slot>
-  <w-slot item><a href="/about">About</a></w-slot>
-  <w-slot item><a href="/contact">Contact</a></w-slot>
+  <w-slot item><w-link href="/home">Home</w-link></w-slot>
+  <w-slot item><w-link href="/about">About</w-link></w-slot>
+  <w-slot item><w-link href="/contact">Contact</w-link></w-slot>
 </w-nav>
 
 <main>
@@ -87,8 +87,8 @@ This renders with `role="region"` and `aria-label="Dashboard content"`.
   <h1>Settings</h1>
 
   <w-nav label="Settings sections">
-    <w-slot item><a href="/settings/profile">Profile</a></w-slot>
-    <w-slot item><a href="/settings/account">Account</a></w-slot>
+    <w-slot item><w-link href="/settings/profile">Profile</w-link></w-slot>
+    <w-slot item><w-link href="/settings/account">Account</w-link></w-slot>
   </w-nav>
 
   <w-view path="/settings/profile">
