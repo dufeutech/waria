@@ -3,27 +3,33 @@
 
     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
         <w-switch label="Dark Mode">
-            <button slot="trigger" class="switch-track">
-                <span class="switch-thumb"></span>
-            </button>
+            <w-slot trigger>
+                <button class="switch-track">
+                    <span class="switch-thumb"></span>
+                </button>
+            </w-slot>
         </w-switch>
         <span>Dark Mode</span>
     </div>
 
     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
         <w-switch pressed label="Notifications">
-            <button slot="trigger" class="switch-track">
-                <span class="switch-thumb"></span>
-            </button>
+            <w-slot trigger>
+                <button class="switch-track">
+                    <span class="switch-thumb"></span>
+                </button>
+            </w-slot>
         </w-switch>
         <span>Notifications (on by default)</span>
     </div>
 
     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
         <w-switch disabled label="Disabled option">
-            <button slot="trigger" class="switch-track">
-                <span class="switch-thumb"></span>
-            </button>
+            <w-slot trigger>
+                <button class="switch-track">
+                    <span class="switch-thumb"></span>
+                </button>
+            </w-slot>
         </w-switch>
         <span style="color: #999;">Disabled switch</span>
     </div>

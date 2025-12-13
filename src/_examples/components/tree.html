@@ -2,7 +2,7 @@
     <h2>Tree</h2>
     <w-tree expanded="src,tools,components,ui,layout">
         <!-- Root folder: src -->
-        <div slot="item" name="src">
+        <w-slot item><div name="src">
             <div toggle>
                 <span w-icon>▶</span>
                 <span>src</span>
@@ -11,7 +11,7 @@
             <!-- Level 1 groups inside /src -->
             <div role="group" style="margin-left: 1em">
                 <!-- components/ -->
-                <div slot="item" name="components">
+                <w-slot item><div name="components">
                     <div toggle>
                         <span w-icon>➔</span>
                         <span>components</span>
@@ -20,7 +20,7 @@
                     <!-- Level 2 groups inside /components -->
                     <div role="group" style="margin-left: 1em">
                         <!-- ui/ -->
-                        <div slot="item" name="ui">
+                        <w-slot item><div name="ui">
                             <div toggle>
                                 <span w-icon>➤</span>
                                 <span>ui</span>
@@ -28,20 +28,20 @@
 
                             <!-- Level 3 Files inside /components/ui -->
                             <div role="group" style="margin-left: 1.75em">
-                                <div slot="item" name="button.ts">
-                                    <span slot="label">button.ts</span>
-                                </div>
-                                <div slot="item" name="input.ts">
-                                    <span slot="label">input.ts</span>
-                                </div>
-                                <div slot="item" name="modal.ts">
-                                    <span slot="label">modal.ts</span>
-                                </div>
+                                <w-slot item><div name="button.ts">
+                                    <w-slot label><span>button.ts</span></w-slot>
+                                </div></w-slot>
+                                <w-slot item><div name="input.ts">
+                                    <w-slot label><span>input.ts</span></w-slot>
+                                </div></w-slot>
+                                <w-slot item><div name="modal.ts">
+                                    <w-slot label><span>modal.ts</span></w-slot>
+                                </div></w-slot>
                             </div>
-                        </div>
+                        </div></w-slot>
 
                         <!-- layout/ -->
-                        <div slot="item" name="layout">
+                        <w-slot item><div name="layout">
                             <div toggle>
                                 <span w-icon>➤</span>
                                 <span>layout</span>
@@ -49,31 +49,31 @@
 
                             <!-- Level 3 Files inside /components/layout -->
                             <div role="group" style="margin-left: 1.75em">
-                                <div slot="item" name="header.ts">
-                                    <span slot="label">header.ts</span>
-                                </div>
-                                <div slot="item" name="sidebar.ts">
-                                    <span slot="label">sidebar.ts</span>
-                                </div>
+                                <w-slot item><div name="header.ts">
+                                    <w-slot label><span>header.ts</span></w-slot>
+                                </div></w-slot>
+                                <w-slot item><div name="sidebar.ts">
+                                    <w-slot label><span>sidebar.ts</span></w-slot>
+                                </div></w-slot>
                             </div>
-                        </div>
+                        </div></w-slot>
 
                         <!-- index file in /components -->
-                        <div slot="item" name="index.ts">
-                            <span slot="label">index.ts</span>
-                        </div>
+                        <w-slot item><div name="index.ts">
+                            <w-slot label><span>index.ts</span></w-slot>
+                        </div></w-slot>
                     </div>
-                </div>
+                </div></w-slot>
 
                 <!-- main.ts at root of /src -->
-                <div slot="item" name="main.ts">
-                    <span slot="label">main.ts</span>
-                </div>
+                <w-slot item><div name="main.ts">
+                    <w-slot label><span>main.ts</span></w-slot>
+                </div></w-slot>
             </div>
-        </div>
+        </div></w-slot>
 
         <!-- Root folder: tools -->
-        <div slot="item" name="tools">
+        <w-slot item><div name="tools">
             <div toggle>
                 <span w-icon>▶</span>
                 <span>tools</span>
@@ -81,21 +81,21 @@
 
             <!-- Files inside /tools -->
             <div role="group" style="margin-left: 1em">
-                <div slot="item" name="helpers.ts">
-                    <span slot="label">helpers.ts</span>
-                </div>
-                <div slot="item" name="constants.ts">
-                    <span slot="label">constants.ts</span>
-                </div>
+                <w-slot item><div name="helpers.ts">
+                    <w-slot label><span>helpers.ts</span></w-slot>
+                </div></w-slot>
+                <w-slot item><div name="constants.ts">
+                    <w-slot label><span>constants.ts</span></w-slot>
+                </div></w-slot>
             </div>
-        </div>
+        </div></w-slot>
 
         <!-- Standalone files at project root -->
-        <div slot="item" name="package.json">
-            <span slot="label">package.json</span>
-        </div>
-        <div slot="item" name="README.md">
-            <span slot="label">README.md</span>
-        </div>
+        <w-slot item><div name="package.json">
+            <w-slot label><span>package.json</span></w-slot>
+        </div></w-slot>
+        <w-slot item><div name="README.md">
+            <w-slot label><span>README.md</span></w-slot>
+        </div></w-slot>
     </w-tree>
 </w-view>

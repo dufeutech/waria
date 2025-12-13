@@ -1,91 +1,166 @@
 <w-view class="view" path="/Treegrid">
     <h2>Treegrid</h2>
-    <w-treegrid label="File Browser">
-        <!-- Level 1: Documents -->
-        <div slot="row" data-level="1">
-            <div slot="cell">
-                📁 Documents
-                <span w-icon style="float: right">➔</span>
+    <w-treegrid label="File Browser" class="treegrid">
+        <!-- Header Row -->
+        <w-slot row>
+            <div class="treegrid-row treegrid-header">
+                <w-slot cell><div class="treegrid-cell treegrid-cell-name">Name</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Type</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Size</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Modified</div></w-slot>
             </div>
-            <div slot="cell">Folder</div>
-            <div slot="cell">--</div>
-            <div slot="cell">Dec 10, 2024</div>
-        </div>
+        </w-slot>
+
+        <!-- Level 1: Documents -->
+        <w-slot row>
+            <div class="treegrid-row" data-level="1">
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 0"></span>
+                        <span class="treegrid-toggle" w-icon>▶</span>
+                        <span>📁 Documents</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">Folder</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">--</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 10, 2024</div></w-slot>
+            </div>
+        </w-slot>
 
         <!-- Level 2: Documents children -->
-        <div slot="row" data-level="2">
-            <div slot="cell">📄 Report.pdf</div>
-            <div slot="cell">PDF Document</div>
-            <div slot="cell">2.4 MB</div>
-            <div slot="cell">Dec 8, 2024</div>
-        </div>
+        <w-slot row>
+            <div class="treegrid-row" data-level="2">
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 1"></span>
+                        <span>📄 Report.pdf</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">PDF Document</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">2.4 MB</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 8, 2024</div></w-slot>
+            </div>
+        </w-slot>
 
-        <div slot="row" data-level="2">
-            <div slot="cell">📄 Notes.txt</div>
-            <div slot="cell">Text File</div>
-            <div slot="cell">4 KB</div>
-            <div slot="cell">Dec 5, 2024</div>
-        </div>
+        <w-slot row>
+            <div class="treegrid-row" data-level="2">
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 1"></span>
+                        <span>📄 Notes.txt</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">Text File</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">4 KB</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 5, 2024</div></w-slot>
+            </div>
+        </w-slot>
 
         <!-- Level 1: Images -->
-        <div slot="row" data-level="1">
-            <div slot="cell">
-                📁 Images <span w-icon style="float: right">➔</span>
+        <w-slot row>
+            <div class="treegrid-row" data-level="1">
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 0"></span>
+                        <span class="treegrid-toggle" w-icon>▶</span>
+                        <span>📁 Images</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">Folder</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">--</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 9, 2024</div></w-slot>
             </div>
-            <div slot="cell">Folder</div>
-            <div slot="cell">--</div>
-            <div slot="cell">Dec 9, 2024</div>
-        </div>
+        </w-slot>
 
-        <!-- Level 2: Images children -->
-        <div slot="row" data-level="2" hidden>
-            <div slot="cell">🖼️ photo1.jpg</div>
-            <div slot="cell">JPEG Image</div>
-            <div slot="cell">1.8 MB</div>
-            <div slot="cell">Dec 9, 2024</div>
-        </div>
+        <!-- Level 2: Images children (initially hidden) -->
+        <w-slot row>
+            <div class="treegrid-row" data-level="2" hidden>
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 1"></span>
+                        <span>🖼️ photo1.jpg</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">JPEG Image</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">1.8 MB</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 9, 2024</div></w-slot>
+            </div>
+        </w-slot>
 
-        <div slot="row" data-level="2" hidden>
-            <div slot="cell">🖼️ photo2.png</div>
-            <div slot="cell">PNG Image</div>
-            <div slot="cell">3.2 MB</div>
-            <div slot="cell">Dec 7, 2024</div>
-        </div>
+        <w-slot row>
+            <div class="treegrid-row" data-level="2" hidden>
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 1"></span>
+                        <span>🖼️ photo2.png</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">PNG Image</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">3.2 MB</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 7, 2024</div></w-slot>
+            </div>
+        </w-slot>
 
         <!-- Level 1: Projects -->
-        <div slot="row" data-level="1">
-            <div slot="cell">
-                📁 Projects <span w-icon style="float: right">➔</span>
+        <w-slot row>
+            <div class="treegrid-row" data-level="1">
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 0"></span>
+                        <span class="treegrid-toggle" w-icon>▶</span>
+                        <span>📁 Projects</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">Folder</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">--</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 10, 2024</div></w-slot>
             </div>
-            <div slot="cell">Folder</div>
-            <div slot="cell">--</div>
-            <div slot="cell">Dec 10, 2024</div>
-        </div>
+        </w-slot>
 
-        <!-- Level 2: Projects children -->
-        <div slot="row" data-level="2">
-            <div slot="cell">
-                📁 Website <span w-icon style="float: right">➔</span>
+        <!-- Level 2: Projects > Website -->
+        <w-slot row>
+            <div class="treegrid-row" data-level="2">
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 1"></span>
+                        <span class="treegrid-toggle" w-icon>▶</span>
+                        <span>📁 Website</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">Folder</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">--</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 10, 2024</div></w-slot>
             </div>
-            <div slot="cell">Folder</div>
-            <div slot="cell">--</div>
-            <div slot="cell">Dec 10, 2024</div>
-        </div>
+        </w-slot>
 
-        <!-- Level 3: Website files -->
-        <div slot="row" data-level="3" hidden>
-            <div slot="cell">📄 index.html</div>
-            <div slot="cell">HTML File</div>
-            <div slot="cell">12 KB</div>
-            <div slot="cell">Dec 10, 2024</div>
-        </div>
+        <!-- Level 3: Website files (initially hidden) -->
+        <w-slot row>
+            <div class="treegrid-row" data-level="3" hidden>
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 2"></span>
+                        <span>📄 index.html</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">HTML File</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">12 KB</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 10, 2024</div></w-slot>
+            </div>
+        </w-slot>
 
-        <div slot="row" data-level="3" hidden>
-            <div slot="cell">📄 styles.css</div>
-            <div slot="cell">CSS File</div>
-            <div slot="cell">8 KB</div>
-            <div slot="cell">Dec 9, 2024</div>
-        </div>
+        <w-slot row>
+            <div class="treegrid-row" data-level="3" hidden>
+                <w-slot cell>
+                    <div class="treegrid-cell treegrid-cell-name">
+                        <span class="treegrid-indent" style="--level: 2"></span>
+                        <span>📄 styles.css</span>
+                    </div>
+                </w-slot>
+                <w-slot cell><div class="treegrid-cell">CSS File</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">8 KB</div></w-slot>
+                <w-slot cell><div class="treegrid-cell">Dec 9, 2024</div></w-slot>
+            </div>
+        </w-slot>
     </w-treegrid>
 
     <p style="margin-top: 1rem; color: #666; font-size: 0.9rem">

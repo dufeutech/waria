@@ -4,25 +4,29 @@
     <div style="margin-top: 1rem;">
         Posted by
         <w-hover-card style="display: inline-block; position: relative;">
-            <a slot="trigger" href="#" style="color: #0066cc; text-decoration: none; font-weight: bold;">@johndoe</a>
-            <div slot="content" hidden
-                style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 280px;">
-                <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <img src="https://picsum.photos/60/60" alt="User avatar"
-                        style="width: 60px; height: 60px; border-radius: 50%;" />
-                    <div>
-                        <h4 style="margin: 0;">John Doe</h4>
-                        <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">@johndoe</p>
+            <w-slot trigger>
+                <a href="#" style="color: #0066cc; text-decoration: none; font-weight: bold;">@johndoe</a>
+            </w-slot>
+            <w-slot body>
+                <div hidden
+                    style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 280px;">
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <img src="https://picsum.photos/60/60" alt="User avatar"
+                            style="width: 60px; height: 60px; border-radius: 50%;" />
+                        <div>
+                            <h4 style="margin: 0;">John Doe</h4>
+                            <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">@johndoe</p>
+                        </div>
+                    </div>
+                    <p style="margin: 1rem 0 0.5rem; font-size: 0.9rem;">
+                        Software developer passionate about accessibility and web standards.
+                    </p>
+                    <div style="display: flex; gap: 1rem; font-size: 0.85rem; color: #666;">
+                        <span><strong>1.2k</strong> Following</span>
+                        <span><strong>5.4k</strong> Followers</span>
                     </div>
                 </div>
-                <p style="margin: 1rem 0 0.5rem; font-size: 0.9rem;">
-                    Software developer passionate about accessibility and web standards.
-                </p>
-                <div style="display: flex; gap: 1rem; font-size: 0.85rem; color: #666;">
-                    <span><strong>1.2k</strong> Following</span>
-                    <span><strong>5.4k</strong> Followers</span>
-                </div>
-            </div>
+            </w-slot>
         </w-hover-card>
         • 2 hours ago
     </div>
@@ -31,16 +35,20 @@
     <div>
         Check out our
         <w-hover-card placement="right" style="display: inline-block; position: relative;">
-            <a slot="trigger" href="#" style="color: #0066cc; text-decoration: none;">featured product</a>
-            <div slot="content" hidden
-                style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 240px;">
-                <img src="https://picsum.photos/220/140" alt="Product image" style="width: 100%; border-radius: 4px;" />
-                <h4 style="margin: 0.75rem 0 0.25rem;">Premium Widget</h4>
-                <p style="margin: 0; color: #28a745; font-weight: bold;">$49.99</p>
-                <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #666;">
-                    High-quality widget with premium features.
-                </p>
-            </div>
+            <w-slot trigger>
+                <a href="#" style="color: #0066cc; text-decoration: none;">featured product</a>
+            </w-slot>
+            <w-slot body>
+                <div hidden
+                    style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 240px;">
+                    <img src="https://picsum.photos/220/140" alt="Product image" style="width: 100%; border-radius: 4px;" />
+                    <h4 style="margin: 0.75rem 0 0.25rem;">Premium Widget</h4>
+                    <p style="margin: 0; color: #28a745; font-weight: bold;">$49.99</p>
+                    <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #666;">
+                        High-quality widget with premium features.
+                    </p>
+                </div>
+            </w-slot>
         </w-hover-card>
         for this month!
     </div>

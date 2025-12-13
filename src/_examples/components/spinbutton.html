@@ -4,28 +4,46 @@
     <h3>Basic Spinbutton</h3>
     <w-spinbutton min="0" max="100" value="50" step="1" label="Quantity"
         style="display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid #ddd; border-radius: 4px; padding: 0.25rem;">
-        <button slot="decrement" style="padding: 0.5rem 0.75rem; cursor: pointer;">−</button>
-        <input slot="input" type="text"
-            style="width: 60px; text-align: center; border: none; font-size: 1rem; padding: 0.5rem;" />
-        <button slot="increment" style="padding: 0.5rem 0.75rem; cursor: pointer;">+</button>
+        <w-slot down>
+            <button style="padding: 0.5rem 0.75rem; cursor: pointer;">−</button>
+        </w-slot>
+        <w-slot input>
+            <input type="text"
+                style="width: 60px; text-align: center; border: none; font-size: 1rem; padding: 0.5rem;" />
+        </w-slot>
+        <w-slot up>
+            <button style="padding: 0.5rem 0.75rem; cursor: pointer;">+</button>
+        </w-slot>
     </w-spinbutton>
 
     <h3 style="margin-top: 2rem;">Display-only Spinbutton</h3>
     <w-spinbutton min="1" max="5" value="3" step="1" label="Rating" disabled
         style="display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid #ddd; border-radius: 4px; padding: 0.25rem;">
-        <button slot="decrement" style="padding: 0.5rem 0.75rem; cursor: pointer;">◀</button>
-        <span slot="display" tabindex="0"
-            style="width: 40px; text-align: center; font-size: 1.25rem; font-weight: bold; padding: 0.5rem;"></span>
-        <button slot="increment" style="padding: 0.5rem 0.75rem; cursor: pointer;">▶</button>
+        <w-slot down>
+            <button style="padding: 0.5rem 0.75rem; cursor: pointer;">◀</button>
+        </w-slot>
+        <w-slot value>
+            <span tabindex="0"
+                style="width: 40px; text-align: center; font-size: 1.25rem; font-weight: bold; padding: 0.5rem;"></span>
+        </w-slot>
+        <w-slot up>
+            <button style="padding: 0.5rem 0.75rem; cursor: pointer;">▶</button>
+        </w-slot>
     </w-spinbutton>
 
     <h3 style="margin-top: 2rem;">Wrapping Spinbutton</h3>
     <w-spinbutton min="1" max="12" value="6" step="1" wrap="true" label="Month"
         style="display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid #ddd; border-radius: 4px; padding: 0.25rem;">
-        <button slot="decrement" style="padding: 0.5rem 0.75rem; cursor: pointer;">−</button>
-        <input slot="input" type="text"
-            style="width: 60px; text-align: center; border: none; font-size: 1rem; padding: 0.5rem;" />
-        <button slot="increment" style="padding: 0.5rem 0.75rem; cursor: pointer;">+</button>
+        <w-slot down>
+            <button style="padding: 0.5rem 0.75rem; cursor: pointer;">−</button>
+        </w-slot>
+        <w-slot input>
+            <input type="text"
+                style="width: 60px; text-align: center; border: none; font-size: 1rem; padding: 0.5rem;" />
+        </w-slot>
+        <w-slot up>
+            <button style="padding: 0.5rem 0.75rem; cursor: pointer;">+</button>
+        </w-slot>
     </w-spinbutton>
     <span style="margin-left: 1rem; color: #666;">(wraps from 12 to 1)</span>
 

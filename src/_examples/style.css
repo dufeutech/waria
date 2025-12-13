@@ -1,68 +1,228 @@
-/* Custom */
+/* ============================================
+   Waria Component Demo Styles
+   ============================================ */
+
+/* Layout */
 body {
   overflow: hidden;
   height: 100dvh;
+  background: #f8f9fa;
 }
+
 #app {
   display: flex;
   overflow: hidden;
   height: 100%;
 }
+
+/* ============================================
+   Sidebar Container
+   ============================================ */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 220px;
+  min-width: 220px;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  border-right: 1px solid #0f0f1a;
+}
+
+.sidebar-header {
+  flex-shrink: 0;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #6c7a89;
+  margin-bottom: 12px;
+}
+
+.sidebar-search {
+  position: relative;
+}
+
+.sidebar-search input {
+  width: 100%;
+  padding: 10px 12px;
+  padding-left: 36px;
+  font-size: 13px;
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.sidebar-search input::placeholder {
+  color: #6c7a89;
+}
+
+.sidebar-search input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.sidebar-search::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236c7a89'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E");
+  background-size: contain;
+  pointer-events: none;
+}
+
+/* ============================================
+   Sidebar Navigation
+   ============================================ */
 .router {
   display: flex;
   flex-direction: column;
-  overflow: auto;
-  height: 100%;
-  width: 200px;
-  padding: 10px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  padding: 8px 0;
 }
+
 .router-button {
-  padding: 12px;
-  border-bottom: #464646 solid 1px;
+  display: block;
+  padding: 12px 20px;
+  font-size: 14px;
+  color: #a8b2c1;
   cursor: pointer;
-  text-align: center;
+  transition: all 0.15s ease;
+  border-left: 3px solid transparent;
 }
+
+.router-button:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Active nav item */
+w-nav [aria-current="page"].router-button {
+  color: #fff;
+  background: rgba(99, 102, 241, 0.15);
+  border-left-color: #6366f1;
+  font-weight: 500;
+}
+
+/* ============================================
+   Main Content Viewer
+   ============================================ */
 .viewer {
   flex-grow: 1;
   height: 100%;
   overflow: auto;
+  background: #fff;
 }
+
 .view {
-  padding: 40px 80px;
+  padding: 40px 60px;
+  max-width: 900px;
+  animation: fadeIn 0.2s ease;
 }
-button {
-  border: #464646 solid 1px;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .view > h2 {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a2e;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e5e7eb;
 }
+
+/* ============================================
+   Buttons
+   ============================================ */
+button {
+  padding: 10px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+button:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+button:active {
+  background: #f3f4f6;
+}
+
+/* ============================================
+   Aspect Ratio Demo
+   ============================================ */
 .aspect-ratio {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 1.125rem;
   font-weight: 600;
+  border-radius: 8px;
 }
 
-/* Web Components Icons */
+/* ============================================
+   Web Component Icons
+   ============================================ */
 [aria-expanded="true"] > [w-icon],
 [aria-expanded="true"] > * > [w-icon] {
   transform: rotate(90deg);
   display: inline-block;
+  transition: transform 0.2s ease;
 }
 
-/* Web Components Examples */
+[w-icon] {
+  transition: transform 0.2s ease;
+}
 
-/* Switch component styles */
+/* ============================================
+   Switch Component
+   ============================================ */
 .switch-track {
   position: relative;
   width: 50px;
   height: 28px;
-  background-color: #ccc;
+  background-color: #d1d5db;
   border: none;
   border-radius: 14px;
   cursor: pointer;
@@ -78,13 +238,13 @@ button {
   height: 24px;
   background-color: white;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease;
   pointer-events: none;
 }
 
 w-switch[pressed] .switch-track {
-  background-color: #0056b3;
+  background-color: #6366f1;
 }
 
 w-switch[pressed] .switch-thumb {
@@ -92,41 +252,162 @@ w-switch[pressed] .switch-thumb {
 }
 
 w-switch[disabled] .switch-track {
-  background-color: #e0e0e0;
+  background-color: #e5e7eb;
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .switch-track:focus {
-  outline: 2px solid #4a9eff;
+  outline: 2px solid #6366f1;
   outline-offset: 2px;
 }
 
-w-choice [slot="option"][aria-checked="true"] {
-  background-color: #e3f2fd;
-  border-color: #0056b3;
+/* ============================================
+   Choice Component
+   ============================================ */
+.choice-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 300px;
+}
+
+.choice-group.horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: none;
+}
+
+.choice-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #fff;
+}
+
+.choice-option:hover {
+  border-color: #c7d2fe;
+  background: #f8fafc;
+}
+
+.choice-option:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.choice-indicator {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.choice-indicator.checkbox {
+  border-radius: 4px;
+}
+
+.choice-indicator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 8px;
+  height: 8px;
+  background: #6366f1;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.choice-indicator.checkbox::after {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E") center/contain no-repeat #6366f1;
+}
+
+/* Selected state */
+.choice-option[aria-checked="true"] {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.choice-option[aria-checked="true"] .choice-indicator {
+  border-color: #6366f1;
+}
+
+.choice-option[aria-checked="true"] .choice-indicator::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Disabled state */
+w-choice[disabled] .choice-option {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+w-choice[disabled] .choice-option:hover {
+  border-color: #e5e7eb;
+  background: #fff;
+}
+
+/* ============================================
+   Tabs Component
+   ============================================ */
+w-tabs [slot="tab"] {
+  padding: 10px 18px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+w-tabs [slot="tab"]:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+w-tabs [slot="tab"]:last-child {
+  border-radius: 0 6px 6px 0;
 }
 
 w-tabs [slot="tab"][aria-selected="true"] {
-  background-color: #0056b3;
+  background-color: #6366f1;
+  border-color: #6366f1;
   color: white;
 }
 
+/* ============================================
+   Menu Component
+   ============================================ */
 w-menu [slot="item"]:hover,
 w-menu [slot="item"]:focus {
-  background-color: #f0f0f0;
+  background-color: #f3f4f6;
 }
 
+/* ============================================
+   Accordion Component
+   ============================================ */
 w-accordion [slot="trigger"][aria-expanded="true"] {
-  background-color: #e3f2fd;
+  background-color: #eef2ff;
 }
 
+/* ============================================
+   Tree Component
+   ============================================ */
 w-tree [slot="item"][aria-selected="true"] {
-  background-color: #e3f2fd;
+  background-color: #eef2ff;
 }
 
 w-tree [slot="item"]:focus {
-  outline: 2px solid #4a9eff;
+  outline: 2px solid #6366f1;
   outline-offset: -2px;
 }
 
@@ -134,86 +415,206 @@ w-tree [slot="item"] > * {
   user-select: none;
 }
 
-/* make sure hidden rows don't take space */
+/* ============================================
+   Grid & TreeGrid Components
+   ============================================ */
 [hidden] {
   display: none !important;
 }
 
-[slot="row"] {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-[slot="cell"] {
-  user-select: none;
-  flex: 0 1 auto;
-  min-width: 0;
-  padding: 0.75rem;
-  border-right: 1px solid #eee;
-  box-sizing: border-box;
+/* Treegrid specific styles */
+.treegrid {
+  display: block;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word; /* allow breaking if needed */
-}
-
-/* first column wider */
-[slot="cell"]:first-child {
-  flex: 2 1 0;
-  border-right-color: #ddd;
-}
-
-/* remaining columns equal width */
-[slot="cell"]:nth-child(2),
-[slot="cell"]:nth-child(3),
-[slot="cell"]:nth-child(4) {
-  flex: 1 1 0;
-}
-
-/* background by level */
-[slot="row"][data-level="1"] {
-  background: #f5f5f5;
-}
-[slot="row"][data-level="2"],
-[slot="row"][data-level="3"] {
   background: #fff;
 }
 
-/* hover */
-[slot="row"]:hover {
-  background: #f9f9fb;
+.treegrid-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.1s ease;
+}
+
+.treegrid-row:last-child {
+  border-bottom: none;
+}
+
+.treegrid-header {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #475569;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.treegrid-header .treegrid-cell {
+  padding: 14px 16px;
+}
+
+.treegrid-cell {
+  flex: 1;
+  padding: 12px 16px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-right: 1px solid #f1f5f9;
+  box-sizing: border-box;
+}
+
+.treegrid-cell:last-child {
+  border-right: none;
+}
+
+.treegrid-cell-name {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.treegrid-indent {
+  width: calc(var(--level, 0) * 20px);
+  flex-shrink: 0;
+}
+
+.treegrid-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  color: #64748b;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.treegrid-row[aria-expanded="true"] .treegrid-toggle {
+  transform: rotate(90deg);
+}
+
+.treegrid-row[data-level="1"] {
+  background: #fafafa;
+}
+
+.treegrid-row[data-level="2"],
+.treegrid-row[data-level="3"] {
+  background: #fff;
+}
+
+.treegrid-row:hover:not(.treegrid-header) {
+  background: #f1f5f9;
   cursor: pointer;
 }
 
-/* Grid cells */
-w-grid [slot="cell"][aria-selected="true"] {
-  background-color: #d0e8ff;
+.treegrid-row:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: -2px;
 }
 
-/* Toggles */
+.treegrid-row[aria-selected="true"] {
+  background: #eef2ff;
+}
+
+w-grid [slot="cell"][aria-selected="true"] {
+  background-color: #dbeafe;
+}
+
+/* ============================================
+   Toggles Component
+   ============================================ */
+w-toggles [slot="item"] {
+  padding: 10px 18px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+w-toggles [slot="item"]:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+w-toggles [slot="item"]:last-child {
+  border-radius: 0 6px 6px 0;
+  border-left: none;
+}
+
 w-toggles [slot="item"][aria-pressed="true"] {
   color: white;
-  border-color: #0056b3;
-  background-color: #0056b3;
+  border-color: #6366f1;
+  background-color: #6366f1;
 }
 
-w-nav {
-  background: #f5f5f5;
-  border-radius: 4px;
-  /* justify-content: space-between; */
+/* ============================================
+   Navigation Component (non-router instances)
+   ============================================ */
+w-nav:not(.router) {
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
 }
 
-w-nav [aria-current="page"] {
+w-nav:not(.router) [aria-current="page"] {
   color: white;
-  border-color: #0056b3;
-  background-color: #0056b3;
+  background-color: #6366f1;
+  border-radius: 6px;
 }
 
-w-nav[orientation="vertical"] {
+w-nav:not(.router)[orientation="vertical"] {
   width: 200px;
 }
 
-w-nav [slot="item"] {
-  padding: 1rem;
+w-nav:not(.router) [slot="item"] {
+  padding: 10px 16px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+w-nav:not(.router) [slot="item"]:hover:not([aria-current="page"]) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+.sidebar ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.sidebar ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.viewer::-webkit-scrollbar {
+  width: 10px;
+}
+
+.viewer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.viewer::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 5px;
+}
+
+.viewer::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }

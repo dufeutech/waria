@@ -25,23 +25,26 @@
         <w-label for="demo-range">Volume (click label to focus slider):</w-label>
         <w-range id="demo-range" min="0" max="100" value="50" step="1" label="Volume"
             style="position: relative; height: 20px; display: block; margin-top: 0.5rem;">
-            <div slot="track"
-                style="position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: #ddd; border-radius: 2px; transform: translateY(-50%);">
-                <div slot="fill" style="background: #0066cc; border-radius: 2px;"></div>
-            </div>
-            <div slot="thumb"
-                style="position: absolute; width: 20px; height: 20px; background: #0066cc; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            </div>
+            <w-slot rail>
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: #ddd; border-radius: 2px; transform: translateY(-50%);">
+                    <w-slot fill><div style="background: #0066cc; border-radius: 2px;"></div></w-slot>
+                </div>
+            </w-slot>
+            <w-slot knob>
+                <div style="position: absolute; width: 20px; height: 20px; background: #0066cc; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+            </w-slot>
         </w-range>
     </div>
     <div style="max-width: 400px; margin-top: 1rem;">
         <w-label for="demo-spinbutton">Quantity:</w-label>
         <w-spinbutton id="demo-spinbutton" min="0" max="10" value="5"
             style="display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.5rem;">
-            <button slot="decrement" style="padding: 0.25rem 0.5rem; cursor: pointer;">-</button>
-            <input slot="input" type="text" readonly
-                style="width: 3rem; text-align: center; padding: 0.25rem; border: 1px solid #ccc; border-radius: 4px;" />
-            <button slot="increment" style="padding: 0.25rem 0.5rem; cursor: pointer;">+</button>
+            <w-slot down><button style="padding: 0.25rem 0.5rem; cursor: pointer;">-</button></w-slot>
+            <w-slot value>
+                <input type="text" readonly
+                    style="width: 3rem; text-align: center; padding: 0.25rem; border: 1px solid #ccc; border-radius: 4px;" />
+            </w-slot>
+            <w-slot up><button style="padding: 0.25rem 0.5rem; cursor: pointer;">+</button></w-slot>
         </w-spinbutton>
     </div>
 </w-view>

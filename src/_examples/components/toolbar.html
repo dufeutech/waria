@@ -2,28 +2,28 @@
     <h2>Toolbar</h2>
     <w-toolbar label="Text formatting"
         style="display: flex; gap: 0.25rem; background: #f5f5f5; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd;">
-        <button slot="item" name="bold" style="padding: 0.5rem; cursor: pointer; font-weight: bold;">B</button>
-        <button slot="item" name="italic" style="padding: 0.5rem; cursor: pointer; font-style: italic;">I</button>
-        <button slot="item" name="underline"
-            style="padding: 0.5rem; cursor: pointer; text-decoration: underline;">U</button>
-        <div slot="separator" style="width: 1px; background: #ccc; margin: 0 0.5rem;"></div>
-        <button slot="item" name="align-left" style="padding: 0.5rem; cursor: pointer;">⬅</button>
-        <button slot="item" name="align-center" style="padding: 0.5rem; cursor: pointer;">⬛</button>
-        <button slot="item" name="align-right" style="padding: 0.5rem; cursor: pointer;">➡</button>
-        <div slot="separator" style="width: 1px; background: #ccc; margin: 0 0.5rem;"></div>
-        <button slot="item" name="bullet-list" style="padding: 0.5rem; cursor: pointer;">•</button>
-        <button slot="item" name="number-list" style="padding: 0.5rem; cursor: pointer;">1.</button>
+        <w-slot item><button name="bold" style="padding: 0.5rem; cursor: pointer; font-weight: bold;">B</button></w-slot>
+        <w-slot item><button name="italic" style="padding: 0.5rem; cursor: pointer; font-style: italic;">I</button></w-slot>
+        <w-slot item><button name="underline"
+                style="padding: 0.5rem; cursor: pointer; text-decoration: underline;">U</button></w-slot>
+        <w-slot sep><div style="width: 1px; background: #ccc; margin: 0 0.5rem;"></div></w-slot>
+        <w-slot item><button name="align-left" style="padding: 0.5rem; cursor: pointer;">⬅</button></w-slot>
+        <w-slot item><button name="align-center" style="padding: 0.5rem; cursor: pointer;">⬛</button></w-slot>
+        <w-slot item><button name="align-right" style="padding: 0.5rem; cursor: pointer;">➡</button></w-slot>
+        <w-slot sep><div style="width: 1px; background: #ccc; margin: 0 0.5rem;"></div></w-slot>
+        <w-slot item><button name="bullet-list" style="padding: 0.5rem; cursor: pointer;">•</button></w-slot>
+        <w-slot item><button name="number-list" style="padding: 0.5rem; cursor: pointer;">1.</button></w-slot>
     </w-toolbar>
 
     <h3 style="margin-top: 2rem;">Vertical Toolbar</h3>
     <w-toolbar label="Drawing tools" orientation="vertical"
         style="display: flex; flex-direction: column; gap: 0.25rem; background: #f5f5f5; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd; width: fit-content;">
-        <button slot="item" name="select" style="padding: 0.5rem 1rem; cursor: pointer;">↖</button>
-        <button slot="item" name="pen" style="padding: 0.5rem 1rem; cursor: pointer;">✏</button>
-        <button slot="item" name="brush" style="padding: 0.5rem 1rem; cursor: pointer;">🖌</button>
-        <div slot="separator" style="height: 1px; background: #ccc; margin: 0.5rem 0;"></div>
-        <button slot="item" name="rectangle" style="padding: 0.5rem 1rem; cursor: pointer;">▭</button>
-        <button slot="item" name="circle" style="padding: 0.5rem 1rem; cursor: pointer;">○</button>
+        <w-slot item><button name="select" style="padding: 0.5rem 1rem; cursor: pointer;">↖</button></w-slot>
+        <w-slot item><button name="pen" style="padding: 0.5rem 1rem; cursor: pointer;">✏</button></w-slot>
+        <w-slot item><button name="brush" style="padding: 0.5rem 1rem; cursor: pointer;">🖌</button></w-slot>
+        <w-slot sep><div style="height: 1px; background: #ccc; margin: 0.5rem 0;"></div></w-slot>
+        <w-slot item><button name="rectangle" style="padding: 0.5rem 1rem; cursor: pointer;">▭</button></w-slot>
+        <w-slot item><button name="circle" style="padding: 0.5rem 1rem; cursor: pointer;">○</button></w-slot>
     </w-toolbar>
     <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
         Use Arrow keys to navigate. Home/End to jump to first/last item.

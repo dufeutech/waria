@@ -2,36 +2,46 @@
     <h2>Grid</h2>
     <w-grid label="Product Inventory" selectionMode="cell"
         style="display: block; border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
-        <div slot="row" style="display: flex; background: #f5f5f5; font-weight: bold;">
-            <div slot="cell" style="flex: 2; padding: 0.75rem; border-right: 1px solid #ddd;">Product</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #ddd;">Category</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #ddd;">Price</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem;">Stock</div>
-        </div>
-        <div slot="row" style="display: flex; border-top: 1px solid #eee;">
-            <div slot="cell" style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Widget Pro</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Electronics</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$99.99</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem;">142</div>
-        </div>
-        <div slot="row" style="display: flex; border-top: 1px solid #eee;">
-            <div slot="cell" style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Gadget Plus</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Electronics</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$149.99</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem;">87</div>
-        </div>
-        <div slot="row" style="display: flex; border-top: 1px solid #eee;">
-            <div slot="cell" style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Basic Tool</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Tools</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$24.99</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem;">253</div>
-        </div>
-        <div slot="row" style="display: flex; border-top: 1px solid #eee;">
-            <div slot="cell" style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Premium Pack</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Bundles</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$299.99</div>
-            <div slot="cell" style="flex: 1; padding: 0.75rem;">31</div>
-        </div>
+        <w-slot row>
+            <div style="display: flex; background: #f5f5f5; font-weight: bold;">
+                <w-slot cell><div style="flex: 2; padding: 0.75rem; border-right: 1px solid #ddd;">Product</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #ddd;">Category</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #ddd;">Price</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem;">Stock</div></w-slot>
+            </div>
+        </w-slot>
+        <w-slot row>
+            <div style="display: flex; border-top: 1px solid #eee;">
+                <w-slot cell><div style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Widget Pro</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Electronics</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$99.99</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem;">142</div></w-slot>
+            </div>
+        </w-slot>
+        <w-slot row>
+            <div style="display: flex; border-top: 1px solid #eee;">
+                <w-slot cell><div style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Gadget Plus</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Electronics</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$149.99</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem;">87</div></w-slot>
+            </div>
+        </w-slot>
+        <w-slot row>
+            <div style="display: flex; border-top: 1px solid #eee;">
+                <w-slot cell><div style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Basic Tool</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Tools</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$24.99</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem;">253</div></w-slot>
+            </div>
+        </w-slot>
+        <w-slot row>
+            <div style="display: flex; border-top: 1px solid #eee;">
+                <w-slot cell><div style="flex: 2; padding: 0.75rem; border-right: 1px solid #eee;">Premium Pack</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">Bundles</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem; border-right: 1px solid #eee;">$299.99</div></w-slot>
+                <w-slot cell><div style="flex: 1; padding: 0.75rem;">31</div></w-slot>
+            </div>
+        </w-slot>
     </w-grid>
     <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
         Use Arrow keys to navigate cells. Enter/Space to select. Ctrl+Home/End for first/last cell. Ctrl+A to select

@@ -2,75 +2,91 @@
     <h2>Tabs</h2>
     <h3>Horizontal Tabs</h3>
     <w-tabs value="tab1">
-        <div slot="tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-            <button slot="tab" name="tab1" style="padding: 0.5rem 1rem;">Tab 1</button>
-            <button slot="tab" name="tab2" style="padding: 0.5rem 1rem;">Tab 2</button>
-            <button slot="tab" name="tab3" style="padding: 0.5rem 1rem;">Tab 3</button>
-        </div>
-        <div slot="views">
-            <div slot="view" name="tab1" style="padding: 1rem; background: #f5f5f5;">
-                Content for Tab 1
+        <w-slot list>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <w-slot tab><button name="tab1" style="padding: 0.5rem 1rem;">Tab 1</button></w-slot>
+                <w-slot tab><button name="tab2" style="padding: 0.5rem 1rem;">Tab 2</button></w-slot>
+                <w-slot tab><button name="tab3" style="padding: 0.5rem 1rem;">Tab 3</button></w-slot>
             </div>
-            <div slot="view" name="tab2" style="padding: 1rem; background: #f5f5f5;">
-                Content for Tab 2
+        </w-slot>
+        <w-slot panels>
+            <div>
+                <w-slot panel><div name="tab1" style="padding: 1rem; background: #f5f5f5;">
+                    Content for Tab 1
+                </div></w-slot>
+                <w-slot panel><div name="tab2" style="padding: 1rem; background: #f5f5f5;">
+                    Content for Tab 2
+                </div></w-slot>
+                <w-slot panel><div name="tab3" style="padding: 1rem; background: #f5f5f5;">
+                    Content for Tab 3
+                </div></w-slot>
             </div>
-            <div slot="view" name="tab3" style="padding: 1rem; background: #f5f5f5;">
-                Content for Tab 3
-            </div>
-        </div>
+        </w-slot>
     </w-tabs>
 
     <h3 style="margin-top: 2rem;">Vertical Tabs</h3>
     <w-tabs value="vtab1" orientation="vertical" style="display: flex; gap: 1rem;">
-        <div slot="tabs" style="display: flex; flex-direction: column; gap: 0.5rem; min-width: 120px;">
-            <button slot="tab" name="vtab1" style="padding: 0.5rem 1rem; text-align: left;">Settings</button>
-            <button slot="tab" name="vtab2" style="padding: 0.5rem 1rem; text-align: left;">Profile</button>
-            <button slot="tab" name="vtab3" style="padding: 0.5rem 1rem; text-align: left;">Security</button>
-        </div>
-        <div slot="views" style="flex: 1;">
-            <div slot="view" name="vtab1" style="padding: 1rem; background: #f5f5f5;">
-                <h4 style="margin-top: 0;">Settings</h4>
-                <p>Configure your application settings here.</p>
+        <w-slot list>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; min-width: 120px;">
+                <w-slot tab><button name="vtab1" style="padding: 0.5rem 1rem; text-align: left;">Settings</button></w-slot>
+                <w-slot tab><button name="vtab2" style="padding: 0.5rem 1rem; text-align: left;">Profile</button></w-slot>
+                <w-slot tab><button name="vtab3" style="padding: 0.5rem 1rem; text-align: left;">Security</button></w-slot>
             </div>
-            <div slot="view" name="vtab2" style="padding: 1rem; background: #f5f5f5;">
-                <h4 style="margin-top: 0;">Profile</h4>
-                <p>Manage your profile information.</p>
+        </w-slot>
+        <w-slot panels>
+            <div style="flex: 1;">
+                <w-slot panel><div name="vtab1" style="padding: 1rem; background: #f5f5f5;">
+                    <h4 style="margin-top: 0;">Settings</h4>
+                    <p>Configure your application settings here.</p>
+                </div></w-slot>
+                <w-slot panel><div name="vtab2" style="padding: 1rem; background: #f5f5f5;">
+                    <h4 style="margin-top: 0;">Profile</h4>
+                    <p>Manage your profile information.</p>
+                </div></w-slot>
+                <w-slot panel><div name="vtab3" style="padding: 1rem; background: #f5f5f5;">
+                    <h4 style="margin-top: 0;">Security</h4>
+                    <p>Update your security preferences.</p>
+                </div></w-slot>
             </div>
-            <div slot="view" name="vtab3" style="padding: 1rem; background: #f5f5f5;">
-                <h4 style="margin-top: 0;">Security</h4>
-                <p>Update your security preferences.</p>
-            </div>
-        </div>
+        </w-slot>
     </w-tabs>
 
     <h3 style="margin-top: 2rem;">Nested Tabs</h3>
     <w-tabs value="outer1">
-        <div slot="tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-            <button slot="tab" name="outer1" style="padding: 0.5rem 1rem;">Outer 1</button>
-            <button slot="tab" name="outer2" style="padding: 0.5rem 1rem;">Outer 2</button>
-        </div>
-        <div slot="views">
-            <div slot="view" name="outer1" style="padding: 1rem; background: #f5f5f5;">
-                <p>Outer Tab 1 content with nested tabs:</p>
-                <w-tabs value="inner1">
-                    <div slot="tabs" style="display: flex; gap: 0.5rem; margin: 1rem 0;">
-                        <button slot="tab" name="inner1" style="padding: 0.25rem 0.5rem;">Inner A</button>
-                        <button slot="tab" name="inner2" style="padding: 0.25rem 0.5rem;">Inner B</button>
-                    </div>
-                    <div slot="views">
-                        <div slot="view" name="inner1" style="padding: 0.5rem; background: #e0e0e0;">
-                            Inner panel A
-                        </div>
-                        <div slot="view" name="inner2" style="padding: 0.5rem; background: #e0e0e0;">
-                            Inner panel B
-                        </div>
-                    </div>
-                </w-tabs>
+        <w-slot list>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <w-slot tab><button name="outer1" style="padding: 0.5rem 1rem;">Outer 1</button></w-slot>
+                <w-slot tab><button name="outer2" style="padding: 0.5rem 1rem;">Outer 2</button></w-slot>
             </div>
-            <div slot="view" name="outer2" style="padding: 1rem; background: #f5f5f5;">
-                Outer Tab 2 content
+        </w-slot>
+        <w-slot panels>
+            <div>
+                <w-slot panel><div name="outer1" style="padding: 1rem; background: #f5f5f5;">
+                    <p>Outer Tab 1 content with nested tabs:</p>
+                    <w-tabs value="inner1">
+                        <w-slot list>
+                            <div style="display: flex; gap: 0.5rem; margin: 1rem 0;">
+                                <w-slot tab><button name="inner1" style="padding: 0.25rem 0.5rem;">Inner A</button></w-slot>
+                                <w-slot tab><button name="inner2" style="padding: 0.25rem 0.5rem;">Inner B</button></w-slot>
+                            </div>
+                        </w-slot>
+                        <w-slot panels>
+                            <div>
+                                <w-slot panel><div name="inner1" style="padding: 0.5rem; background: #e0e0e0;">
+                                    Inner panel A
+                                </div></w-slot>
+                                <w-slot panel><div name="inner2" style="padding: 0.5rem; background: #e0e0e0;">
+                                    Inner panel B
+                                </div></w-slot>
+                            </div>
+                        </w-slot>
+                    </w-tabs>
+                </div></w-slot>
+                <w-slot panel><div name="outer2" style="padding: 1rem; background: #f5f5f5;">
+                    Outer Tab 2 content
+                </div></w-slot>
             </div>
-        </div>
+        </w-slot>
     </w-tabs>
 
     <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">

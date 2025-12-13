@@ -1,36 +1,54 @@
 <w-view class="view" path="/ContextMenu">
     <h2>Context Menu</h2>
     <w-context-menu>
-        <div slot="trigger"
-            style="border: 2px dashed #ccc; border-radius: 8px; padding: 3rem; text-align: center; background: #f9f9f9; cursor: context-menu;">
-            <p style="margin: 0; color: #666;">Right-click anywhere in this area</p>
-            <p style="margin: 0.5rem 0 0; font-size: 0.9rem; color: #666;">to open the context menu</p>
-        </div>
-        <div slot="content" hidden
-            style="background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); min-width: 180px; padding: 0.25rem 0;">
-            <button slot="item" name="cut"
-                style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                ✂️ Cut
-            </button>
-            <button slot="item" name="copy"
-                style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                📋 Copy
-            </button>
-            <button slot="item" name="paste"
-                style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                📄 Paste
-            </button>
-            <div slot="separator" style="height: 1px; background: #eee; margin: 0.25rem 0;"></div>
-            <button slot="item" name="select-all"
-                style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                ☑️ Select All
-            </button>
-            <div slot="separator" style="height: 1px; background: #eee; margin: 0.25rem 0;"></div>
-            <button slot="item" name="delete"
-                style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; color: #dc3545;">
-                🗑️ Delete
-            </button>
-        </div>
+        <w-slot trigger>
+            <div
+                style="border: 2px dashed #ccc; border-radius: 8px; padding: 3rem; text-align: center; background: #f9f9f9; cursor: context-menu;">
+                <p style="margin: 0; color: #666;">Right-click anywhere in this area</p>
+                <p style="margin: 0.5rem 0 0; font-size: 0.9rem; color: #666;">to open the context menu</p>
+            </div>
+        </w-slot>
+        <w-slot body>
+            <div hidden
+                style="background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); min-width: 180px; padding: 0.25rem 0;">
+                <w-slot item>
+                    <button name="cut"
+                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        ✂️ Cut
+                    </button>
+                </w-slot>
+                <w-slot item>
+                    <button name="copy"
+                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        📋 Copy
+                    </button>
+                </w-slot>
+                <w-slot item>
+                    <button name="paste"
+                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        📄 Paste
+                    </button>
+                </w-slot>
+                <w-slot sep>
+                    <div style="height: 1px; background: #eee; margin: 0.25rem 0;"></div>
+                </w-slot>
+                <w-slot item>
+                    <button name="select-all"
+                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
+                        ☑️ Select All
+                    </button>
+                </w-slot>
+                <w-slot sep>
+                    <div style="height: 1px; background: #eee; margin: 0.25rem 0;"></div>
+                </w-slot>
+                <w-slot item>
+                    <button name="delete"
+                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; color: #dc3545;">
+                        🗑️ Delete
+                    </button>
+                </w-slot>
+            </div>
+        </w-slot>
     </w-context-menu>
     <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
         Use Arrow keys to navigate. Enter/Space to select. Escape to close.

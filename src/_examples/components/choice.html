@@ -1,14 +1,101 @@
 <w-view class="view" path="/Choice">
-    <h2>Choice (Radio Group)</h2>
-    <w-choice mode="radio" value="option1" style="display: flex; flex-direction: column; gap: 0.5rem;">
-        <div slot="option" name="option1" style="padding: 0.5rem; border: 1px solid #ccc; cursor: pointer;">
-            Option 1
-        </div>
-        <div slot="option" name="option2" style="padding: 0.5rem; border: 1px solid #ccc; cursor: pointer;">
-            Option 2
-        </div>
-        <div slot="option" name="option3" style="padding: 0.5rem; border: 1px solid #ccc; cursor: pointer;">
-            Option 3
-        </div>
+    <h2>Choice</h2>
+
+    <h3>Radio Mode (Single Selection)</h3>
+    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+        Only one option can be selected at a time.
+    </p>
+    <w-choice mode="radio" value="option1" class="choice-group">
+        <w-slot opt>
+            <div name="option1" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Option 1</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="option2" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Option 2</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="option3" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Option 3</span>
+            </div>
+        </w-slot>
     </w-choice>
+
+    <h3 style="margin-top: 2rem;">Checkbox Mode (Multiple Selection)</h3>
+    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+        Multiple options can be selected. Value is comma-separated.
+    </p>
+    <w-choice mode="checkbox" value="feature1,feature3" class="choice-group">
+        <w-slot opt>
+            <div name="feature1" class="choice-option">
+                <span class="choice-indicator checkbox"></span>
+                <span>Feature 1</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="feature2" class="choice-option">
+                <span class="choice-indicator checkbox"></span>
+                <span>Feature 2</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="feature3" class="choice-option">
+                <span class="choice-indicator checkbox"></span>
+                <span>Feature 3</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="feature4" class="choice-option">
+                <span class="choice-indicator checkbox"></span>
+                <span>Feature 4</span>
+            </div>
+        </w-slot>
+    </w-choice>
+
+    <h3 style="margin-top: 2rem;">Horizontal Orientation</h3>
+    <w-choice mode="radio" value="small" orientation="horizontal" class="choice-group horizontal">
+        <w-slot opt>
+            <div name="small" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Small</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="medium" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Medium</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="large" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Large</span>
+            </div>
+        </w-slot>
+    </w-choice>
+
+    <h3 style="margin-top: 2rem;">Disabled State</h3>
+    <w-choice mode="radio" value="opt1" disabled class="choice-group">
+        <w-slot opt>
+            <div name="opt1" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Disabled Option 1</span>
+            </div>
+        </w-slot>
+        <w-slot opt>
+            <div name="opt2" class="choice-option">
+                <span class="choice-indicator"></span>
+                <span>Disabled Option 2</span>
+            </div>
+        </w-slot>
+    </w-choice>
+
+    <p style="margin-top: 2rem; color: #666; font-size: 0.9rem;">
+        Use Arrow keys to navigate between options. Space/Enter to select.
+    </p>
 </w-view>

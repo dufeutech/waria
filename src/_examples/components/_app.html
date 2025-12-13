@@ -1,33 +1,57 @@
-<w-nav class="router" label="Component navigation" orientation="vertical">
-  <a slot="item" class="router-button" href="/Accordion">Accordion</a>
-  <a slot="item" class="router-button" href="/AspectRatio">AspectRatio</a>
-  <a slot="item" class="router-button" href="/Avatar">Avatar</a>
-  <a slot="item" class="router-button" href="/Breadcrumb">Breadcrumb</a>
-  <a slot="item" class="router-button" href="/Carousel">Carousel</a>
-  <a slot="item" class="router-button" href="/Choice">Choice</a>
-  <a slot="item" class="router-button" href="/Collapsible">Collapsible</a>
-  <a slot="item" class="router-button" href="/ContextMenu">ContextMenu</a>
-  <a slot="item" class="router-button" href="/Dialog">Dialog</a>
-  <a slot="item" class="router-button" href="/Feed">Feed</a>
-  <a slot="item" class="router-button" href="/Grid">Grid</a>
-  <a slot="item" class="router-button" href="/HoverCard">HoverCard</a>
-  <a slot="item" class="router-button" href="/Label">Label</a>
-  <a slot="item" class="router-button" href="/Link">Link</a>
-  <a slot="item" class="router-button" href="/Menu">Menu</a>
-  <a slot="item" class="router-button" href="/Navigation">Navigation</a>
-  <a slot="item" class="router-button" href="/Popover">Popover</a>
-  <a slot="item" class="router-button" href="/ProgressBar">ProgressBar</a>
-  <a slot="item" class="router-button" href="/Range">Range</a>
-  <a slot="item" class="router-button" href="/Scrollbar">Scrollbar</a>
-  <a slot="item" class="router-button" href="/Select">Select</a>
-  <a slot="item" class="router-button" href="/Separator">Separator</a>
-  <a slot="item" class="router-button" href="/Spinbutton">Spinbutton</a>
-  <a slot="item" class="router-button" href="/Switch">Switch</a>
-  <a slot="item" class="router-button" href="/Tabs">Tabs</a>
-  <a slot="item" class="router-button" href="/Toast">Toast</a>
-  <a slot="item" class="router-button" href="/Toggles">Toggles</a>
-  <a slot="item" class="router-button" href="/Toolbar">Toolbar</a>
-  <a slot="item" class="router-button" href="/Tooltip">Tooltip</a>
-  <a slot="item" class="router-button" href="/Tree">Tree</a>
-  <a slot="item" class="router-button" href="/Treegrid">Treegrid</a>
-</w-nav>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Waria Components</div>
+    <div class="sidebar-search">
+      <input type="text" id="component-search" placeholder="Search components..." autocomplete="off" />
+    </div>
+  </div>
+  <w-nav class="router" label="Component navigation" orientation="vertical">
+    <w-slot item><a class="router-button" href="/Accordion">Accordion</a></w-slot>
+    <w-slot item><a class="router-button" href="/AspectRatio">AspectRatio</a></w-slot>
+    <w-slot item><a class="router-button" href="/Avatar">Avatar</a></w-slot>
+    <w-slot item><a class="router-button" href="/Breadcrumb">Breadcrumb</a></w-slot>
+    <w-slot item><a class="router-button" href="/Carousel">Carousel</a></w-slot>
+    <w-slot item><a class="router-button" href="/Choice">Choice</a></w-slot>
+    <w-slot item><a class="router-button" href="/Collapsible">Collapsible</a></w-slot>
+    <w-slot item><a class="router-button" href="/ContextMenu">ContextMenu</a></w-slot>
+    <w-slot item><a class="router-button" href="/Dialog">Dialog</a></w-slot>
+    <w-slot item><a class="router-button" href="/Feed">Feed</a></w-slot>
+    <w-slot item><a class="router-button" href="/Grid">Grid</a></w-slot>
+    <w-slot item><a class="router-button" href="/HoverCard">HoverCard</a></w-slot>
+    <w-slot item><a class="router-button" href="/Label">Label</a></w-slot>
+    <w-slot item><a class="router-button" href="/Link">Link</a></w-slot>
+    <w-slot item><a class="router-button" href="/Menu">Menu</a></w-slot>
+    <w-slot item><a class="router-button" href="/Navigation">Navigation</a></w-slot>
+    <w-slot item><a class="router-button" href="/Popover">Popover</a></w-slot>
+    <w-slot item><a class="router-button" href="/ProgressBar">ProgressBar</a></w-slot>
+    <w-slot item><a class="router-button" href="/Range">Range</a></w-slot>
+    <w-slot item><a class="router-button" href="/Scrollbar">Scrollbar</a></w-slot>
+    <w-slot item><a class="router-button" href="/Select">Select</a></w-slot>
+    <w-slot item><a class="router-button" href="/Separator">Separator</a></w-slot>
+    <w-slot item><a class="router-button" href="/Spinbutton">Spinbutton</a></w-slot>
+    <w-slot item><a class="router-button" href="/Switch">Switch</a></w-slot>
+    <w-slot item><a class="router-button" href="/Tabs">Tabs</a></w-slot>
+    <w-slot item><a class="router-button" href="/Toast">Toast</a></w-slot>
+    <w-slot item><a class="router-button" href="/Toggles">Toggles</a></w-slot>
+    <w-slot item><a class="router-button" href="/Toolbar">Toolbar</a></w-slot>
+    <w-slot item><a class="router-button" href="/Tooltip">Tooltip</a></w-slot>
+    <w-slot item><a class="router-button" href="/Tree">Tree</a></w-slot>
+    <w-slot item><a class="router-button" href="/Treegrid">Treegrid</a></w-slot>
+  </w-nav>
+</div>
+<script>
+  // Component search functionality
+  document.getElementById('component-search').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.router w-slot[item]');
+
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      if (query === '' || text.includes(query)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+</script>

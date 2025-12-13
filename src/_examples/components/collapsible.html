@@ -1,11 +1,15 @@
 <w-view class="view" path="/Collapsible">
     <h2>Collapsible</h2>
     <w-collapsible>
-        <button slot="trigger" style="padding: 0.5rem 1rem; cursor: pointer;">
-            Click to expand
-        </button>
-        <div slot="content" style="padding: 1rem; background: #f5f5f5; margin-top: 0.5rem;">
-            <p>This is the collapsible content. It can contain any HTML.</p>
-        </div>
+        <w-slot trigger>
+            <button style="padding: 0.5rem 1rem; cursor: pointer;">
+                Click to expand
+            </button>
+        </w-slot>
+        <w-slot body>
+            <div style="padding: 1rem; background: #f5f5f5; margin-top: 0.5rem;">
+                <p>This is the collapsible content. It can contain any HTML.</p>
+            </div>
+        </w-slot>
     </w-collapsible>
 </w-view>
