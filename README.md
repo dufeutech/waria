@@ -59,10 +59,18 @@ App.start({
 
 ```html
 <w-tabs value="tab1">
-  <button slot="tab" name="tab1">Tab 1</button>
-  <button slot="tab" name="tab2">Tab 2</button>
-  <div slot="panel" name="tab1">Content 1</div>
-  <div slot="panel" name="tab2">Content 2</div>
+  <w-slot list>
+    <div>
+      <w-slot tab name="tab1"><button>Tab 1</button></w-slot>
+      <w-slot tab name="tab2"><button>Tab 2</button></w-slot>
+    </div>
+  </w-slot>
+  <w-slot panels>
+    <div>
+      <w-slot panel name="tab1"><div>Content 1</div></w-slot>
+      <w-slot panel name="tab2"><div>Content 2</div></w-slot>
+    </div>
+  </w-slot>
 </w-tabs>
 ```
 
@@ -71,47 +79,24 @@ App.start({
 **slots:**
 
 - **`trigger`**
-- **`content`**
+- **`body`**
 - **`close`**
 
 ```html
 <w-dialog id="dialog_one">
-  <button slot="trigger" style="cursor: pointer">Open Dialog</button>
-  <div
-    slot="content"
-    label="Example Dialog"
-    style="
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-      "
-  >
-    <h3>Dialog Title</h3>
-    <p>
-      This is a modal dialog. Press Escape or click the close button to close
-      it.
-    </p>
-    <button slot="close" style="padding: 0.5rem 1rem; cursor: pointer">
-      Close
-    </button>
-  </div>
+  <w-slot trigger><button>Open Dialog</button></w-slot>
+  <w-slot body>
+    <div>
+      <h3>Dialog Title</h3>
+      <p>This is a modal dialog. Press Escape or click the close button to close it.</p>
+      <w-slot close><button>Close</button></w-slot>
+    </div>
+  </w-slot>
 </w-dialog>
 <script>
-  // Close Dialog: `dialog_one` every 2 seconds.
   const dialog = document.getElementById("dialog_one");
-  setInterval(() => {
-    dialog.close();
-  }, 2000);
-  // Listen to Open
-  document.getElementById("dialog_one").addEventListener("open", () => {
-    console.log("opened");
-  });
+  dialog.addEventListener("open", () => console.log("opened"));
+  dialog.addEventListener("close", () => console.log("closed"));
 </script>
 ```
 
