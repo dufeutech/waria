@@ -1,0 +1,90 @@
+---
+sidebar_position: 4
+title: Routing
+---
+
+# Routing
+
+Waria includes a lightweight client-side router for SPAs.
+
+## Setup
+
+```ts
+import { App } from "waria";
+
+App.start({ hash: true });
+```
+
+## Navigation + Views
+
+```html
+<w-nav label="Main navigation">
+  <w-slot item><a href="/home">Home</a></w-slot>
+  <w-slot item><a href="/about">About</a></w-slot>
+</w-nav>
+
+<w-view path="/home">
+  <h1>Home</h1>
+</w-view>
+
+<w-view path="/about">
+  <h1>About</h1>
+</w-view>
+```
+
+`w-nav` handles link clicks. `w-view` shows/hides based on the URL.
+
+## Routing Modes
+
+### Hash Mode (default for SPAs)
+
+```ts
+App.start({ hash: true });
+// URLs: example.com/#/about
+```
+
+Works with static hosting (GitHub Pages, Netlify, etc.)
+
+### Pathname Mode
+
+```ts
+App.start({ hash: false, base: "/app" });
+// URLs: example.com/app/about
+```
+
+Requires server-side URL rewriting.
+
+### Native Mode (server routing)
+
+```ts
+App.start({ native: true });
+```
+
+Links trigger full page loads. Use with Rails, Django, Laravel, etc.
+
+## Route Guards
+
+```ts
+App.start({
+  hash: true,
+  before: (from, to, { next, redirect }) => {
+    if (to.path === "/admin" && !isLoggedIn) {
+      redirect("/login");
+      return;
+    }
+    next();
+  },
+  after: (from, to) => {
+    console.log("Navigated to", to.path);
+  }
+});
+```
+
+## Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `hash` | `boolean` | `false` | Use `#/path` URLs |
+| `base` | `string` | `"/"` | Base path prefix |
+| `sync` | `boolean` | `true` | Sync across all `w-nav` components |
+| `native` | `boolean` | `false` | Full page navigation |

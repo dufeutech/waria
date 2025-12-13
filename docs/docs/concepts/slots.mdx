@@ -1,0 +1,81 @@
+---
+sidebar_position: 1
+title: Slots
+---
+
+# Slots
+
+Waria uses **slot-based composition** — you provide the markup, the component provides the behavior.
+
+## How Slots Work
+
+Wrap your content with `<w-slot name="...">`:
+
+```html
+<w-dialog>
+  <w-slot trigger><button>Open</button></w-slot>
+  <w-slot body>
+    <div>Your content here</div>
+  </w-slot>
+</w-dialog>
+```
+
+The component:
+- Finds elements by slot name
+- Adds ARIA attributes automatically
+- Handles keyboard/mouse interactions
+- Leaves your markup and styles untouched
+
+## Common Slots
+
+| Slot | Used In | Purpose |
+|------|---------|---------|
+| `trigger` | Dialog, Menu, Popover, Tooltip | Opens/activates the component |
+| `body` / `content` | Dialog, Popover, Menu | Main content area |
+| `item` | Accordion, Tabs, Menu, Nav | Repeated items |
+| `close` | Dialog, Popover | Close button |
+
+## Named Items
+
+Some slots need a `name` attribute to identify them:
+
+```html
+<w-tabs value="one">
+  <w-slot tab name="one"><button>First</button></w-slot>
+  <w-slot tab name="two"><button>Second</button></w-slot>
+  <w-slot panel name="one"><div>Content 1</div></w-slot>
+  <w-slot panel name="two"><div>Content 2</div></w-slot>
+</w-tabs>
+```
+
+The `name` attribute links tabs to their panels.
+
+## Nested Slots
+
+Slots can be nested for complex components:
+
+```html
+<w-accordion>
+  <w-slot item name="faq1">
+    <w-slot trigger><button>Question 1</button></w-slot>
+    <w-slot body><div>Answer 1</div></w-slot>
+  </w-slot>
+</w-accordion>
+```
+
+## Bring Your Own Styles
+
+Slots are unstyled. Use any CSS approach:
+
+```html
+<w-dialog>
+  <w-slot trigger>
+    <button class="btn btn-primary">Open</button>
+  </w-slot>
+  <w-slot body>
+    <div class="modal-content">
+      <!-- Tailwind, CSS Modules, plain CSS — anything works -->
+    </div>
+  </w-slot>
+</w-dialog>
+```

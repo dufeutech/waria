@@ -3,6 +3,6 @@
   "position": 5,
   "link": {
     "type": "generated-index",
-    "description": "Floating and modal components that appear above the page."
+    "description": "Dialogs, menus, popovers, and tooltips."
   }
 }

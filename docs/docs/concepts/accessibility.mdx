@@ -1,0 +1,87 @@
+---
+sidebar_position: 3
+title: Accessibility
+---
+
+# Accessibility
+
+Every Waria component is WCAG 2.1 AA compliant out of the box.
+
+## What You Get Automatically
+
+| Feature | Description |
+|---------|-------------|
+| **ARIA attributes** | `role`, `aria-expanded`, `aria-controls`, etc. |
+| **Keyboard navigation** | Arrow keys, Tab, Enter, Space, Escape |
+| **Focus management** | Focus trapping, focus restoration |
+| **Screen reader support** | Live regions, announcements |
+
+## Keyboard Shortcuts
+
+Standard keyboard patterns across all components:
+
+| Key | Action |
+|-----|--------|
+| `Tab` | Move between focusable elements |
+| `Arrow Keys` | Navigate within a component |
+| `Enter` / `Space` | Activate buttons, select items |
+| `Escape` | Close overlays, cancel |
+| `Home` / `End` | Jump to first/last item |
+
+## Example: Dialog Accessibility
+
+```html
+<w-dialog label="Confirm deletion">
+  <w-slot trigger><button>Delete</button></w-slot>
+  <w-slot body>
+    <div>Are you sure?</div>
+  </w-slot>
+</w-dialog>
+```
+
+Waria automatically adds:
+- `role="dialog"` to the content
+- `aria-modal="true"` when modal
+- `aria-label` from the `label` prop
+- `aria-labelledby` if using a heading
+- Focus trap inside the dialog
+- Escape key handler
+- Focus restoration on close
+
+## Labels
+
+Always provide accessible labels:
+
+```html
+<!-- Using label prop -->
+<w-dialog label="Settings">...</w-dialog>
+
+<!-- Using aria-label -->
+<w-nav aria-label="Main navigation">...</w-nav>
+
+<!-- Using visible text (automatically detected) -->
+<w-accordion>
+  <w-slot item name="faq">
+    <w-slot trigger><button>FAQ</button></w-slot>
+    <!-- "FAQ" becomes the accessible name -->
+  </w-slot>
+</w-accordion>
+```
+
+## Testing Accessibility
+
+Recommended tools:
+
+| Tool | Purpose |
+|------|---------|
+| [axe DevTools](https://www.deque.com/axe/) | Browser extension for a11y audits |
+| [WAVE](https://wave.webaim.org/) | Visual accessibility checker |
+| VoiceOver / NVDA | Screen reader testing |
+| Keyboard-only | Test without a mouse |
+
+## Standards
+
+Waria follows:
+- [WAI-ARIA 1.2](https://www.w3.org/TR/wai-aria-1.2/)
+- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [WCAG 2.1 Level AA](https://www.w3.org/WAI/WCAG21/quickref/)

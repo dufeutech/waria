@@ -1,0 +1,105 @@
+---
+sidebar_position: 2
+title: Events
+---
+
+# Events
+
+Waria components emit custom DOM events you can listen to.
+
+## Inline Handlers
+
+Use `w-*` attributes for quick inline handlers:
+
+```html
+<w-dialog w-open="console.log('opened')" w-close="console.log('closed')">
+  ...
+</w-dialog>
+
+<w-menu w-select="handleSelect(event.detail)">
+  ...
+</w-menu>
+```
+
+The `event` object is available in the handler:
+
+| Property | Description |
+|----------|-------------|
+| `event.type` | Event name (`"open"`, `"close"`, `"select"`) |
+| `event.detail` | Event data (varies by component) |
+| `event.target` | The component element |
+
+## addEventListener
+
+Standard DOM event listeners work:
+
+```js
+const dialog = document.querySelector('w-dialog');
+
+dialog.addEventListener('open', () => {
+  console.log('Dialog opened');
+});
+
+dialog.addEventListener('close', () => {
+  console.log('Dialog closed');
+});
+```
+
+## Common Events
+
+| Event | Components | Detail |
+|-------|------------|--------|
+| `open` | Dialog, Menu, Popover | — |
+| `close` | Dialog, Menu, Popover | — |
+| `change` | Accordion, Tabs, Select, Switch | `{ value }` |
+| `select` | Menu, Select | `{ value, name }` |
+
+## Event Detail Example
+
+```html
+<w-accordion w-change="handleChange(event.detail)">
+  ...
+</w-accordion>
+
+<script>
+function handleChange(detail) {
+  console.log(detail.value);     // "item1"
+  console.log(detail.expanded);  // ["item1", "item2"]
+  console.log(detail.toggled);   // "item1"
+  console.log(detail.isExpanded); // true
+}
+</script>
+```
+
+## Framework Integration
+
+### React
+
+```jsx
+function MyComponent() {
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const el = dialogRef.current;
+    const onOpen = () => console.log('opened');
+    el.addEventListener('open', onOpen);
+    return () => el.removeEventListener('open', onOpen);
+  }, []);
+
+  return <w-dialog ref={dialogRef}>...</w-dialog>;
+}
+```
+
+### Vue
+
+```vue
+<template>
+  <w-dialog @open="onOpen" @close="onClose">...</w-dialog>
+</template>
+```
+
+### Svelte
+
+```svelte
+<w-dialog on:open={onOpen} on:close={onClose}>...</w-dialog>
+```

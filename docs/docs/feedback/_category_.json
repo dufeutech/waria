@@ -3,6 +3,6 @@
   "position": 7,
   "link": {
     "type": "generated-index",
-    "description": "Components for displaying status and progress."
+    "description": "Progress indicators and live feeds."
   }
 }

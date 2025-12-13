@@ -1,121 +1,70 @@
 ---
 sidebar_position: 1
+title: Getting Started
 ---
 
-# Getting Started
+Get Waria running in under 2 minutes.
 
-WC-Aria is a framework-agnostic, accessible web components library built with performance and WCAG 2.1 AA compliance in mind.
-
-## Installation
+## Install
 
 ```bash
 npm install waria
 ```
 
-## Quick Start
+## Initialize
 
 ```ts
 import { App } from "waria";
 
-// Configure and initialize
-App.start({ hash: true });
+App.start();
 ```
 
-All components are now registered and ready to use.
+Done. All 29 components are now registered and ready to use.
 
-## Basic Usage
-
-```html
-<!-- Navigation with URL sync -->
-<w-nav label="Main navigation">
-  <w-slot item><a href="/home">Home</a></w-slot>
-  <w-slot item><a href="/about">About</a></w-slot>
-</w-nav>
-
-<!-- View routing -->
-<w-view path="/home">
-  <h1>Home Page</h1>
-</w-view>
-
-<w-view path="/about">
-  <h1>About Page</h1>
-</w-view>
-```
-
-## Slot-Based Composition
-
-All components use the `slot` attribute for composition:
+## Your First Component
 
 ```html
 <w-dialog>
-  <w-slot trigger><button>Open Dialog</button></w-slot>
+  <w-slot trigger><button>Open</button></w-slot>
   <w-slot body>
     <div>
-      <h2>Dialog Title</h2>
-      <p>Dialog content goes here.</p>
+      <h2>Hello Waria!</h2>
+      <p>Focus trapping, escape-to-close, and ARIA — all automatic.</p>
       <w-slot close><button>Close</button></w-slot>
     </div>
   </w-slot>
 </w-dialog>
 ```
 
-Common slots used across components:
+That's it. The dialog handles:
+- Focus trapping inside the modal
+- Escape key to close
+- Click outside to close
+- ARIA attributes (`role="dialog"`, `aria-modal`)
+- Return focus to trigger on close
 
-| Slot      | Purpose                                   |
-| --------- | ----------------------------------------- |
-| `trigger` | Element that activates the component      |
-| `content` | Main content area                         |
-| `item`    | Repeated items (menus, lists, navigation) |
-| `close`   | Close button                              |
-| `label`   | Label text                                |
+## CDN Usage
 
-## Event Handlers
-
-Components emit custom events that you can listen to. Use the `w-*` attribute syntax for inline handlers:
+No build tools? Use the IIFE bundle:
 
 ```html
-<w-dialog w-open="console.log('opened')" w-close="console.log('closed')">
-  <w-slot trigger><button>Open</button></w-slot>
-  <w-slot body><div>...</div></w-slot>
-</w-dialog>
-
-<w-menu w-select="handleSelect(event.detail)">
-  <w-slot trigger><button>Menu</button></w-slot>
-  <w-slot body>
-    <div>
-      <w-slot item name="edit"><button>Edit</button></w-slot>
-    </div>
-  </w-slot>
-</w-menu>
+<script src="https://unpkg.com/@dufeut/waria/dist/waria.iife.js"></script>
+<script>
+  waria.App.start();
+</script>
 ```
-
-The `event` object is available in the handler with:
-
-- `event.type` - Event name (e.g., "open", "close")
-- `event.detail` - Event data (varies by component)
-- `event.target` - The component element
-
-You can also use `addEventListener`:
-
-```js
-document.querySelector('w-dialog').addEventListener('open', (e) => {
-  console.log('Dialog opened');
-});
-```
-
-## Keyboard Navigation
-
-All components support full keyboard navigation:
-
-- **Tab** - Move between focusable elements
-- **Arrow Keys** - Navigate within components
-- **Enter/Space** - Activate buttons and selections
-- **Escape** - Close overlays and cancel operations
-- **Home/End** - Jump to first/last items
 
 ## Browser Support
 
-- Chrome 67+
-- Firefox 63+
-- Safari 10.1+
-- Edge 79+
+| Browser | Version |
+|---------|---------|
+| Chrome | 67+ |
+| Firefox | 63+ |
+| Safari | 10.1+ |
+| Edge | 79+ |
+
+## Next Steps
+
+- [Slots](./concepts/slots) — How composition works
+- [Events](./concepts/events) — Handling component events
+- [Cheat Sheet](./cheat-sheet) — All components at a glance
