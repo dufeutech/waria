@@ -377,7 +377,7 @@ export function defineComponent<T extends HTMLElement = HTMLElement & WComponent
  *
  * @example
  * ```ts
- * import { Router, init } from 'waria';
+ * import { Router, init } from '@dufeut/waria';
  *
  * // Configure before init
  * Router.config({ hash: true });
