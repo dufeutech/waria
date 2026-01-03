@@ -1,16 +1,16 @@
 {
-  "name": "@dufeut/waria",
+  "name": "@dufeutech/waria",
   "version": "0.1.2",
   "type": "module",
   "description": "Accessible Web Components Library - Framework-agnostic, performant, WCAG 2.1 AA compliant UI primitives",
-  "author": "dufeut",
+  "author": "dufeutech",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dufeut/waria.git"
+    "url": "git+https://github.com/dufeutech/waria.git"
   },
-  "homepage": "https://github.com/dufeut/waria#readme",
+  "homepage": "https://github.com/dufeutech/waria#readme",
   "bugs": {
-    "url": "https://github.com/dufeut/waria/issues"
+    "url": "https://github.com/dufeutech/waria/issues"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

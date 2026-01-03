@@ -2,17 +2,17 @@
 
 <div align="center">
 
-  <img height="140px" src="https://raw.githubusercontent.com/dufeut/waria/main/docs/static/img/logo.png" alt="logo"/>
+  <img height="140px" src="https://raw.githubusercontent.com/dufeutech/waria/main/docs/static/img/logo.png" alt="logo"/>
 
 **Framework-agnostic UI primitives via native Web Components (ESM).**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![ESM](https://img.shields.io/badge/ESM-Native-green.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
 [![License](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE)
-[![npm](https://img.shields.io/npm/v/@dufeut/waria)](https://www.npmjs.com/package/@dufeut/waria)
+[![npm](https://img.shields.io/npm/v/@dufeutech/waria)](https://www.npmjs.com/package/@dufeutech/waria)
 
-[Documentation](https://dufeut.github.io/waria/) |
-[GitHub](https://github.com/dufeut/waria)
+[Documentation](https://dufeutech.github.io/waria/) |
+[GitHub](https://github.com/dufeutech/waria)
 
 </div>
 
@@ -31,7 +31,7 @@
 ## Installation
 
 ```bash
-npm install @dufeut/waria
+npm install @dufeutech/waria
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ npm install @dufeut/waria
 ### ES Modules
 
 ```ts
-import { App } from "@dufeut/waria";
+import { App } from "@dufeutech/waria";
 
 App.start({
   hash: true, // Use hash-based routing
@@ -49,7 +49,7 @@ App.start({
 ### IIFE (Script Tag)
 
 ```html
-<script src="https://unpkg.com/@dufeut/waria/dist/waria.iife.js"></script>
+<script src="https://unpkg.com/@dufeutech/waria/dist/waria.iife.js"></script>
 <script>
   waria.App.start({ hash: true });
 </script>

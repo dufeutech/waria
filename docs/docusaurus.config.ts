@@ -15,13 +15,13 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: "https://dufeut.github.io",
+  url: "https://dufeutech.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/waria/",
 
   // GitHub pages deployment config.
-  organizationName: "dufeut",
+  organizationName: "dufeutech",
   projectName: "waria",
 
   onBrokenLinks: "throw",
@@ -76,7 +76,7 @@ const config: Config = {
       },
       items: [
         {
-          href: "https://github.com/dufeut/waria",
+          href: "https://github.com/dufeutech/waria",
           label: "GitHub",
           position: "right",
         },
