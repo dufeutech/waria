@@ -2,18 +2,18 @@
  * Component Factory - defineComponent implementation
  */
 
-import { scheduler } from '../core/scheduler';
-import { createEventScope, type EventScope } from '../core/events';
-import type { Transition } from '../core/transitions';
-import type { State } from '../core/state';
-import { createContext, invalidateChildCache } from './context';
+import { scheduler } from "../core/scheduler";
+import { createEventScope, type EventScope } from "../core/events";
+import type { Transition } from "../core/transitions";
+import type { State } from "../core/state";
+import { createContext, invalidateChildCache } from "./context";
 import type {
   ComponentSchema,
   PropType,
   CleanupFn,
   ComponentContext,
   WComponent,
-} from './types';
+} from "./types";
 
 // Queue of pending component schemas (for lazy initialization)
 const pendingComponents: ComponentSchema<HTMLElement & WComponent>[] = [];
@@ -27,7 +27,7 @@ let initialized = false;
 function parseAttribute(
   value: string | null,
   type: PropType,
-  defaultValue?: unknown
+  defaultValue?: unknown,
 ): unknown {
   if (value === null) {
     return defaultValue;
@@ -39,7 +39,7 @@ function parseAttribute(
     case Number:
       return Number(value);
     case Boolean:
-      return value !== null && value !== 'false';
+      return value !== null && value !== "false";
     case Array:
     case Object:
       try {
@@ -62,7 +62,7 @@ function toAttributeValue(value: unknown, type: PropType): string | null {
 
   switch (type) {
     case Boolean:
-      return value ? '' : null;
+      return value ? "" : null;
     case Array:
     case Object:
       return JSON.stringify(value);
@@ -78,7 +78,7 @@ function updateAttribute(
   element: HTMLElement,
   name: string,
   value: unknown,
-  type: PropType
+  type: PropType,
 ): void {
   const attrValue = toAttributeValue(value, type);
 
@@ -93,14 +93,14 @@ function updateAttribute(
  * Convert camelCase to kebab-case
  */
 function toKebabCase(str: string): string {
-  return str.replace(/([A-Z])/g, '-$1').toLowerCase();
+  return str.replace(/([A-Z])/g, "-$1").toLowerCase();
 }
 
 /**
  * Actually register a component with the browser's custom elements registry
  */
 function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
-  schema: ComponentSchema<T>
+  schema: ComponentSchema<T>,
 ): void {
   const {
     tag,
@@ -115,7 +115,7 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
   } = schema;
 
   // Validate tag name
-  if (!tag.includes('-')) {
+  if (!tag.includes("-")) {
     throw new Error(`Component tag must include a hyphen: ${tag}`);
   }
 
@@ -159,10 +159,12 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
         const configArray = Array.isArray(configs) ? configs : [configs];
         for (const config of configArray) {
           this.#eventScope.on(eventType, {
-            selector: config.selector ?? '*',
+            selector: config.selector ?? "*",
             handler: (e, target) => {
-              const method = (this as unknown as Record<string, unknown>)[config.handler];
-              if (typeof method === 'function') {
+              const method = (this as unknown as Record<string, unknown>)[
+                config.handler
+              ];
+              if (typeof method === "function") {
                 method.call(this, e, target);
               }
             },
@@ -178,9 +180,10 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
 
       // Setup viewport listeners (RAF-throttled)
       if (viewport) {
-        const config = typeof viewport === 'boolean'
-          ? { scroll: true, resize: true, handler: 'onViewportChange' }
-          : viewport;
+        const config =
+          typeof viewport === "boolean"
+            ? { scroll: true, resize: true, handler: "onViewportChange" }
+            : viewport;
 
         let rafId: number | null = null;
 
@@ -188,8 +191,10 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
           if (rafId !== null) return;
           rafId = requestAnimationFrame(() => {
             rafId = null;
-            const method = (this as unknown as Record<string, unknown>)[config.handler];
-            if (typeof method === 'function') {
+            const method = (this as unknown as Record<string, unknown>)[
+              config.handler
+            ];
+            if (typeof method === "function") {
               scheduler.read(() => {
                 (method as () => void).call(this);
               });
@@ -198,25 +203,28 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
         };
 
         if (config.scroll) {
-          window.addEventListener('scroll', handler, { passive: true, capture: true });
+          window.addEventListener("scroll", handler, {
+            passive: true,
+            capture: true,
+          });
           this.#cleanupFns.push(() => {
             if (rafId !== null) cancelAnimationFrame(rafId);
-            window.removeEventListener('scroll', handler, { capture: true });
+            window.removeEventListener("scroll", handler, { capture: true });
           });
         }
 
         if (config.resize) {
-          window.addEventListener('resize', handler, { passive: true });
+          window.addEventListener("resize", handler, { passive: true });
           this.#cleanupFns.push(() => {
             if (rafId !== null) cancelAnimationFrame(rafId);
-            window.removeEventListener('resize', handler);
+            window.removeEventListener("resize", handler);
           });
         }
       }
 
       // Setup ARIA
       if (aria?.role) {
-        this.setAttribute('role', aria.role);
+        this.setAttribute("role", aria.role);
       }
 
       // Create context and call setup
@@ -233,7 +241,7 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
         });
 
         const cleanup = setup.call(this, this.#context as ComponentContext<T>);
-        if (typeof cleanup === 'function') {
+        if (typeof cleanup === "function") {
           this.#setupCleanup = cleanup;
         }
       }
@@ -282,13 +290,13 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
     attributeChangedCallback(
       name: string,
       oldValue: string | null,
-      newValue: string | null
+      newValue: string | null,
     ): void {
       if (oldValue === newValue) return;
 
       // Find the corresponding prop
       const prop = props.find(
-        (p) => (p.attribute ?? toKebabCase(p.name)) === name
+        (p) => (p.attribute ?? toKebabCase(p.name)) === name,
       );
 
       if (prop) {
@@ -296,7 +304,7 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
         const propName = prop.name;
         const descriptor = Object.getOwnPropertyDescriptor(
           Component.prototype,
-          propName
+          propName,
         );
 
         if (descriptor?.set) {
@@ -357,15 +365,17 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
  *
  * If already initialized, the component is registered immediately.
  */
-export function defineComponent<T extends HTMLElement = HTMLElement & WComponent>(
-  schema: ComponentSchema<T>
-): void {
+export function defineComponent<
+  T extends HTMLElement = HTMLElement & WComponent,
+>(schema: ComponentSchema<T>): void {
   if (initialized) {
     // Already initialized - register immediately
     registerComponent(schema);
   } else {
     // Queue for later registration
-    pendingComponents.push(schema as unknown as ComponentSchema<HTMLElement & WComponent>);
+    pendingComponents.push(
+      schema as unknown as ComponentSchema<HTMLElement & WComponent>,
+    );
   }
 }
 
@@ -377,7 +387,7 @@ export function defineComponent<T extends HTMLElement = HTMLElement & WComponent
  *
  * @example
  * ```ts
- * import { Router, init } from '@dufeutech/waria';
+ * import { Router, init } from '@dufeut/waria';
  *
  * // Configure before init
  * Router.config({ hash: true });

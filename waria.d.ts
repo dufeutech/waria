@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import type { App } from "@dufeutech/waria";
+import type { App } from "@dufeut/waria";
 
 // Declare waria as a global variable
 declare global {

@@ -10,7 +10,7 @@ Waria includes a lightweight client-side router for SPAs.
 ## Setup
 
 ```ts
-import { App } from "@dufeutech/waria";
+import { App } from "@dufeut/waria";
 
 App.start({ hash: true });
 ```
@@ -76,15 +76,15 @@ App.start({
   },
   after: (from, to) => {
     console.log("Navigated to", to.path);
-  }
+  },
 });
 ```
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `hash` | `boolean` | `false` | Use `#/path` URLs |
-| `base` | `string` | `"/"` | Base path prefix |
-| `sync` | `boolean` | `true` | Sync across all `w-nav` components |
-| `native` | `boolean` | `false` | Full page navigation |
+| Option   | Type      | Default | Description                        |
+| -------- | --------- | ------- | ---------------------------------- |
+| `hash`   | `boolean` | `false` | Use `#/path` URLs                  |
+| `base`   | `string`  | `"/"`   | Base path prefix                   |
+| `sync`   | `boolean` | `true`  | Sync across all `w-nav` components |
+| `native` | `boolean` | `false` | Full page navigation               |

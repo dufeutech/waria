@@ -1,5 +1,5 @@
 {
-  "name": "@dufeutech/waria",
+  "name": "@dufeut/waria",
   "version": "0.1.2",
   "type": "module",
   "description": "Accessible Web Components Library - Framework-agnostic, performant, WCAG 2.1 AA compliant UI primitives",

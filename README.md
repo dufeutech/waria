@@ -2,14 +2,14 @@
 
 <div align="center">
 
-  <img height="140px" src="https://raw.githubusercontent.com/dufeutech/waria/main/docs/static/img/logo.png" alt="logo"/>
+  <img height="140px" src="https://raw.githubusercontent.com/dufeut/waria/main/docs/static/img/logo.png" alt="logo"/>
 
 **Framework-agnostic UI primitives via native Web Components (ESM).**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![ESM](https://img.shields.io/badge/ESM-Native-green.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
 [![License](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE)
-[![npm](https://img.shields.io/npm/v/@dufeutech/waria)](https://www.npmjs.com/package/@dufeutech/waria)
+[![npm](https://img.shields.io/npm/v/@dufeut/waria)](https://www.npmjs.com/package/@dufeut/waria)
 
 [Documentation](https://dufeutech.github.io/waria/) |
 [GitHub](https://github.com/dufeutech/waria)
@@ -31,7 +31,7 @@
 ## Installation
 
 ```bash
-npm install @dufeutech/waria
+npm install @dufeut/waria
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ npm install @dufeutech/waria
 ### ES Modules
 
 ```ts
-import { App } from "@dufeutech/waria";
+import { App } from "@dufeut/waria";
 
 App.start({
   hash: true, // Use hash-based routing
@@ -49,7 +49,7 @@ App.start({
 ### IIFE (Script Tag)
 
 ```html
-<script src="https://unpkg.com/@dufeutech/waria/dist/waria.iife.js"></script>
+<script src="https://unpkg.com/@dufeut/waria/dist/waria.iife.js"></script>
 <script>
   waria.App.start({ hash: true });
 </script>
@@ -88,7 +88,10 @@ App.start({
   <w-slot body>
     <div>
       <h3>Dialog Title</h3>
-      <p>This is a modal dialog. Press Escape or click the close button to close it.</p>
+      <p>
+        This is a modal dialog. Press Escape or click the close button to close
+        it.
+      </p>
       <w-slot close><button>Close</button></w-slot>
     </div>
   </w-slot>
@@ -109,15 +112,13 @@ Use `w-*` attributes for inline event handling:
   ...
 </w-dialog>
 
-<w-menu w-select="handleSelect(event.detail)">
-  ...
-</w-menu>
+<w-menu w-select="handleSelect(event.detail)"> ... </w-menu>
 ```
 
 Or use `addEventListener`:
 
 ```js
-dialog.addEventListener('open', (e) => console.log('opened'));
+dialog.addEventListener("open", (e) => console.log("opened"));
 ```
 
 ## Components
