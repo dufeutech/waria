@@ -170,7 +170,16 @@ defineComponent({
       }
 
       if (display) {
-        display.textContent = String(el.value);
+        // The display slot may wrap a non-editable element (e.g. <span>) or an
+        // <input readonly>. Inputs ignore textContent, so write to .value.
+        if (
+          display instanceof HTMLInputElement ||
+          display instanceof HTMLTextAreaElement
+        ) {
+          display.value = String(el.value);
+        } else {
+          display.textContent = String(el.value);
+        }
       }
     };
 
@@ -249,20 +258,12 @@ defineComponent({
         if (el.disabled) return;
         e.preventDefault();
         increment();
-        // Keep focus on the spinbutton control
-        const input = getInput();
-        const display = getDisplay();
-        (input || display)?.focus();
       },
 
       handleDecrement(e: Event): void {
         if (el.disabled) return;
         e.preventDefault();
         decrement();
-        // Keep focus on the spinbutton control
-        const input = getInput();
-        const display = getDisplay();
-        (input || display)?.focus();
       },
 
       handleInput(e: Event): void {

@@ -1,18 +1,36 @@
 import { defineComponent } from "../factory";
-import { SLOT } from "../constants";
 
 interface AspectRatioElement extends HTMLElement {
   ratio: string;
+}
+
+// Default layout: container becomes a relatively-positioned block with the
+// requested aspect-ratio; any direct child (or `<w-slot body>` content)
+// absolutely fills it. `:where()` keeps specificity at 0 so users can override.
+const STYLE_ID = "w-aspect-ratio-defaults";
+if (typeof document !== "undefined" && !document.getElementById(STYLE_ID)) {
+  const style = document.createElement("style");
+  style.id = STYLE_ID;
+  style.textContent = `
+:where(w-aspect-ratio) {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+:where(w-aspect-ratio) > :where(:not(w-slot)),
+:where(w-aspect-ratio) > :where(w-slot[body]) > * {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
+`;
+  document.head.appendChild(style);
 }
 
 defineComponent({
   tag: "w-aspect-ratio",
 
   props: [{ name: "ratio", type: String, default: "1/1" }],
-
-  children: {
-    content: SLOT.body,
-  },
 
   aria: {
     role: "none",
@@ -30,50 +48,20 @@ defineComponent({
           return width / height;
         }
       }
-      // Try parsing as decimal
       const decimal = parseFloat(ratioStr);
-      if (!isNaN(decimal)) {
-        return decimal;
-      }
-      return 1;
+      return !isNaN(decimal) ? decimal : 1;
     };
 
-    const updateStyles = (): void => {
-      const content = ctx.query<HTMLElement>(SLOT.body);
-      const ratio = parseRatio(el.ratio);
-
-      // Apply styles to container using CSS aspect-ratio if supported
-      // with padding-bottom fallback
-      el.style.position = "relative";
-      el.style.width = "100%";
-
-      // Modern browsers support CSS aspect-ratio
-      if (CSS.supports("aspect-ratio", "1")) {
-        el.style.aspectRatio = String(ratio);
-        el.style.paddingBottom = "0";
-      } else {
-        // Fallback for older browsers
-        el.style.paddingBottom = `${(1 / ratio) * 100}%`;
-      }
-
-      // Apply styles to content
-      if (content) {
-        content.style.position = "absolute";
-        content.style.top = "0";
-        content.style.left = "0";
-        content.style.width = "100%";
-        content.style.height = "100%";
-        content.style.objectFit = "cover";
-      }
+    const applyRatio = (): void => {
+      el.style.aspectRatio = String(parseRatio(el.ratio));
     };
 
-    updateStyles();
+    applyRatio();
 
-    // Observe attribute changes
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.attributeName === "ratio") {
-          updateStyles();
+          applyRatio();
         }
       }
     });

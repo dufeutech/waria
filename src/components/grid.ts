@@ -267,14 +267,19 @@ defineComponent({
             break;
 
           case "a":
-            if (e.ctrlKey && el.multiSelect) {
+            if (e.ctrlKey && el.multiSelect && el.selectionMode !== "none") {
               e.preventDefault();
-              // Select all cells
-              rows.forEach((row) => {
-                getCells(row).forEach((cell) =>
-                  cell.setAttribute(ARIA.selected, "true")
+              if (el.selectionMode === "row") {
+                rows.forEach((row) =>
+                  row.setAttribute(ARIA.selected, "true")
                 );
-              });
+              } else {
+                rows.forEach((row) => {
+                  getCells(row).forEach((cell) =>
+                    cell.setAttribute(ARIA.selected, "true")
+                  );
+                });
+              }
               ctx.emit("selectAll");
             }
             break;
@@ -320,16 +325,26 @@ defineComponent({
       },
 
       getSelectedCells(): HTMLElement[] {
+        // Returns directly-selected cells (cell mode) plus all cells in
+        // selected rows (row mode), so callers get the full data set
+        // regardless of the active selectionMode.
         const rows = getRows();
         const selected: HTMLElement[] = [];
         rows.forEach((row) => {
+          const rowSelected = row.getAttribute(ARIA.selected) === "true";
           getCells(row).forEach((cell) => {
-            if (cell.getAttribute(ARIA.selected) === "true") {
+            if (rowSelected || cell.getAttribute(ARIA.selected) === "true") {
               selected.push(cell);
             }
           });
         });
         return selected;
+      },
+
+      getSelectedRows(): HTMLElement[] {
+        return getRows().filter(
+          (row) => row.getAttribute(ARIA.selected) === "true"
+        );
       },
     });
 

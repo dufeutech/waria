@@ -130,9 +130,9 @@ declare module "preact" {
         open?: boolean;
         modal?: boolean;
         persistent?: boolean;
-        closeOnEscape?: boolean;
-        closeOnOutsideClick?: boolean;
-        returnFocus?: boolean;
+        "close-on-escape"?: boolean;
+        "close-on-outside-click"?: boolean;
+        "return-focus"?: boolean;
         label?: string;
       };
 
@@ -177,7 +177,7 @@ declare module "preact" {
         open?: boolean;
         placement?: string;
         persistent?: boolean;
-        closeOnSelect?: boolean;
+        "close-on-select"?: boolean;
         portal?: boolean;
       };
 
@@ -186,7 +186,7 @@ declare module "preact" {
         open?: boolean;
         placement?: string;
         delay?: number;
-        closeDelay?: number;
+        "close-delay"?: number;
         portal?: boolean;
       };
 
@@ -195,9 +195,9 @@ declare module "preact" {
         open?: boolean;
         placement?: string;
         persistent?: boolean;
-        closeOnOutsideClick?: boolean;
-        closeOnEscape?: boolean;
-        returnFocus?: boolean;
+        "close-on-outside-click"?: boolean;
+        "close-on-escape"?: boolean;
+        "return-focus"?: boolean;
         portal?: boolean;
         label?: string;
       };
@@ -206,15 +206,15 @@ declare module "preact" {
       "w-hover-card": WariaBaseAttributes & {
         open?: boolean;
         placement?: string;
-        openDelay?: number;
-        closeDelay?: number;
+        "open-delay"?: number;
+        "close-delay"?: number;
         portal?: boolean;
       };
 
       // Context Menu
       "w-context-menu": WariaBaseAttributes & {
         open?: boolean;
-        closeOnSelect?: boolean;
+        "close-on-select"?: boolean;
         portal?: boolean;
       };
 
@@ -319,7 +319,7 @@ declare module "preact" {
         min?: number;
         max?: number;
         step?: number;
-        pageStep?: number;
+        "page-step"?: number;
         disabled?: boolean;
         label?: string;
         name?: string;
@@ -361,15 +361,15 @@ declare module "preact" {
       // Grid
       "w-grid": WariaBaseAttributes & {
         label?: string;
-        selectionMode?: "none" | "cell" | "row";
-        multiSelect?: boolean;
+        "selection-mode"?: "none" | "cell" | "row";
+        "multi-select"?: boolean;
         height?: string;
       };
 
       // Tree Grid
       "w-treegrid": WariaBaseAttributes & {
         label?: string;
-        selectionMode?: "none" | "single" | "multiple";
+        "selection-mode"?: "none" | "single" | "multiple";
         height?: string;
       };
 

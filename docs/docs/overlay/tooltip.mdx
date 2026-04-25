@@ -22,7 +22,7 @@ Accessible tooltips with hover and focus triggers.
 | `open`       | `boolean` | `false` | Whether the tooltip is visible      |
 | `placement`  | `string`  | `"top"` | Position relative to trigger        |
 | `delay`      | `number`  | `300`   | Delay before showing (ms)           |
-| `closeDelay` | `number`  | `100`   | Delay before hiding (ms)            |
+| `close-delay` | `number` | `100`   | Delay before hiding (ms)            |
 | `portal`     | `boolean` | `true`  | Teleport to body for z-index safety |
 
 ## Slots
@@ -57,7 +57,7 @@ Accessible tooltips with hover and focus triggers.
 ### Instant Tooltip
 
 ```html
-<w-tooltip delay="0" closeDelay="0">
+<w-tooltip delay="0" close-delay="0">
   <w-slot trigger><span>?</span></w-slot>
   <w-slot body><div>Instant help</div></w-slot>
 </w-tooltip>

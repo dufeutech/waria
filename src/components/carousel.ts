@@ -182,9 +182,23 @@ defineComponent({
 
       if (newIndex === el.current) return;
 
+      // Detect whether focus is on (or inside) the slide that's about to be
+      // hidden. If so, the browser will dump focus to <body> when we hide it,
+      // which breaks subsequent keyboard navigation since the carousel root
+      // never receives the next keydown.
+      const oldItem = items[el.current];
+      const focusOnOldSlide =
+        !!oldItem &&
+        (oldItem === document.activeElement ||
+          oldItem.contains(document.activeElement));
+
       const oldIndex = el.current;
       el.current = newIndex;
       updateAria();
+
+      if (focusOnOldSlide) {
+        items[newIndex]?.focus();
+      }
 
       ctx.emit("change", {
         current: newIndex,

@@ -29,23 +29,9 @@ Container that maintains a specific aspect ratio.
 - `2/3` - Portrait photo
 - `3/2` - Landscape photo
 
-## Styling
+## Layout
 
-```css
-w-aspect-ratio {
-  display: block;
-  position: relative;
-  width: 100%;
-}
-
-w-aspect-ratio > * {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-```
+The container is set to `display: block; position: relative; width: 100%; aspect-ratio: <ratio>` automatically, and any direct child (or `<w-slot body>` content) is absolutely positioned to fill the box with `object-fit: cover`. These defaults use `:where()` (zero specificity) so any class or inline style on the child overrides them.
 
 ## Examples
 

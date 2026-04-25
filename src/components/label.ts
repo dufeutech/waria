@@ -1,10 +1,17 @@
 import { defineComponent } from "../factory";
+import { ensureId } from "../aria";
 
 interface LabelElement extends HTMLElement {
   for: string;
   required: boolean;
   disabled: boolean;
 }
+
+// Elements the browser natively associates with `<label for>`. For these,
+// clicking the label fires a synthetic click on the control (focuses,
+// toggles checkbox/radio, etc.), so we don't intercept clicks ourselves.
+const LABELABLE_SELECTOR =
+  "input:not([type=hidden]), textarea, select, button, output, meter, progress";
 
 // Priority-ordered selectors for focusable elements inside custom components
 // We check in priority order to ensure primary interactive elements are focused
@@ -19,10 +26,11 @@ const FOCUSABLE_SELECTORS_PRIORITY = [
   '[role="checkbox"]',
   '[role="radio"]',
   '[role="switch"]',
-  // Slot-based selectors for custom components
-  '[slot="input"]',
-  '[slot="thumb"]',
-  '[slot="trigger"]',
+  // Slot-based selectors for custom components (matches `<w-slot X>` content)
+  "w-slot[input] > *",
+  "w-slot[knob] > *",
+  "w-slot[value] > *",
+  "w-slot[trigger] > *",
   // Native form elements
   "input:not([type=hidden])",
   "textarea",
@@ -38,31 +46,25 @@ const isCustomComponent = (element: Element): boolean => {
   return element.tagName.includes("-");
 };
 
-// Find the focusable element inside a custom component
-// Checks selectors in priority order to focus the main interactive element
+// Find the labellable form field inside (or as) the given element. Returns
+// disabled fields too — the label still needs to associate with them so that
+// AT and lint tools see a labelled field. Callers that want to act on the
+// element interactively (focus, click forwarding) should additionally check
+// the disabled / aria-disabled state.
 const findFocusableElement = (element: Element): HTMLElement | null => {
-  // If element itself is focusable (native input, button, etc.)
-  if (
-    element.matches("input, textarea, select, button") &&
-    !element.hasAttribute("disabled")
-  ) {
+  if (element.matches("input, textarea, select, button")) {
     return element as HTMLElement;
   }
 
-  // For custom components, find the interactive element inside
-  // Check in priority order to ensure we find the primary element
   if (isCustomComponent(element)) {
     for (const selector of FOCUSABLE_SELECTORS_PRIORITY) {
       const focusable = element.querySelector<HTMLElement>(selector);
-      if (focusable && !focusable.hasAttribute("disabled")) {
-        return focusable;
-      }
+      if (focusable) return focusable;
     }
   }
 
-  // Check if element itself has a focusable role or tabindex
   for (const selector of FOCUSABLE_SELECTORS_PRIORITY) {
-    if (element.matches(selector) && !element.hasAttribute("disabled")) {
+    if (element.matches(selector)) {
       return element as HTMLElement;
     }
   }
@@ -88,61 +90,95 @@ defineComponent({
     let nativeLabel: HTMLLabelElement | null = null;
     let customClickHandler: ((e: MouseEvent) => void) | null = null;
 
-    // Get the target element referenced by for attribute
+    // Resolve the labelled element. Priority: explicit `for` id → first
+    // following sibling that contains a focusable form field. Falling back to
+    // siblings means consumers can drop the `for`/`id` boilerplate when the
+    // label sits next to its field, and it still associates correctly.
     const getTargetElement = (): Element | null => {
-      if (!el.for) return null;
-      return document.getElementById(el.for);
+      if (el.for) {
+        const explicit = document.getElementById(el.for);
+        if (explicit) return explicit;
+      }
+      let sibling = el.nextElementSibling;
+      while (sibling) {
+        if (findFocusableElement(sibling)) return sibling;
+        sibling = sibling.nextElementSibling;
+      }
+      return null;
     };
 
-    // Handle click on label to focus the target element or its focusable child
+    // Handle click on label only when the focusable target isn't a native
+    // labelable element. Native labelable elements get click forwarding for
+    // free via the `<label for>` association we set in associateLabel.
     const handleLabelClick = (e: MouseEvent): void => {
-      if (el.disabled || !el.for) return;
+      if (el.disabled) return;
 
       const target = getTargetElement();
       if (!target) return;
 
-      // Find the focusable element (works for both native and custom components)
       const focusable = findFocusableElement(target);
-      if (focusable) {
-        e.preventDefault();
-        focusable.focus();
-      }
+      if (!focusable) return;
+      if (
+        focusable.hasAttribute("disabled") ||
+        focusable.getAttribute("aria-disabled") === "true"
+      )
+        return;
+      if (focusable.matches(LABELABLE_SELECTOR)) return;
+
+      e.preventDefault();
+      focusable.focus();
     };
 
     const wrapContent = (): void => {
-      // Create native label if not exists
       if (!nativeLabel) {
         nativeLabel = document.createElement("label");
-        // Move all child nodes into the native label
         while (el.firstChild) {
           nativeLabel.appendChild(el.firstChild);
         }
         el.appendChild(nativeLabel);
 
-        // Always use click handler instead of native for attribute
-        // This ensures proper focus management for both native and custom components
         customClickHandler = handleLabelClick;
         nativeLabel.addEventListener("click", customClickHandler);
       }
+    };
 
-      // Never use native for attribute - we handle focus via click handler
-      // This ensures consistent behavior across native inputs and custom components
-      nativeLabel.removeAttribute("for");
+    // Resolve the actual focusable form field, give it an id, and wire up
+    // both the native `<label for>` association and aria-labelledby. This
+    // satisfies a11y tools that expect form fields to have an id and a
+    // discoverable label, for native inputs and custom widgets alike.
+    const associateLabel = (): void => {
+      if (!nativeLabel) return;
+
+      // Always associate (even when label/field is disabled) so AT and lint
+      // tools see a labelled field with an id; the click handler is what gates
+      // interaction, not the association.
+      const target = getTargetElement();
+      const focusable = target ? findFocusableElement(target) : null;
+
+      if (!focusable) {
+        nativeLabel.removeAttribute("for");
+        return;
+      }
+
+      ensureId(focusable, "w-label-target");
+      ensureId(nativeLabel, "w-label");
+
+      nativeLabel.setAttribute("for", focusable.id);
+
+      // aria-labelledby covers non-labelable widgets (e.g. role="slider" divs)
+      // where the native `for` association is ignored by AT.
+      if (focusable.getAttribute("aria-labelledby") !== nativeLabel.id) {
+        focusable.setAttribute("aria-labelledby", nativeLabel.id);
+      }
     };
 
     const updateStyles = (): void => {
       if (!nativeLabel) return;
 
-      // Add cursor pointer for clickable labels (on both elements)
-      if (el.for && !el.disabled) {
-        el.style.cursor = "pointer";
-        nativeLabel.style.cursor = "pointer";
-      } else {
-        el.style.cursor = "default";
-        nativeLabel.style.cursor = "default";
-      }
+      const cursor = !el.disabled && getTargetElement() ? "pointer" : "default";
+      el.style.cursor = cursor;
+      nativeLabel.style.cursor = cursor;
 
-      // Handle disabled state
       if (el.disabled) {
         nativeLabel.style.color = "#666666";
         nativeLabel.style.pointerEvents = "none";
@@ -154,17 +190,21 @@ defineComponent({
 
     wrapContent();
     updateStyles();
+    // Defer one frame so the target's setup (which may set role/ids on its
+    // inner focusable) has a chance to run before we resolve the association.
+    requestAnimationFrame(associateLabel);
 
     // Observe attribute changes
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.attributeName === "for") {
-          wrapContent(); // Re-check target and update accordingly
+          associateLabel();
           updateStyles();
         } else if (
           mutation.attributeName === "disabled" ||
           mutation.attributeName === "required"
         ) {
+          associateLabel();
           updateStyles();
         }
       }

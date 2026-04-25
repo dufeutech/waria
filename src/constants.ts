@@ -53,11 +53,15 @@ export const SLOT = {
 } as const;
 
 /**
- * Get the name attribute from a slot child element.
- * The name is stored on the parent w-slot element, not the child.
+ * Get the identifying name for a slot. Checks the element's own `name`
+ * attribute first (matches native `<button name>` / `<input name>` ergonomics
+ * and how every example in the repo writes it), then falls back to the parent
+ * w-slot's `name` attribute (e.g. `<w-slot item name="x">`).
  */
 export function getSlotName(element: HTMLElement | null | undefined): string | null {
   if (!element) return null;
+  const own = element.getAttribute("name");
+  if (own !== null) return own;
   const slot = element.parentElement;
   if (slot?.tagName === "W-SLOT") {
     return slot.getAttribute("name");

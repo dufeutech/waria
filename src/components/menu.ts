@@ -537,34 +537,28 @@ defineComponent({
           if (parentSubmenu) {
             e.preventDefault();
             e.stopPropagation();
-            // Find the parent item that owns this submenu
-            const parentItem = parentSubmenu.parentElement;
-            if (parentItem && parentItem.matches(SLOT.item)) {
+            // Walk up past the <w-slot sub> wrapper to the owning item.
+            const parentItem = parentSubmenu.parentElement?.closest(
+              SLOT.item
+            ) as HTMLElement | null;
+            if (parentItem) {
               closeSubmenu(parentItem, true);
             }
           }
           return;
         }
 
-        // Escape closes submenus first, then main menu (unless persistent)
+        // Escape closes everything (all submenus + main menu).
         if (e.key === KEY.Escape) {
           const el = ctx.element as unknown as MenuElement;
-          const parentSubmenu = target.closest(SLOT.sub);
-          if (parentSubmenu) {
-            e.preventDefault();
-            e.stopPropagation();
-            const parentItem = parentSubmenu.parentElement;
-            if (parentItem && parentItem.matches(SLOT.item)) {
-              closeSubmenu(parentItem, true);
-            }
-            return;
-          }
-          // If persistent, don't close the main menu
           if (el.persistent) {
             e.preventDefault();
             return;
           }
-          // Let the dismiss handler close the main menu
+          e.preventDefault();
+          e.stopPropagation();
+          closeMenu();
+          return;
         }
       },
 
