@@ -62,11 +62,11 @@ Rows default to `display: flex` and cells default to `flex: 1`, so a bare treegr
 
 ## Props
 
-| Prop            | Type                              | Default    | Description                                                              |
-| --------------- | --------------------------------- | ---------- | ------------------------------------------------------------------------ |
-| `label`         | `string`                          | `""`       | Accessible label                                                         |
+| Prop             | Type                               | Default    | Description                                                              |
+| ---------------- | ---------------------------------- | ---------- | ------------------------------------------------------------------------ |
+| `label`          | `string`                           | `""`       | Accessible label                                                         |
 | `selection-mode` | `"none" \| "single" \| "multiple"` | `"single"` | Selection behavior on rows                                               |
-| `height`        | `string`                          | —          | CSS height (e.g. `"240px"`, `"50vh"`). Applies `overflow: auto` for you. |
+| `height`         | `string`                           | —          | CSS height (e.g. `"240px"`, `"50vh"`). Applies `overflow: auto` for you. |
 
 ## Slots
 
@@ -77,10 +77,10 @@ Rows default to `display: flex` and cells default to `flex: 1`, so a bare treegr
 
 ## Row Attributes
 
-| Attribute    | Description                                                        |
-| ------------ | ------------------------------------------------------------------ |
-| `data-level` | Nesting level (1, 2, 3, etc.)                                      |
-| `expandable` | Row can be expanded                                                |
+| Attribute    | Description                                                          |
+| ------------ | -------------------------------------------------------------------- |
+| `data-level` | Nesting level (1, 2, 3, etc.)                                        |
+| `expandable` | Row can be expanded                                                  |
 | `sticky`     | Pins the row to the top of a scrolling treegrid (`position: sticky`) |
 
 ## Cell Attributes
@@ -97,6 +97,46 @@ Rows default to `display: flex` and cells default to `flex: 1`, so a bare treegr
 | `ArrowLeft`  | Collapse row or move left |
 | `ArrowDown`  | Next visible row          |
 | `ArrowUp`    | Previous visible row      |
+
+## Styling
+
+Rows are flex; cells default to `flex: 1`. Depth is exposed via `aria-level` and the library mirrors expansion state to `data-expanded`. `aria-selected` marks selected rows.
+
+```css
+/* Indent rows by depth */
+w-treegrid w-slot[row] > *[aria-level="1"] {
+  padding-left: 0;
+}
+w-treegrid w-slot[row] > *[aria-level="2"] {
+  padding-left: 1.5rem;
+}
+w-treegrid w-slot[row] > *[aria-level="3"] {
+  padding-left: 3rem;
+}
+
+/* Expanded folder row */
+w-treegrid w-slot[row] > *[aria-expanded="true"] {
+  background: #fafafa;
+}
+
+/* Selected row */
+w-treegrid w-slot[row] > *[aria-selected="true"] {
+  background: #eef2ff;
+}
+
+/* Sticky header */
+w-treegrid w-slot[row][sticky] > * {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+```
+
+| Selector                                           | Targets             |
+| -------------------------------------------------- | ------------------- |
+| `w-treegrid w-slot[row] > *[aria-level="N"]`       | Rows at depth N     |
+| `w-treegrid w-slot[row] > *[aria-expanded="true"]` | Expanded folder row |
+| `w-treegrid w-slot[row] > *[aria-selected="true"]` | Selected row        |
+| `w-treegrid w-slot[row][sticky] > *`               | Sticky header row   |
 
 ## Accessibility
 

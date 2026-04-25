@@ -75,37 +75,28 @@ When `external` is set:
 
 ## Styling
 
+State and variants are exposed via host attributes. The library sets `pointer-events: none` and `opacity: 0.5` on the inner `<a>` automatically when `[disabled]`.
+
 ```css
-/* Base link styles */
 w-link {
   color: #0066cc;
 }
-
 w-link:hover {
   text-decoration: underline;
 }
-
-/* External link indicator */
 w-link[external]::after {
   content: " ↗";
   font-size: 0.8em;
 }
-
-/* Disabled state */
-w-link[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Variants */
-w-link[variant="subtle"] {
-  text-decoration: none;
-}
-
-w-link[variant="underline"] {
-  text-decoration: underline;
-}
 ```
+
+| Selector                      | Targets                                 |
+| ----------------------------- | --------------------------------------- |
+| `w-link[external]`            | External (new-tab) links                |
+| `w-link[disabled]`            | Disabled link (already non-interactive) |
+| `w-link[variant="subtle"]`    | Variant override                        |
+| `w-link[variant="underline"]` | Variant override                        |
+| `w-link > a`                  | The internal anchor element             |
 
 ## Router Integration
 

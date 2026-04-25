@@ -48,6 +48,32 @@ Custom scrollbar with accessible controls.
 | `Home`                     | Scroll to start      |
 | `End`                      | Scroll to end        |
 
+## Styling
+
+The library sets `overflow-x` and `overflow-y` automatically based on `[orientation]`. You only need to size the host. Use the standard browser scrollbar styling APIs (`scrollbar-width`, `scrollbar-color`, `::-webkit-scrollbar`) for visual treatment.
+
+```css
+w-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f0f0f0;
+}
+
+w-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+w-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+```
+
+| Selector                                | Targets                |
+| --------------------------------------- | ---------------------- |
+| `w-scrollbar[orientation="horizontal"]` | Horizontal scroll only |
+| `w-scrollbar[orientation="vertical"]`   | Vertical scroll only   |
+| `w-scrollbar[orientation="both"]`       | Both axes              |
+
 ## Accessibility
 
 - `role="scrollbar"` with proper ARIA

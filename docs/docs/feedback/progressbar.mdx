@@ -31,23 +31,34 @@ Visual progress indicator.
 
 ## Styling
 
+The library sets the indicator's width via the `--w-fill` custom property on the host (updated on every value change). You only style appearance.
+
 ```css
 w-progressbar {
-  display: block;
   height: 8px;
   background: #e0e0e0;
   border-radius: 4px;
   overflow: hidden;
 }
 
-w-progressbar w-slot[fill] {
+w-progressbar w-slot[dot] > * {
   height: 100%;
-  background: #0056b3;
+  background: #6366f1;
   transition: width 0.3s;
+}
+
+/* Indeterminate progress */
+w-progressbar[indeterminate] w-slot[dot] > * {
+  width: 30%;
+  animation: indeterminate 1.5s infinite linear;
 }
 ```
 
-The fill width is automatically set as a percentage.
+| Selector                        | Targets                                  |
+| ------------------------------- | ---------------------------------------- |
+| `w-progressbar[indeterminate]`  | Indeterminate progress (no value)        |
+| `w-progressbar w-slot[dot] > *` | The fill bar (width set via `--w-fill`)  |
+| `--w-fill`                      | Current fill percentage (set by library) |
 
 ## Accessibility
 

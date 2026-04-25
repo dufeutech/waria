@@ -1,0 +1,262 @@
+---
+sidebar_position: 2
+title: Styling
+---
+
+# Styling
+
+Waria gives you a clean separation of concerns: **the library owns functional layout, you own everything else**. This page explains how to style components — what to write, where, and how the cascade works in your favor.
+
+## The cascade you get
+
+Every component ships a small slice of structural CSS in a single named cascade layer:
+
+```css
+@layer waria {
+  /* what the library puts here */
+  w-carousel {
+    display: block;
+    position: relative;
+  }
+  w-range[orientation="horizontal"] w-slot[knob] > * {
+    position: absolute;
+    left: var(--w-knob);
+  }
+}
+```
+
+Your CSS lives **outside** that layer. Anything you write — class, attribute selector, element selector, even a single property on a `<style>` tag — automatically beats the library's defaults, regardless of selector specificity. You never need `!important` to override Waria.
+
+```css
+/* Your CSS, no @layer wrapper anywhere */
+w-carousel {
+  /* wins over the layered defaults, no matter how specific they are */
+  position: static;
+}
+```
+
+## What the library does (and what it leaves to you)
+
+| Owned by Waria                                   | Owned by you                                    |
+| ------------------------------------------------ | ----------------------------------------------- |
+| `position`, `overflow`, `display` for primitives | Colors, fonts, spacing, borders, shadows        |
+| Axis layout for `[orientation]` / `[direction]`  | Sizing of host (`width`, `height`, `max-width`) |
+| Dynamic state (`--w-knob`, `--w-fill`, …)        | Visual state (hover, focus, active styling)     |
+| ARIA attributes and state                        | What those states look like                     |
+| Show/hide via `[hidden]`                         | Enter/leave transitions                         |
+
+If a piece of CSS is required for the component to _function correctly_ (a carousel arrow that escapes its container, a slider thumb at the wrong axis), the library handles it. Anything that's a _visual choice_ is yours.
+
+## Selector hooks
+
+Every component exposes the same kinds of styling hooks. Once you know the pattern, you can style any component in the library.
+
+### Host attribute selectors
+
+Component props with a default value are reflected onto the host element as attributes, so you can style each variant directly:
+
+```css
+w-range[orientation="vertical"] {
+  /* vertical slider only */
+}
+w-toolbar[orientation="horizontal"] {
+  /* horizontal toolbar only */
+}
+w-avatar[size="large"] {
+  /* large avatar only */
+}
+w-avatar[shape="square"] {
+  /* square avatar only */
+}
+w-link[variant="underline"] {
+  /* underlined link only */
+}
+w-dialog[open] {
+  /* while open */
+}
+w-switch[pressed] {
+  /* on state */
+}
+```
+
+### ARIA-state selectors
+
+Components set ARIA attributes as their state changes. These are first-class CSS hooks:
+
+```css
+/* Accordion: style the open section */
+w-accordion w-slot[trigger] > *[aria-expanded="true"] {
+  background: #eef2ff;
+}
+
+/* Tabs: style the selected tab */
+w-tabs w-slot[tab] > *[aria-selected="true"] {
+  background: #6366f1;
+  color: white;
+}
+
+/* Toggles: style pressed buttons */
+w-toggles w-slot[item] > *[aria-pressed="true"] {
+  background: #6366f1;
+}
+
+/* Choice: style the selected option */
+w-choice w-slot[opt] > *[aria-checked="true"] {
+  border-color: #6366f1;
+}
+
+/* Navigation: style the current page */
+w-nav [aria-current="page"] {
+  font-weight: 600;
+}
+
+/* Anything: style disabled state */
+w-spinbutton[aria-disabled="true"] {
+  opacity: 0.5;
+}
+```
+
+### Slot selectors
+
+Every slot is a stable selector you can target. Use the `w-slot[name] > *` pattern to style the user-provided content inside a slot:
+
+```css
+/* Style every menu item */
+w-menu w-slot[item] > * {
+  padding: 0.5rem 1rem;
+}
+
+/* Style the dialog trigger differently */
+w-dialog w-slot[trigger] > * {
+  font-weight: 600;
+}
+```
+
+Slot names are documented per component (see each component's **Slots** table).
+
+### Internal classes and data attributes
+
+A few components add specific classes or data attributes for parts they create dynamically:
+
+```css
+/* Carousel: highlight the active dot indicator */
+w-carousel .active {
+  background: #6366f1;
+}
+
+/* Split: style the drag handle */
+.w-split-resizer {
+  background: #ddd;
+}
+.w-split-resizer:hover {
+  background: #6366f1;
+}
+
+/* Avatar: style the auto-generated fallback span */
+.w-avatar-fallback {
+  font-weight: 600;
+}
+
+/* Select: style the keyboard-highlighted option */
+[data-highlighted] {
+  background: #f0f0f0;
+}
+
+/* Treegrid: indent rows by depth */
+[data-level="2"] {
+  padding-left: 2rem;
+}
+```
+
+### The portal
+
+Overlays (dialog, popover, tooltip, hover-card, menu, select, context-menu, toast) get teleported to a container at `<body>` level when opened, so their CSS reach is **outside** the host. Style them by their `role` instead:
+
+```css
+/* Modal dialog body */
+[role="dialog"][aria-modal="true"] {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltips */
+[role="tooltip"] {
+  background: #333;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* All menus (menu, context-menu) */
+[role="menu"] {
+  background: white;
+  border: 1px solid #ddd;
+}
+```
+
+## State-driven layout via custom properties
+
+Components that animate continuous state expose CSS custom properties on the host. Read them from your CSS:
+
+| Component       | Property             | Value                             |
+| --------------- | -------------------- | --------------------------------- |
+| `w-range`       | `--w-knob`           | Thumb position as a percentage    |
+| `w-range`       | `--w-fill`           | Fill width/height as a percentage |
+| `w-progressbar` | `--w-fill`           | Indicator width as a percentage   |
+| `w-split`       | `--w-split-template` | Computed grid template for panes  |
+
+You don't need to set these — the components do. But you can reference them if you want a custom indicator:
+
+```css
+.my-tick {
+  position: absolute;
+  left: var(--w-knob);
+  background: red;
+}
+```
+
+## What you almost never need to write
+
+Because the library handles structure, common boilerplate disappears from your CSS:
+
+- `position: relative` on a carousel host
+- `overflow: hidden` on a carousel body
+- `position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)` on a modal dialog
+- `display: flex; flex-direction: row|column` on orientation-aware components
+- Per-axis branching for sliders, separators, scrollbars, tabs, toolbars, navigation
+
+If you find yourself writing one of those, you're probably duplicating something Waria already provides — and your override may stop the library from doing its job.
+
+## Tailwind / utility classes
+
+The slot pattern works with utility CSS too. Apply utilities to the elements _inside_ the slots — those are yours:
+
+```html
+<w-dialog>
+  <w-slot trigger>
+    <button class="px-4 py-2 bg-indigo-600 text-white rounded">Open</button>
+  </w-slot>
+  <w-slot body>
+    <div class="bg-white p-6 rounded-xl shadow-xl">
+      <h3 class="text-lg font-semibold">Title</h3>
+    </div>
+  </w-slot>
+</w-dialog>
+```
+
+The library's centering, z-index, and `position: fixed` for the dialog body still apply — your utilities just paint on top.
+
+## Disabling library defaults
+
+If you really want a component with zero structural CSS from the library, override at the host level:
+
+```css
+w-carousel,
+w-range,
+w-toast {
+  all: revert;
+}
+```
+
+This is rarely a good idea, but it's available.

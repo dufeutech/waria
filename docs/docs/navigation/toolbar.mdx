@@ -38,6 +38,43 @@ Grouped controls with keyboard navigation.
 | `Home`                     | First item    |
 | `End`                      | Last item     |
 
+## Styling
+
+The host gets `display: flex` and a small gap; row vs. column direction is set automatically by `[orientation]`. Each separator gets `role="separator"` so you can style it semantically.
+
+```css
+w-toolbar {
+  background: #f5f5f5;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+/* Buttons inside */
+w-toolbar w-slot[item] > * {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+/* Separators between sections — `role="separator"` is set by the library */
+w-toolbar w-slot[sep] > * {
+  width: 1px;
+  background: #ccc;
+  margin: 0 0.5rem;
+  align-self: stretch;
+}
+w-toolbar[orientation="vertical"] w-slot[sep] > * {
+  width: auto;
+  height: 1px;
+  margin: 0.5rem 0;
+}
+```
+
+| Selector                            | Targets              |
+| ----------------------------------- | -------------------- |
+| `w-toolbar[orientation="vertical"]` | Vertical layout      |
+| `w-toolbar w-slot[sep] > *`         | Internal dividers    |
+| `w-toolbar w-slot[item] > *`        | Each toolbar control |
+
 ## Accessibility
 
 - Container has `role="toolbar"` with `aria-label`

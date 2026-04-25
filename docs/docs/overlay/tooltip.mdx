@@ -17,13 +17,13 @@ Accessible tooltips with hover and focus triggers.
 
 ## Props
 
-| Prop         | Type      | Default | Description                         |
-| ------------ | --------- | ------- | ----------------------------------- |
-| `open`       | `boolean` | `false` | Whether the tooltip is visible      |
-| `placement`  | `string`  | `"top"` | Position relative to trigger        |
-| `delay`      | `number`  | `300`   | Delay before showing (ms)           |
-| `close-delay` | `number` | `100`   | Delay before hiding (ms)            |
-| `portal`     | `boolean` | `true`  | Teleport to body for z-index safety |
+| Prop          | Type      | Default | Description                         |
+| ------------- | --------- | ------- | ----------------------------------- |
+| `open`        | `boolean` | `false` | Whether the tooltip is visible      |
+| `placement`   | `string`  | `"top"` | Position relative to trigger        |
+| `delay`       | `number`  | `300`   | Delay before showing (ms)           |
+| `close-delay` | `number`  | `100`   | Delay before hiding (ms)            |
+| `portal`      | `boolean` | `true`  | Teleport to body for z-index safety |
 
 ## Slots
 
@@ -117,16 +117,29 @@ Available placements:
 
 ## Styling
 
+Content is teleported to the portal when shown and positioned by `autoPosition`. Style it via `role="tooltip"`. The host is `display: contents`, so it doesn't disturb inline flow around the trigger.
+
 ```css
-w-tooltip w-slot[body] {
+[role="tooltip"] {
   background: #333;
   color: white;
-  padding: 8px 12px;
+  padding: 0.5rem 0.75rem;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 0.875rem;
   max-width: 250px;
+  pointer-events: none;
+}
+
+w-tooltip w-slot[trigger] > *[aria-describedby] {
+  /* The trigger while a tooltip is associated with it */
 }
 ```
+
+| Selector                           | Targets                                 |
+| ---------------------------------- | --------------------------------------- |
+| `[role="tooltip"]`                 | The tooltip body wherever it's rendered |
+| `w-tooltip[open]`                  | Host while shown                        |
+| `[data-portal-owner^="w-tooltip"]` | A specific tooltip's portaled body      |
 
 ## Accessibility
 

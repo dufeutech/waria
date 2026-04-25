@@ -87,6 +87,8 @@ Toggle switch for boolean settings.
 
 ## Styling
 
+State is exposed via host attributes (`[pressed]`, `[disabled]`) and via `aria-pressed` on the trigger.
+
 ```css
 .switch-track {
   position: relative;
@@ -111,9 +113,8 @@ Toggle switch for boolean settings.
 
 /* Pressed state */
 w-switch[pressed] .switch-track {
-  background-color: #0056b3;
+  background-color: #6366f1;
 }
-
 w-switch[pressed] .switch-thumb {
   transform: translateX(22px);
 }
@@ -124,6 +125,12 @@ w-switch[disabled] .switch-track {
   cursor: not-allowed;
 }
 ```
+
+| Selector                                            | Targets         |
+| --------------------------------------------------- | --------------- |
+| `w-switch[pressed]`                                 | On state        |
+| `w-switch[disabled]`                                | Disabled        |
+| `w-switch w-slot[trigger] > *[aria-pressed="true"]` | Pressed trigger |
 
 ## Accessibility
 

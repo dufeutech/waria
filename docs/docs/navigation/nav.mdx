@@ -79,30 +79,40 @@ Site navigation with URL synchronization and roving tabindex.
 
 ## Styling
 
+The host gets `display: flex` with row/column direction set automatically by `[orientation]`. Vertical nav also stretches each item to full width. The active item carries `aria-current="page"`.
+
 ```css
 w-nav {
-  display: flex;
   gap: 4px;
   background: #f5f5f5;
+  padding: 4px;
   border-radius: 4px;
 }
 
-w-nav[orientation="vertical"] {
-  flex-direction: column;
-}
-
-w-nav w-slot[item] {
+w-nav w-slot[item] > * {
   padding: 12px 16px;
+  border-radius: 4px;
   text-decoration: none;
   color: inherit;
 }
 
-/* Active state */
+/* Active page */
 w-nav [aria-current="page"] {
-  background-color: #0056b3;
+  background: #6366f1;
   color: white;
 }
+
+/* Hover (not on active) */
+w-nav w-slot[item] > *:hover:not([aria-current="page"]) {
+  background: rgba(0, 0, 0, 0.05);
+}
 ```
+
+| Selector                        | Targets              |
+| ------------------------------- | -------------------- |
+| `w-nav [aria-current="page"]`   | Active item          |
+| `w-nav[orientation="vertical"]` | Sidebar-style layout |
+| `w-nav w-slot[item] > *`        | Each navigation item |
 
 ## With Views
 

@@ -57,6 +57,53 @@ Slider input for selecting a value in a range.
 | `PageUp`                  | Increment by 10% |
 | `PageDown`                | Decrement by 10% |
 
+## Styling
+
+The library positions the rail, fill, and knob automatically — you only style appearance. Position is fed via two custom properties on the host (`--w-knob` and `--w-fill`), updated on every value change.
+
+```css
+/* Rail (the track) */
+w-range w-slot[rail] > * {
+  background: #ddd;
+  border-radius: 2px;
+}
+w-range[orientation="horizontal"] w-slot[rail] > * {
+  height: 4px;
+}
+w-range[orientation="vertical"] w-slot[rail] > * {
+  width: 4px;
+}
+
+/* Fill */
+w-range w-slot[fill] > * {
+  background: #6366f1;
+  border-radius: 2px;
+}
+
+/* Knob (thumb) */
+w-range w-slot[knob] > * {
+  width: 20px;
+  height: 20px;
+  background: #6366f1;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Disabled */
+w-range[disabled] {
+  opacity: 0.5;
+}
+```
+
+| Selector                            | Targets                                       |
+| ----------------------------------- | --------------------------------------------- |
+| `w-range[orientation="horizontal"]` | Horizontal slider (default)                   |
+| `w-range[orientation="vertical"]`   | Vertical slider                               |
+| `w-range[disabled]`                 | Disabled state                                |
+| `--w-knob`                          | Thumb position percentage (set by library)    |
+| `--w-fill`                          | Fill width/height percentage (set by library) |
+
 ## Accessibility
 
 - `role="slider"` with full ARIA value attributes

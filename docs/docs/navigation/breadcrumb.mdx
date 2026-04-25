@@ -59,29 +59,34 @@ Navigation breadcrumb trail.
 
 ## Styling
 
+The list slot gets `display: flex` with sensible defaults (`gap`, no list bullets, no padding). Items get `role="listitem"`; the current page item carries `aria-current="page"`.
+
 ```css
-w-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-w-breadcrumb w-slot[sep] {
-  color: #666;
-}
-
-w-breadcrumb [aria-current="page"] {
-  font-weight: bold;
-}
-
-w-breadcrumb w-link {
+w-breadcrumb a {
   color: #0066cc;
+  text-decoration: none;
 }
-
-w-breadcrumb w-link:hover {
+w-breadcrumb a:hover {
   text-decoration: underline;
 }
+
+/* Current page */
+w-breadcrumb [aria-current="page"] {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Separator slot */
+w-breadcrumb w-slot[sep] > * {
+  color: #666;
+}
 ```
+
+| Selector                             | Targets           |
+| ------------------------------------ | ----------------- |
+| `w-breadcrumb [aria-current="page"]` | Current page item |
+| `w-breadcrumb w-slot[item] > *`      | Each crumb        |
+| `w-breadcrumb w-slot[sep] > *`       | Separator content |
 
 ## Accessibility
 

@@ -67,6 +67,48 @@ Image/content carousel with navigation.
 | `ArrowLeft`  | Previous slide |
 | `ArrowRight` | Next slide     |
 
+## Styling
+
+The library positions the prev/next arrows absolutely and lays out the dots as a flex row — you only style aesthetics. State hooks: each indicator carries a `data-indicator` attribute, the active indicator gets `class="active"`, and inactive slides are hidden via the `[hidden]` attribute.
+
+```css
+/* Slide images and captions */
+w-carousel w-slot[item] > * {
+  /* each slide */
+}
+
+/* Arrows — already absolutely positioned by the library */
+w-carousel w-slot[prev] > *,
+w-carousel w-slot[next] > * {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+/* Indicator dots — already laid out as a centered flex row */
+w-carousel [data-indicator] {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+}
+w-carousel .active {
+  /* The currently-displayed slide's dot */
+  background: #6366f1;
+}
+
+/* Tweak the inset of the arrows from the edge */
+w-carousel {
+  --w-carousel-arrow-inset: 1rem;
+}
+```
+
+| Selector                              | Targets                                            |
+| ------------------------------------- | -------------------------------------------------- |
+| `w-carousel [data-indicator]`         | Every dot button                                   |
+| `w-carousel .active`                  | The dot for the currently shown slide              |
+| `w-carousel w-slot[item] > *[hidden]` | Off-screen slides                                  |
+| `--w-carousel-arrow-inset`            | Distance of arrows from the edge (custom property) |
+
 ## Accessibility
 
 - Container has `role="region"` with `aria-roledescription="carousel"`

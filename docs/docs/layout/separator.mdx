@@ -47,21 +47,27 @@ Visual divider between content sections.
 
 ## Styling
 
+The library handles size and orientation — `1px × 100%` for horizontal, `1px × 100%` for vertical with `align-self: stretch`. You only style appearance.
+
 ```css
 w-separator {
   background: #e0e0e0;
+  opacity: 1;
 }
-
+/* Adjust thickness */
 w-separator[orientation="horizontal"] {
-  height: 1px;
-  width: 100%;
+  height: 2px;
 }
-
 w-separator[orientation="vertical"] {
-  width: 1px;
-  height: 100%;
+  width: 2px;
 }
 ```
+
+| Selector                                | Targets               |
+| --------------------------------------- | --------------------- |
+| `w-separator[orientation="horizontal"]` | Horizontal separator  |
+| `w-separator[orientation="vertical"]`   | Vertical separator    |
+| `w-separator[decorative]`               | Non-semantic dividers |
 
 ## Accessibility
 

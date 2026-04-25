@@ -59,6 +59,38 @@ Hierarchical tree view with expandable nodes.
 | `End`             | Last visible item             |
 | `Enter` / `Space` | Select item                   |
 
+## Styling
+
+```css
+w-tree w-slot[item] > * {
+  /* every tree item */
+}
+
+/* Expanded folder */
+w-tree w-slot[item] > *[aria-expanded="true"] {
+  /* open */
+}
+
+/* Selected item */
+w-tree w-slot[item] > *[aria-selected="true"] {
+  background: #eef2ff;
+}
+
+/* Indent by depth — aria-level is set automatically */
+w-tree w-slot[item] > *[aria-level="2"] {
+  padding-left: 1rem;
+}
+w-tree w-slot[item] > *[aria-level="3"] {
+  padding-left: 2rem;
+}
+```
+
+| Selector                                        | Targets          |
+| ----------------------------------------------- | ---------------- |
+| `w-tree w-slot[item] > *[aria-selected="true"]` | Selected item    |
+| `w-tree w-slot[item] > *[aria-expanded="true"]` | Expanded folder  |
+| `w-tree w-slot[item] > *[aria-level="N"]`       | Items at depth N |
+
 ## Accessibility
 
 - Container has `role="tree"`

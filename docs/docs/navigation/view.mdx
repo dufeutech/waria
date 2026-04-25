@@ -129,12 +129,18 @@ URLs: `https://example.com/app/about`
 
 ## Styling
 
-Views are hidden with `display: none` when inactive:
+The active view has `[active]`; inactive ones are hidden via the `[hidden]` attribute (already invisible).
 
 ```css
-/* Active view styling */
+/* Style only the visible view */
 w-view[active] {
   animation: fadeIn 0.2s ease;
+}
+
+/* Optional: a label-bearing view becomes role="region" */
+w-view[role="region"] {
+  outline: 1px dashed #ccc;
+  padding: 1rem;
 }
 
 @keyframes fadeIn {
@@ -146,6 +152,12 @@ w-view[active] {
   }
 }
 ```
+
+| Selector                | Targets                                 |
+| ----------------------- | --------------------------------------- |
+| `w-view[active]`        | Currently visible view                  |
+| `w-view[hidden]`        | Inactive view (already `display: none`) |
+| `w-view[role="region"]` | View with `label` (landmark)            |
 
 ## Accessibility
 

@@ -49,12 +49,37 @@ Single or multiple toggle button group.
 
 ## Styling
 
+The host is `display: inline-flex` by default. State is `aria-pressed` on each item's child.
+
 ```css
-w-toggles w-slot[item][aria-pressed="true"] {
+w-toggles w-slot[item] > * {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* Pressed state */
+w-toggles w-slot[item] > *[aria-pressed="true"] {
   background-color: #0056b3;
   color: white;
 }
+
+/* Make the buttons look like a segmented group */
+w-toggles w-slot[item]:not(:first-child) > * {
+  border-left: none;
+}
+w-toggles w-slot[item]:first-child > * {
+  border-radius: 4px 0 0 4px;
+}
+w-toggles w-slot[item]:last-child > * {
+  border-radius: 0 4px 4px 0;
+}
 ```
+
+| Selector                                          | Targets           |
+| ------------------------------------------------- | ----------------- |
+| `w-toggles w-slot[item] > *[aria-pressed="true"]` | Active toggle     |
+| `w-toggles[disabled]`                             | Disabled group    |
+| `w-toggles[multiple]`                             | Multi-select mode |
 
 ## Accessibility
 

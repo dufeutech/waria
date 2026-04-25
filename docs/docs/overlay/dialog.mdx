@@ -24,15 +24,15 @@ Modal dialogs with focus trapping and accessible announcements.
 
 ## Props
 
-| Prop                  | Type      | Default | Description                                 |
-| --------------------- | --------- | ------- | ------------------------------------------- |
-| `open`                | `boolean` | `false` | Whether the dialog is open                  |
-| `modal`               | `boolean` | `true`  | Trap focus and add backdrop                 |
-| `persistent`          | `boolean` | `false` | Prevent closing via Escape or outside click |
+| Prop                     | Type      | Default | Description                                 |
+| ------------------------ | --------- | ------- | ------------------------------------------- |
+| `open`                   | `boolean` | `false` | Whether the dialog is open                  |
+| `modal`                  | `boolean` | `true`  | Trap focus and add backdrop                 |
+| `persistent`             | `boolean` | `false` | Prevent closing via Escape or outside click |
 | `close-on-escape`        | `boolean` | `true`  | Close when Escape is pressed                |
 | `close-on-outside-click` | `boolean` | `true`  | Close when clicking outside                 |
 | `return-focus`           | `boolean` | `true`  | Return focus to trigger on close            |
-| `label`               | `string`  | `""`    | Accessible label for the dialog             |
+| `label`                  | `string`  | `""`    | Accessible label for the dialog             |
 
 ## Slots
 
@@ -143,6 +143,42 @@ A persistent dialog cannot be dismissed by pressing Escape or clicking outside. 
   </w-slot>
 </w-dialog>
 ```
+
+## Styling
+
+The dialog body is teleported to a portal at `<body>` level when opened, so target it by `role` rather than as a descendant of `w-dialog`. The library handles viewport-centering and `position: fixed`.
+
+```css
+/* Modal dialog body — already viewport-centered */
+[role="dialog"][aria-modal="true"] {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+}
+
+/* Trigger button */
+w-dialog w-slot[trigger] > * {
+  /* button-like trigger */
+}
+
+/* Optional backdrop — render your own with a fixed pseudo-element if wanted */
+[role="dialog"][aria-modal="true"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+```
+
+| Selector                                             | Targets                      |
+| ---------------------------------------------------- | ---------------------------- |
+| `[role="dialog"][aria-modal="true"]`                 | The modal dialog body        |
+| `[role="dialog"][aria-modal="false"]`                | A non-modal dialog body      |
+| `w-dialog[open]`                                     | The host while open          |
+| `w-dialog w-slot[trigger] > *[aria-expanded="true"]` | Trigger while dialog is open |
 
 ## Accessibility
 

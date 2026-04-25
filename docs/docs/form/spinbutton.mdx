@@ -52,6 +52,48 @@ Numeric input with increment/decrement buttons.
 | `PageUp`    | Increment by step \* 10 |
 | `PageDown`  | Decrement by step \* 10 |
 
+## Styling
+
+The host is `display: inline-flex` with center alignment by default. The increment/decrement buttons get `aria-disabled` when at the bounds (unless `wrap` is set).
+
+```css
+w-spinbutton {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.25rem;
+}
+
+w-spinbutton w-slot[input] > * {
+  width: 60px;
+  text-align: center;
+  border: none;
+}
+w-spinbutton w-slot[up] > *,
+w-spinbutton w-slot[down] > * {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+/* At-bound state */
+w-spinbutton w-slot[up] > *[aria-disabled="true"],
+w-spinbutton w-slot[down] > *[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Disabled */
+w-spinbutton[disabled] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+```
+
+| Selector                                              | Targets                     |
+| ----------------------------------------------------- | --------------------------- |
+| `w-spinbutton[disabled]`                              | Disabled spinbutton         |
+| `w-spinbutton w-slot[up] > *[aria-disabled="true"]`   | Disabled increment (at max) |
+| `w-spinbutton w-slot[down] > *[aria-disabled="true"]` | Disabled decrement (at min) |
+
 ## Accessibility
 
 - Input has `role="spinbutton"`

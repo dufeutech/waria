@@ -65,12 +65,12 @@ Rows default to `display: flex` and cells default to `flex: 1`, so a bare grid l
 
 ## Props
 
-| Prop             | Type                         | Default  | Description                                                              |
-| ---------------- | ---------------------------- | -------- | ------------------------------------------------------------------------ |
-| `label`          | `string`                     | `""`     | Accessible label                                                         |
-| `selection-mode` | `"none" \| "cell" \| "row"`  | `"cell"` | What gets `aria-selected` on click/Enter — the cell or the whole row     |
-| `multi-select`   | `boolean`                    | `false`  | Allow multiple cells/rows to be selected at once                         |
-| `height`         | `string`                     | —        | CSS height (e.g. `"240px"`, `"50vh"`). Applies `overflow: auto` for you. |
+| Prop             | Type                        | Default  | Description                                                              |
+| ---------------- | --------------------------- | -------- | ------------------------------------------------------------------------ |
+| `label`          | `string`                    | `""`     | Accessible label                                                         |
+| `selection-mode` | `"none" \| "cell" \| "row"` | `"cell"` | What gets `aria-selected` on click/Enter — the cell or the whole row     |
+| `multi-select`   | `boolean`                   | `false`  | Allow multiple cells/rows to be selected at once                         |
+| `height`         | `string`                    | —        | CSS height (e.g. `"240px"`, `"50vh"`). Applies `overflow: auto` for you. |
 
 ## Slots
 
@@ -104,6 +104,48 @@ Rows default to `display: flex` and cells default to `flex: 1`, so a bare grid l
 | `End`        | Last cell in row   |
 | `Ctrl+Home`  | First cell in grid |
 | `Ctrl+End`   | Last cell in grid  |
+
+## Styling
+
+Rows are flex; cells are `flex: 1` (or `flex: N` if `size="N"`). State is exposed via `aria-selected` on cells/rows. The keyboard-focused cell has `tabindex="0"`.
+
+```css
+/* Rows and cells */
+w-grid w-slot[row] > * {
+  border-bottom: 1px solid #eee;
+}
+w-grid w-slot[cell] > * {
+  padding: 0.75rem 1rem;
+}
+
+/* Sticky header row */
+w-grid w-slot[row][sticky] > * {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+/* Selected cell or row */
+w-grid w-slot[cell] > *[aria-selected="true"] {
+  background: #dbeafe;
+}
+w-grid w-slot[row] > *[aria-selected="true"] {
+  background: #eef2ff;
+}
+
+/* Currently focused cell (keyboard nav) */
+w-grid w-slot[cell] > *[tabindex="0"] {
+  outline: 2px solid #6366f1;
+  outline-offset: -2px;
+}
+```
+
+| Selector                                        | Targets                        |
+| ----------------------------------------------- | ------------------------------ |
+| `w-grid w-slot[cell] > *[aria-selected="true"]` | Selected cell                  |
+| `w-grid w-slot[row]  > *[aria-selected="true"]` | Selected row                   |
+| `w-grid w-slot[row][sticky] > *`                | Sticky header row              |
+| `w-grid[height]`                                | Scrolling grid (overflow auto) |
+| `w-grid[selectionmode="row"]`                   | Row-selection mode             |
 
 ## Accessibility
 

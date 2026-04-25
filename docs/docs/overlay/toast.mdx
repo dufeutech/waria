@@ -48,6 +48,57 @@ Notification messages with auto-dismiss.
 - `top-left`, `top-center`, `top-right`
 - `bottom-left`, `bottom-center`, `bottom-right`
 
+## Styling
+
+Toast ships **zero positioning** — you decide where it lives (corner-fixed, top-of-page banner, inline alert, or anywhere else). The component just hides via the `[hidden]` attribute when closed.
+
+```css
+/* Anchor toasts to a corner of the viewport */
+w-toast {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Variant styling — use the `variant` attribute */
+w-toast[variant="success"] {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+w-toast[variant="error"] {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+w-toast[variant="warning"] {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+}
+w-toast[variant="info"] {
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+}
+
+/* Hidden when closed (UA stylesheet handles this automatically) */
+w-toast[hidden] {
+  display: none;
+}
+```
+
+| Selector                 | Targets                            |
+| ------------------------ | ---------------------------------- |
+| `w-toast[variant="X"]`   | A specific variant                 |
+| `w-toast[role="alert"]`  | An assertive (error/warning) toast |
+| `w-toast[role="status"]` | A polite (info/success) toast      |
+| `w-toast[open]`          | Visible toast                      |
+
 ## Accessibility
 
 - Uses `role="status"` for polite announcements

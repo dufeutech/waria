@@ -23,13 +23,13 @@ Dropdown menus with nested submenus and keyboard navigation.
 
 ## Props
 
-| Prop            | Type      | Default          | Description                                 |
-| --------------- | --------- | ---------------- | ------------------------------------------- |
-| `open`          | `boolean` | `false`          | Whether the menu is open                    |
-| `placement`     | `string`  | `"bottom-start"` | Menu position relative to trigger           |
-| `persistent`    | `boolean` | `false`          | Prevent closing via Escape or outside click |
-| `close-on-select` | `boolean` | `true`         | Close menu when item is selected            |
-| `portal`        | `boolean` | `true`           | Teleport content to body for z-index safety |
+| Prop              | Type      | Default          | Description                                 |
+| ----------------- | --------- | ---------------- | ------------------------------------------- |
+| `open`            | `boolean` | `false`          | Whether the menu is open                    |
+| `placement`       | `string`  | `"bottom-start"` | Menu position relative to trigger           |
+| `persistent`      | `boolean` | `false`          | Prevent closing via Escape or outside click |
+| `close-on-select` | `boolean` | `true`           | Close menu when item is selected            |
+| `portal`          | `boolean` | `true`           | Teleport content to body for z-index safety |
 
 ## Slots
 
@@ -163,6 +163,46 @@ A persistent menu cannot be dismissed by pressing Escape or clicking outside.
   opacity: 0;
 }
 ```
+
+## Styling
+
+```css
+/* The menu panel — teleported to portal, target by role */
+[role="menu"] {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
+}
+
+/* Items */
+[role="menuitem"] {
+  padding: 0.5rem 1rem;
+}
+
+/* Items that have a submenu — aria-haspopup is set */
+[role="menuitem"][aria-haspopup="menu"]::after {
+  content: "▶";
+}
+
+/* Submenu open state */
+[role="menuitem"][aria-expanded="true"] {
+  background: #eef2ff;
+}
+
+/* Trigger open state */
+w-menu w-slot[trigger] > *[aria-expanded="true"] {
+  background: #eef2ff;
+}
+```
+
+| Selector                                  | Targets                      |
+| ----------------------------------------- | ---------------------------- |
+| `[role="menu"]`                           | Any menu panel (root or sub) |
+| `[role="menuitem"]`                       | Every menu item              |
+| `[role="menuitem"][aria-haspopup="menu"]` | Items with a submenu         |
+| `[role="menuitem"][aria-expanded="true"]` | Item with open submenu       |
 
 ## Accessibility
 

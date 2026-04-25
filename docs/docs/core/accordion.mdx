@@ -85,6 +85,41 @@ Expandable content sections with accessible keyboard navigation.
 </w-accordion>
 ```
 
+## Styling
+
+Accordion items expose state via standard ARIA on the trigger and `[hidden]` on the body. See [Styling](../concepts/styling.mdx) for the full pattern.
+
+```css
+/* Each item, trigger, and body */
+w-accordion w-slot[item] > * {
+  /* item wrapper */
+}
+w-accordion w-slot[trigger] > * {
+  /* clickable header */
+}
+w-accordion w-slot[body] > * {
+  /* expandable region */
+}
+
+/* Open state — `aria-expanded="true"` is set on the trigger */
+w-accordion w-slot[trigger] > *[aria-expanded="true"] {
+  background: #eef2ff;
+}
+
+/* The collapsed body is hidden via the [hidden] attribute, so it's
+   already invisible. Style the visible body if you need to: */
+w-accordion w-slot[body] > *:not([hidden]) {
+  border-top: 1px solid #e5e7eb;
+}
+```
+
+| Selector                                                 | Targets                          |
+| -------------------------------------------------------- | -------------------------------- |
+| `w-accordion w-slot[trigger] > *[aria-expanded="true"]`  | Open section's trigger           |
+| `w-accordion w-slot[trigger] > *[aria-expanded="false"]` | Closed section's trigger         |
+| `w-accordion w-slot[body] > *[hidden]`                   | Currently-collapsed body         |
+| `w-accordion[multiple]`                                  | When multiple panels can be open |
+
 ## Accessibility
 
 - Uses `aria-expanded` on triggers

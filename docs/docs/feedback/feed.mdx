@@ -45,6 +45,27 @@ Scrollable feed of articles with accessibility.
 | `Page Down` | Next article     |
 | `Page Up`   | Previous article |
 
+## Styling
+
+Items get `role="article"` with `aria-posinset`/`aria-setsize`. The host is `display: block`.
+
+```css
+w-feed w-slot[item] > * {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+/* While loading more items */
+w-feed[aria-busy="true"] {
+  opacity: 0.7;
+}
+```
+
+| Selector                   | Targets                 |
+| -------------------------- | ----------------------- |
+| `w-feed[aria-busy="true"]` | Feed loading more items |
+| `w-feed w-slot[item] > *`  | Each article            |
+
 ## Accessibility
 
 - Container has `role="feed"`

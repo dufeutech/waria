@@ -105,7 +105,8 @@
     </p>
 
     <style>
-        .carousel-arrow {
+        .carousel-arrow,
+        .carousel-arrow:hover {
             background: rgba(255, 255, 255, 0.9);
             border: none;
             width: 40px;
@@ -119,10 +120,25 @@
             justify-content: center;
         }
 
-        .carousel-arrow--dark {
+        .carousel-arrow:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        /* Rectangular variant — overrides the round defaults to demo a
+           different visual treatment (no border-radius, no fixed size). */
+        .carousel-arrow--dark,
+        .carousel-arrow--dark:hover {
             background: rgba(0, 0, 0, 0.5);
             color: white;
             box-shadow: none;
+            border-radius: 0;
+            width: auto;
+            height: auto;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .carousel-arrow--dark:hover {
+            background: rgba(0, 0, 0, 0.75);
         }
 
         .carousel-caption {

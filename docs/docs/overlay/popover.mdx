@@ -22,14 +22,14 @@ Non-modal floating content triggered by click.
 
 ## Props
 
-| Prop                  | Type      | Default    | Description                                 |
-| --------------------- | --------- | ---------- | ------------------------------------------- |
-| `open`                | `boolean` | `false`    | Whether popover is visible                  |
-| `placement`           | `string`  | `"bottom"` | Position relative to trigger                |
-| `persistent`          | `boolean` | `false`    | Prevent closing via Escape or outside click |
+| Prop                     | Type      | Default    | Description                                 |
+| ------------------------ | --------- | ---------- | ------------------------------------------- |
+| `open`                   | `boolean` | `false`    | Whether popover is visible                  |
+| `placement`              | `string`  | `"bottom"` | Position relative to trigger                |
+| `persistent`             | `boolean` | `false`    | Prevent closing via Escape or outside click |
 | `close-on-outside-click` | `boolean` | `true`     | Close when clicking outside                 |
 | `close-on-escape`        | `boolean` | `true`     | Close on Escape key                         |
-| `portal`              | `boolean` | `true`     | Teleport to body                            |
+| `portal`                 | `boolean` | `true`     | Teleport to body                            |
 
 ## Slots
 
@@ -79,6 +79,33 @@ A persistent popover stays open until explicitly closed.
   </w-slot>
 </w-popover>
 ```
+
+## Styling
+
+When open the body is teleported to the portal and positioned by `autoPosition`. Target it via `role`. The popover host is `display: contents`, so it doesn't affect surrounding layout.
+
+```css
+/* Popover body */
+[role="dialog"]:not([aria-modal="true"]) {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+}
+
+/* Trigger expanded state */
+w-popover w-slot[trigger] > *[aria-expanded="true"] {
+  background: #eef2ff;
+}
+```
+
+| Selector                                              | Targets                   |
+| ----------------------------------------------------- | ------------------------- |
+| `[role="dialog"]:not([aria-modal="true"])`            | Popover/non-modal content |
+| `w-popover[open]`                                     | Host while open           |
+| `w-popover w-slot[trigger] > *[aria-expanded="true"]` | Active trigger            |
 
 ## Accessibility
 

@@ -61,6 +61,27 @@ Simple expand/collapse container.
 </w-collapsible>
 ```
 
+## Styling
+
+```css
+w-collapsible w-slot[trigger] > * {
+  /* clickable header */
+}
+w-collapsible w-slot[body] > * {
+  /* expandable content */
+}
+
+/* Open state — `aria-expanded="true"` is set on the trigger */
+w-collapsible w-slot[trigger] > *[aria-expanded="true"] {
+  background: #eef2ff;
+}
+```
+
+| Selector                                                  | Targets         |
+| --------------------------------------------------------- | --------------- |
+| `w-collapsible w-slot[trigger] > *[aria-expanded="true"]` | Open trigger    |
+| `w-collapsible[open]`                                     | Host while open |
+
 ## Accessibility
 
 - Trigger has `aria-expanded` and `aria-controls`

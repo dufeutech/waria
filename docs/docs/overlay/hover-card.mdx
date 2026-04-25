@@ -23,12 +23,12 @@ Rich hover preview card.
 
 ## Props
 
-| Prop         | Type      | Default    | Description             |
-| ------------ | --------- | ---------- | ----------------------- |
-| `open`       | `boolean` | `false`    | Whether card is visible |
-| `placement`  | `string`  | `"bottom"` | Card position           |
-| `delay`      | `number`  | `500`      | Show delay (ms)         |
-| `close-delay` | `number` | `300`      | Hide delay (ms)         |
+| Prop          | Type      | Default    | Description             |
+| ------------- | --------- | ---------- | ----------------------- |
+| `open`        | `boolean` | `false`    | Whether card is visible |
+| `placement`   | `string`  | `"bottom"` | Card position           |
+| `delay`       | `number`  | `500`      | Show delay (ms)         |
+| `close-delay` | `number`  | `300`      | Hide delay (ms)         |
 
 ## Slots
 
@@ -43,6 +43,34 @@ Rich hover preview card.
 | ------ | ----------- |
 | `show` | Card shown  |
 | `hide` | Card hidden |
+
+## Styling
+
+The card is teleported to the portal when shown. The host is `display: contents`, so it doesn't disturb inline layout around the trigger. `autoPosition` handles placement.
+
+```css
+/* The card body — write your selector against the slot directly */
+w-hover-card w-slot[body] > *,
+[data-portal-owner^="w-hover-card"] {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 280px;
+}
+
+/* Trigger active state */
+w-hover-card w-slot[trigger] > *[aria-expanded="true"] {
+  text-decoration: underline;
+}
+```
+
+| Selector                                                 | Targets             |
+| -------------------------------------------------------- | ------------------- |
+| `w-hover-card[open]`                                     | Host while open     |
+| `w-hover-card w-slot[trigger] > *[aria-expanded="true"]` | Active trigger      |
+| `[data-portal-owner^="w-hover-card"]`                    | The teleported body |
 
 ## Accessibility
 

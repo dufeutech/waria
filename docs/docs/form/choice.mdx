@@ -57,6 +57,41 @@ Radio or checkbox group selection.
 </w-choice>
 ```
 
+## Styling
+
+The host gets `display: flex` with row/column direction set automatically by `[orientation]`. State is exposed as `aria-checked` on each option's child element.
+
+```css
+/* Each option */
+w-choice w-slot[opt] > * {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* Selected option */
+w-choice w-slot[opt] > *[aria-checked="true"] {
+  background: #eef2ff;
+  border-color: #6366f1;
+}
+
+/* Disabled */
+w-choice[disabled] w-slot[opt] > * {
+  opacity: 0.5;
+}
+
+/* Vertical (default) vs horizontal */
+w-choice[orientation="horizontal"] {
+  flex-wrap: wrap;
+}
+```
+
+| Selector                                         | Targets             |
+| ------------------------------------------------ | ------------------- |
+| `w-choice w-slot[opt] > *[aria-checked="true"]`  | Currently selected  |
+| `w-choice w-slot[opt] > *[aria-disabled="true"]` | Disabled options    |
+| `w-choice[orientation="horizontal"]`             | Horizontal layout   |
+| `w-choice[mode="checkbox"]`                      | Checkbox mode group |
+
 ## Accessibility
 
 - Single selection: `role="radiogroup"` with `role="radio"` options

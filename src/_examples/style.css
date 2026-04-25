@@ -356,9 +356,9 @@ w-choice[disabled] .choice-option:hover {
 }
 
 /* ============================================
-   Tabs Component
+   Tabs Component  ([aria-selected] on tabs)
    ============================================ */
-w-tabs [slot="tab"] {
+w-tabs w-slot[tab] > * {
   padding: 10px 18px;
   border: 1px solid #e5e7eb;
   background: #f9fafb;
@@ -366,50 +366,66 @@ w-tabs [slot="tab"] {
   transition: all 0.15s ease;
 }
 
-w-tabs [slot="tab"]:first-child {
+w-tabs w-slot[tab]:first-of-type > * {
   border-radius: 6px 0 0 6px;
 }
 
-w-tabs [slot="tab"]:last-child {
+w-tabs w-slot[tab]:last-of-type > * {
   border-radius: 0 6px 6px 0;
 }
 
-w-tabs [slot="tab"][aria-selected="true"] {
+w-tabs w-slot[tab] > *[aria-selected="true"] {
   background-color: #6366f1;
   border-color: #6366f1;
   color: white;
 }
 
 /* ============================================
-   Menu Component
+   Menu Component  ([role="menu"], [role="menuitem"] — teleported to portal)
    ============================================ */
-w-menu [slot="item"]:hover,
-w-menu [slot="item"]:focus {
+[role="menu"] {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem;
+  min-width: 180px;
+}
+
+[role="menuitem"]:hover,
+[role="menuitem"]:focus {
   background-color: #f3f4f6;
 }
 
-/* ============================================
-   Accordion Component
-   ============================================ */
-w-accordion [slot="trigger"][aria-expanded="true"] {
+[role="menuitem"][aria-expanded="true"] {
   background-color: #eef2ff;
 }
 
 /* ============================================
-   Tree Component
+   Accordion Component  ([aria-expanded] on trigger)
    ============================================ */
-w-tree [slot="item"][aria-selected="true"] {
+w-accordion w-slot[trigger] > *[aria-expanded="true"] {
   background-color: #eef2ff;
 }
 
-w-tree [slot="item"]:focus {
+/* ============================================
+   Tree Component  ([aria-selected], [aria-expanded], [aria-level])
+   ============================================ */
+w-tree w-slot[item] > *[aria-selected="true"] {
+  background-color: #eef2ff;
+}
+
+w-tree w-slot[item] > *:focus {
   outline: 2px solid #6366f1;
   outline-offset: -2px;
 }
 
-w-tree [slot="item"]>* {
+w-tree w-slot[item] > * {
   user-select: none;
 }
+
+w-tree w-slot[item] > *[aria-level="2"] { padding-left: 1rem; }
+w-tree w-slot[item] > *[aria-level="3"] { padding-left: 2rem; }
 
 /* ============================================
    Grid & TreeGrid Components
@@ -527,9 +543,9 @@ w-grid [role="row"][aria-selected="true"] {
 }
 
 /* ============================================
-   Toggles Component
+   Toggles Component  ([aria-pressed] on items)
    ============================================ */
-w-toggles [slot="item"] {
+w-toggles w-slot[item] > * {
   padding: 10px 18px;
   border: 1px solid #d1d5db;
   background: #fff;
@@ -537,16 +553,19 @@ w-toggles [slot="item"] {
   transition: all 0.15s ease;
 }
 
-w-toggles [slot="item"]:first-child {
+w-toggles w-slot[item]:first-of-type > * {
   border-radius: 6px 0 0 6px;
 }
 
-w-toggles [slot="item"]:last-child {
+w-toggles w-slot[item]:last-of-type > * {
   border-radius: 0 6px 6px 0;
+}
+
+w-toggles w-slot[item]:not(:first-of-type) > * {
   border-left: none;
 }
 
-w-toggles [slot="item"][aria-pressed="true"] {
+w-toggles w-slot[item] > *[aria-pressed="true"] {
   color: white;
   border-color: #6366f1;
   background-color: #6366f1;
@@ -620,11 +639,245 @@ w-nav:not(.router) w-slot[item]>*:hover:not([aria-current="page"]) {
   background: #a1a1a1;
 }
 
-/* Carousel */
-w-carousel .active {
-  background: red;
+/* ============================================
+   Carousel  ([data-indicator], .active for the live dot)
+   ============================================ */
+w-carousel [data-indicator] {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: #d1d5db;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease;
 }
 
-w-accordion [aria-expanded="true"] {
-  background: red;
+w-carousel [data-indicator]:hover {
+  background: #9ca3af;
+}
+
+w-carousel .active {
+  background: #6366f1;
+}
+
+/* ============================================
+   Dialog  ([role="dialog"][aria-modal="true"] in portal)
+   ============================================ */
+[role="dialog"][aria-modal="true"] {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem;
+  max-width: 480px;
+}
+
+[role="dialog"][aria-modal="true"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: -1;
+}
+
+/* ============================================
+   Popover  ([role="dialog"]:not([aria-modal="true"]))
+   ============================================ */
+[role="dialog"]:not([aria-modal="true"]) {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  padding: 1rem;
+  min-width: 220px;
+}
+
+/* ============================================
+   Tooltip  ([role="tooltip"])
+   ============================================ */
+[role="tooltip"] {
+  background: #1f2937;
+  color: #fff;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  max-width: 250px;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   Select  ([role="listbox"], [role="option"], [data-highlighted])
+   ============================================ */
+[role="listbox"] {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  padding: 0.25rem;
+  min-width: 160px;
+}
+
+[role="option"] {
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+[role="option"][aria-selected="true"] {
+  background: #eef2ff;
+  font-weight: 500;
+}
+
+[role="option"][data-highlighted],
+[role="option"]:hover {
+  background: #f3f4f6;
+}
+
+/* ============================================
+   Spinbutton  (at-bound increment/decrement get aria-disabled)
+   ============================================ */
+w-spinbutton w-slot[up] > *[aria-disabled="true"],
+w-spinbutton w-slot[down] > *[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Toast  (placement is the user's choice — lib ships none)
+   role="alert" for error/warning, role="status" for info/success
+   ============================================ */
+w-toast[hidden] {
+  display: none;
+}
+
+/* ============================================
+   Range  (rail/fill/knob aesthetic; positioning is automatic)
+   ============================================ */
+w-range w-slot[rail] > * {
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+
+w-range[orientation="horizontal"] w-slot[rail] > * { height: 4px; }
+w-range[orientation="vertical"]   w-slot[rail] > * { width: 4px; }
+
+w-range w-slot[fill] > * {
+  background: #6366f1;
+  border-radius: 999px;
+}
+
+w-range w-slot[knob] > * {
+  width: 18px;
+  height: 18px;
+  background: #6366f1;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+/* ============================================
+   Progressbar  (fill width comes from --w-fill on the host)
+   ============================================ */
+w-progressbar {
+  display: block;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+w-progressbar w-slot[dot] > * {
+  height: 100%;
+  background: #6366f1;
+  transition: width 0.3s ease;
+}
+
+/* ============================================
+   Separator  (orientation-aware — library handles size)
+   ============================================ */
+w-separator {
+  background: #e5e7eb;
+  opacity: 1;
+}
+
+/* ============================================
+   Toolbar  (orientation-aware separators)
+   ============================================ */
+w-toolbar w-slot[sep] > * {
+  background: #e5e7eb;
+  align-self: stretch;
+}
+
+w-toolbar[orientation="horizontal"] w-slot[sep] > * {
+  width: 1px;
+  margin: 0 0.25rem;
+}
+
+w-toolbar[orientation="vertical"] w-slot[sep] > * {
+  height: 1px;
+  width: auto;
+  margin: 0.25rem 0;
+}
+
+/* ============================================
+   Avatar  (size/shape variants are attribute-driven; lib handles geometry)
+   ============================================ */
+.w-avatar-fallback {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   Link  ([disabled], [external], [variant])
+   ============================================ */
+w-link {
+  color: #6366f1;
+}
+
+w-link[external]::after {
+  content: " ↗";
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+/* ============================================
+   View  (hidden when inactive via [hidden]; [active] for the live one)
+   ============================================ */
+w-view[active] {
+  animation: fadeIn 0.2s ease;
+}
+
+/* ============================================
+   Feed
+   ============================================ */
+w-feed[aria-busy="true"] {
+  opacity: 0.6;
+}
+
+/* ============================================
+   Split resizer (.w-split-resizer is added by the library)
+   ============================================ */
+.w-split-resizer {
+  background: #e5e7eb;
+  transition: background 0.15s ease;
+}
+
+.w-split-resizer:hover,
+.w-split-resizer:focus {
+  background: #6366f1;
+  outline: none;
+}
+
+/* ============================================
+   Label  ([required], [disabled])
+   ============================================ */
+w-label[required]::after {
+  content: " *";
+  color: #dc2626;
+}
+
+w-label[disabled] > label {
+  color: #9ca3af;
 }

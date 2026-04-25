@@ -157,6 +157,44 @@ Tabs can be nested without conflicts. Each `w-tabs` component only manages the t
 </w-tabs>
 ```
 
+## Styling
+
+The tab list gets `display: flex` with row/column direction set automatically by `[orientation]`. State is exposed via `aria-selected` on the tab buttons; inactive panels are hidden via `[hidden]`.
+
+```css
+/* Tab buttons */
+w-tabs w-slot[tab] > * {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* Selected tab */
+w-tabs w-slot[tab] > *[aria-selected="true"] {
+  background: #6366f1;
+  color: white;
+}
+
+/* Panels */
+w-tabs w-slot[panel] > * {
+  padding: 1rem;
+}
+w-tabs w-slot[panel] > *[hidden] {
+  /* already invisible */
+}
+
+/* Vertical layout — host becomes flex row, list flex column */
+w-tabs[orientation="vertical"] w-slot[panel] > * {
+  flex: 1;
+}
+```
+
+| Selector                                        | Targets                     |
+| ----------------------------------------------- | --------------------------- |
+| `w-tabs w-slot[tab] > *[aria-selected="true"]`  | The active tab              |
+| `w-tabs w-slot[tab] > *[aria-selected="false"]` | Inactive tabs               |
+| `w-tabs w-slot[panel] > *:not([hidden])`        | The currently visible panel |
+| `w-tabs[orientation="vertical"]`                | Vertical-layout tabs        |
+
 ## Accessibility
 
 - Tab container has `role="tablist"` with `aria-orientation`

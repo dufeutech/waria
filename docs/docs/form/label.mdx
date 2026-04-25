@@ -51,22 +51,29 @@ Accessible label for form controls.
 
 ## Styling
 
+State is exposed via host attributes (`[required]`, `[disabled]`).
+
 ```css
 w-label {
-  display: block;
   cursor: pointer;
 }
-
 w-label[required]::after {
   content: " *";
   color: red;
 }
-
 w-label[disabled] {
-  opacity: 0.5;
   cursor: not-allowed;
 }
+w-label[disabled] > label {
+  color: #999;
+}
 ```
+
+| Selector            | Targets                              |
+| ------------------- | ------------------------------------ |
+| `w-label[required]` | Required field labels                |
+| `w-label[disabled]` | Disabled labels                      |
+| `w-label[for]`      | Labels with explicit `for` reference |
 
 ## Accessibility
 

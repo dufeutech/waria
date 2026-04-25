@@ -62,6 +62,52 @@ Custom select dropdown with full keyboard support.
 | `End`             | Last option                   |
 | `Escape`          | Close dropdown                |
 
+## Styling
+
+The listbox is teleported to the portal when open and positioned by `autoPosition`. Style by `role`. The currently keyboard-highlighted option gets a `data-highlighted` attribute.
+
+```css
+/* Trigger */
+w-select w-slot[trigger] > * {
+  /* button-like trigger */
+}
+w-select w-slot[trigger] > *[aria-expanded="true"] {
+  /* while open */
+}
+
+/* Listbox panel — teleported, target by role */
+[role="listbox"] {
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Options */
+[role="option"] {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* Currently selected */
+[role="option"][aria-selected="true"] {
+  background: #eef2ff;
+  font-weight: 500;
+}
+
+/* Keyboard-highlighted (arrow-key navigation) */
+[role="option"][data-highlighted] {
+  background: #f0f0f0;
+}
+```
+
+| Selector                                | Targets                 |
+| --------------------------------------- | ----------------------- |
+| `[role="listbox"]`                      | The dropdown panel      |
+| `[role="option"][aria-selected="true"]` | Selected option         |
+| `[role="option"][data-highlighted]`     | Keyboard-focused option |
+| `w-select[disabled]`                    | Disabled select         |
+| `w-select[open]`                        | Open select             |
+
 ## Accessibility
 
 - Trigger has `role="combobox"`

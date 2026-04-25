@@ -52,6 +52,33 @@ Right-click context menu.
 | `Enter`     | Select item   |
 | `Escape`    | Close menu    |
 
+## Styling
+
+Same selectors as [Menu](./menu.mdx) — the panel is teleported and gets `role="menu"`; items get `role="menuitem"`. The library positions the panel at the cursor (you don't need to set `position: fixed` yourself).
+
+```css
+[role="menu"] {
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  padding: 0.25rem 0;
+}
+
+[role="menuitem"] {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+[role="menuitem"]:hover,
+[role="menuitem"]:focus {
+  background: #f0f0f0;
+}
+```
+
 ## Accessibility
 
 - Same accessibility features as regular Menu

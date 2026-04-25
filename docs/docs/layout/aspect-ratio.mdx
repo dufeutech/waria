@@ -50,3 +50,19 @@ The container is set to `display: block; position: relative; width: 100%; aspect
   <img src="photo.jpg" alt="Description" />
 </w-aspect-ratio>
 ```
+
+## Styling
+
+The library positions direct children absolutely to fill the box (with `object-fit: cover`). You usually don't need any CSS unless you want to override `object-fit` or add aesthetic treatment to the child.
+
+```css
+/* Override the default object-fit on direct children */
+w-aspect-ratio > img {
+  object-fit: contain;
+}
+```
+
+| Selector                            | Targets                            |
+| ----------------------------------- | ---------------------------------- |
+| `w-aspect-ratio > :not(w-slot)`     | Direct content (positioned by lib) |
+| `w-aspect-ratio > w-slot[body] > *` | Slot-wrapped content (same)        |
