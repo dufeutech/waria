@@ -7,6 +7,32 @@ interface TreegridElement extends HTMLElement {
   selectionMode: "none" | "single" | "multiple";
 }
 
+// Default layout for rows/cells so consumers don't have to set
+// `display: flex` and `flex: N` inline. `:where()` keeps specificity at 0
+// so any class, attribute, or inline style overrides cleanly.
+// `size="N"` (1–12) sets the cell's flex grow value declaratively.
+const STYLE_ID = "w-treegrid-defaults";
+if (typeof document !== "undefined" && !document.getElementById(STYLE_ID)) {
+  const sizeRules = Array.from({ length: 12 }, (_, i) => {
+    const n = i + 1;
+    return `:where(w-treegrid) :where(w-slot[cell][size="${n}"]) > * { flex: ${n}; }`;
+  }).join("\n");
+
+  const style = document.createElement("style");
+  style.id = STYLE_ID;
+  style.textContent = `
+:where(w-treegrid) > :where(w-slot[row]) > * {
+  display: flex;
+}
+:where(w-treegrid) :where(w-slot[cell]) > * {
+  flex: 1;
+  min-width: 0;
+}
+${sizeRules}
+`;
+  document.head.appendChild(style);
+}
+
 defineComponent({
   tag: "w-treegrid",
 

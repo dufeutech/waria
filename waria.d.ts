@@ -92,6 +92,8 @@ type WSlotAttributes = WariaBaseAttributes & {
   // Grid slots
   cell?: boolean;
   row?: boolean;
+  // Grid cell flex size (1–12) — sets `flex: N` on the inner element
+  size?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
   // Range slots
   knob?: boolean;
   fill?: boolean;
