@@ -21,3 +21,5 @@ export type { Transition, TransitionConfig, TransitionState } from './transition
 
 export { observeAttributes, onAttributeChange } from './observe';
 export type { AttributeObserverConfig } from './observe';
+
+export { forwardClasses } from './forward-class';

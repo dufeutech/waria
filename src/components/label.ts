@@ -1,5 +1,6 @@
 import { defineComponent } from "../factory";
 import { ensureId } from "../aria";
+import { forwardClasses } from "../core/forward-class";
 
 interface LabelElement extends HTMLElement {
   for: string;
@@ -183,6 +184,12 @@ defineComponent({
     // inner focusable) has a chance to run before we resolve the association.
     requestAnimationFrame(associateLabel);
 
+    // w-label is a shapeless wrapper, so classes on the host should style the
+    // inner <label> (which is the actual rendered element).
+    const stopForwarding = nativeLabel
+      ? forwardClasses(el, nativeLabel)
+      : () => {};
+
     // Observe attribute changes
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
@@ -200,6 +207,7 @@ defineComponent({
 
     ctx.onCleanup(() => {
       observer.disconnect();
+      stopForwarding();
       if (customClickHandler && nativeLabel) {
         nativeLabel.removeEventListener("click", customClickHandler);
       }

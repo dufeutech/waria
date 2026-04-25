@@ -1,5 +1,6 @@
 import { defineComponent } from "../factory";
 import { ARIA } from "../constants";
+import { forwardClasses } from "../core/forward-class";
 
 interface LinkElement extends HTMLElement {
   href: string;
@@ -94,6 +95,12 @@ defineComponent({
     // Initial setup
     createAnchor();
 
+    // w-link is a shapeless wrapper, so classes on the host should style the
+    // inner <a> (which is what the user actually sees and clicks).
+    const stopForwarding = anchorElement
+      ? forwardClasses(ctx.element as HTMLElement, anchorElement)
+      : () => {};
+
     // Observe attribute changes (variant is CSS-driven; href/external/disabled
     // touch ARIA and listeners so they still need JS handling).
     const observer = new MutationObserver((mutations) => {
@@ -112,6 +119,7 @@ defineComponent({
 
     ctx.onCleanup(() => {
       observer.disconnect();
+      stopForwarding();
     });
   },
 });
