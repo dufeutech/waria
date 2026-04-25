@@ -137,15 +137,30 @@ w-grid w-slot[cell] > *[tabindex="0"] {
   outline: 2px solid #6366f1;
   outline-offset: -2px;
 }
+
+/* Focused cell — sticky row only */
+w-grid w-slot[row][sticky] w-slot[cell] > *[tabindex="0"] {
+  outline: 2px solid #6366f1;
+  outline-offset: -2px;
+}
+
+/* Focused cell — non-sticky rows only */
+w-grid w-slot[row]:not([sticky]) w-slot[cell] > *[tabindex="0"] {
+  outline: 2px solid #6366f1;
+  outline-offset: -2px;
+}
 ```
 
-| Selector                                        | Targets                        |
-| ----------------------------------------------- | ------------------------------ |
-| `w-grid w-slot[cell] > *[aria-selected="true"]` | Selected cell                  |
-| `w-grid w-slot[row]  > *[aria-selected="true"]` | Selected row                   |
-| `w-grid w-slot[row][sticky] > *`                | Sticky header row              |
-| `w-grid[height]`                                | Scrolling grid (overflow auto) |
-| `w-grid[selectionmode="row"]`                   | Row-selection mode             |
+| Selector                                                          | Targets                        |
+| ----------------------------------------------------------------- | ------------------------------ |
+| `w-grid w-slot[cell] > *[aria-selected="true"]`                   | Selected cell                  |
+| `w-grid w-slot[row]  > *[aria-selected="true"]`                   | Selected row                   |
+| `w-grid w-slot[row][sticky] > *`                                  | Sticky header row              |
+| `w-grid w-slot[cell] > *[tabindex="0"]`                           | Focused cell (any row)         |
+| `w-grid w-slot[row][sticky] w-slot[cell] > *[tabindex="0"]`       | Focused cell in sticky row     |
+| `w-grid w-slot[row]:not([sticky]) w-slot[cell] > *[tabindex="0"]` | Focused cell in non-sticky row |
+| `w-grid[height]`                                                  | Scrolling grid (overflow auto) |
+| `w-grid[selectionmode="row"]`                                     | Row-selection mode             |
 
 ## Accessibility
 
