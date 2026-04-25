@@ -9,24 +9,24 @@ Every Waria component is WCAG 2.1 AA compliant out of the box.
 
 ## What You Get Automatically
 
-| Feature | Description |
-|---------|-------------|
-| **ARIA attributes** | `role`, `aria-expanded`, `aria-controls`, etc. |
-| **Keyboard navigation** | Arrow keys, Tab, Enter, Space, Escape |
-| **Focus management** | Focus trapping, focus restoration |
-| **Screen reader support** | Live regions, announcements |
+| Feature                   | Description                                    |
+| ------------------------- | ---------------------------------------------- |
+| **ARIA attributes**       | `role`, `aria-expanded`, `aria-controls`, etc. |
+| **Keyboard navigation**   | Arrow keys, Tab, Enter, Space, Escape          |
+| **Focus management**      | Focus trapping, focus restoration              |
+| **Screen reader support** | Live regions, announcements                    |
 
 ## Keyboard Shortcuts
 
 Standard keyboard patterns across all components:
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Move between focusable elements |
-| `Arrow Keys` | Navigate within a component |
-| `Enter` / `Space` | Activate buttons, select items |
-| `Escape` | Close overlays, cancel |
-| `Home` / `End` | Jump to first/last item |
+| Key               | Action                          |
+| ----------------- | ------------------------------- |
+| `Tab`             | Move between focusable elements |
+| `Arrow Keys`      | Navigate within a component     |
+| `Enter` / `Space` | Activate buttons, select items  |
+| `Escape`          | Close overlays, cancel          |
+| `Home` / `End`    | Jump to first/last item         |
 
 ## Example: Dialog Accessibility
 
@@ -40,6 +40,7 @@ Standard keyboard patterns across all components:
 ```
 
 Waria automatically adds:
+
 - `role="dialog"` to the content
 - `aria-modal="true"` when modal
 - `aria-label` from the `label` prop
@@ -72,16 +73,17 @@ Always provide accessible labels:
 
 Recommended tools:
 
-| Tool | Purpose |
-|------|---------|
+| Tool                                       | Purpose                           |
+| ------------------------------------------ | --------------------------------- |
 | [axe DevTools](https://www.deque.com/axe/) | Browser extension for a11y audits |
-| [WAVE](https://wave.webaim.org/) | Visual accessibility checker |
-| VoiceOver / NVDA | Screen reader testing |
-| Keyboard-only | Test without a mouse |
+| [WAVE](https://wave.webaim.org/)           | Visual accessibility checker      |
+| VoiceOver / NVDA                           | Screen reader testing             |
+| Keyboard-only                              | Test without a mouse              |
 
 ## Standards
 
 Waria follows:
+
 - [WAI-ARIA 1.2](https://www.w3.org/TR/wai-aria-1.2/)
 - [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [WCAG 2.1 Level AA](https://www.w3.org/WAI/WCAG21/quickref/)

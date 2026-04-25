@@ -28,36 +28,36 @@ Hierarchical tree view with expandable nodes.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | `""` | Selected item name |
-| `expanded` | `string` | `""` | Comma-separated expanded item names |
-| `label` | `string` | `""` | Accessible label |
+| Prop       | Type     | Default | Description                         |
+| ---------- | -------- | ------- | ----------------------------------- |
+| `value`    | `string` | `""`    | Selected item name                  |
+| `expanded` | `string` | `""`    | Comma-separated expanded item names |
+| `label`    | `string` | `""`    | Accessible label                    |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
+| Slot   | Element   | Description                                     |
+| ------ | --------- | ----------------------------------------------- |
 | `item` | Container | Tree item (use `name`, optionally `expandable`) |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `change` | `{ value }` | Selection changed |
+| Event    | Detail               | Description             |
+| -------- | -------------------- | ----------------------- |
+| `change` | `{ value }`          | Selection changed       |
 | `expand` | `{ item, expanded }` | Item expanded/collapsed |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `ArrowDown` | Next visible item |
-| `ArrowUp` | Previous visible item |
-| `ArrowRight` | Expand or move to first child |
-| `ArrowLeft` | Collapse or move to parent |
-| `Home` | First item |
-| `End` | Last visible item |
-| `Enter` / `Space` | Select item |
+| Key               | Action                        |
+| ----------------- | ----------------------------- |
+| `ArrowDown`       | Next visible item             |
+| `ArrowUp`         | Previous visible item         |
+| `ArrowRight`      | Expand or move to first child |
+| `ArrowLeft`       | Collapse or move to parent    |
+| `Home`            | First item                    |
+| `End`             | Last visible item             |
+| `Enter` / `Space` | Select item                   |
 
 ## Accessibility
 

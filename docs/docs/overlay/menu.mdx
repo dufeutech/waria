@@ -23,53 +23,53 @@ Dropdown menus with nested submenus and keyboard navigation.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `open` | `boolean` | `false` | Whether the menu is open |
-| `placement` | `string` | `"bottom-start"` | Menu position relative to trigger |
-| `persistent` | `boolean` | `false` | Prevent closing via Escape or outside click |
-| `closeOnSelect` | `boolean` | `true` | Close menu when item is selected |
-| `portal` | `boolean` | `true` | Teleport content to body for z-index safety |
+| Prop            | Type      | Default          | Description                                 |
+| --------------- | --------- | ---------------- | ------------------------------------------- |
+| `open`          | `boolean` | `false`          | Whether the menu is open                    |
+| `placement`     | `string`  | `"bottom-start"` | Menu position relative to trigger           |
+| `persistent`    | `boolean` | `false`          | Prevent closing via Escape or outside click |
+| `closeOnSelect` | `boolean` | `true`           | Close menu when item is selected            |
+| `portal`        | `boolean` | `true`           | Teleport content to body for z-index safety |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `trigger` | Button | Element that opens the menu |
-| `content` | Container | Menu container |
-| `item` | Button | Menu item (optionally with `name` attribute) |
-| `submenu` | Container | Nested submenu content |
+| Slot      | Element   | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| `trigger` | Button    | Element that opens the menu                  |
+| `content` | Container | Menu container                               |
+| `item`    | Button    | Menu item (optionally with `name` attribute) |
+| `submenu` | Container | Nested submenu content                       |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `open` | - | Fired when menu opens |
-| `close` | - | Fired when menu closes |
+| Event    | Detail              | Description                    |
+| -------- | ------------------- | ------------------------------ |
+| `open`   | -                   | Fired when menu opens          |
+| `close`  | -                   | Fired when menu closes         |
 | `select` | `{ item, element }` | Fired when an item is selected |
 
 ## Methods
 
-| Method | Description |
-|--------|-------------|
-| `show()` | Open the menu |
-| `hide()` | Close the menu |
+| Method           | Description       |
+| ---------------- | ----------------- |
+| `show()`         | Open the menu     |
+| `hide()`         | Close the menu    |
 | `toggle(force?)` | Toggle open state |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `Enter` / `Space` / `ArrowDown` | Open menu (on trigger) |
-| `ArrowUp` | Open menu and focus last item |
-| `ArrowDown` | Focus next item |
-| `ArrowUp` | Focus previous item |
-| `ArrowRight` | Open submenu |
-| `ArrowLeft` | Close submenu, return to parent |
-| `Home` | Focus first item |
-| `End` | Focus last item |
-| `Escape` | Close menu |
-| `Tab` | Close menu |
+| Key                             | Action                          |
+| ------------------------------- | ------------------------------- |
+| `Enter` / `Space` / `ArrowDown` | Open menu (on trigger)          |
+| `ArrowUp`                       | Open menu and focus last item   |
+| `ArrowDown`                     | Focus next item                 |
+| `ArrowUp`                       | Focus previous item             |
+| `ArrowRight`                    | Open submenu                    |
+| `ArrowLeft`                     | Close submenu, return to parent |
+| `Home`                          | Focus first item                |
+| `End`                           | Focus last item                 |
+| `Escape`                        | Close menu                      |
+| `Tab`                           | Close menu                      |
 
 ## Examples
 
@@ -111,6 +111,7 @@ Dropdown menus with nested submenus and keyboard navigation.
 ```
 
 Available placements:
+
 - `top`, `top-start`, `top-end`
 - `bottom`, `bottom-start`, `bottom-end`
 - `left`, `left-start`, `left-end`
@@ -142,13 +143,25 @@ A persistent menu cannot be dismissed by pressing Escape or clicking outside.
 ## CSS Transitions
 
 ```css
-.menu-enter { }
-.menu-enter-from { opacity: 0; transform: translateY(-4px); }
-.menu-enter-to { opacity: 1; transform: translateY(0); }
+.menu-enter {
+}
+.menu-enter-from {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+.menu-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-.menu-leave { }
-.menu-leave-from { opacity: 1; }
-.menu-leave-to { opacity: 0; }
+.menu-leave {
+}
+.menu-leave-from {
+  opacity: 1;
+}
+.menu-leave-to {
+  opacity: 0;
+}
 ```
 
 ## Accessibility

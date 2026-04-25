@@ -18,32 +18,32 @@ Radio or checkbox group selection.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | `""` | Selected value(s), comma-separated for multiple |
-| `multiple` | `boolean` | `false` | Allow multiple selection |
-| `label` | `string` | `""` | Group label |
-| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout direction |
+| Prop          | Type                           | Default        | Description                                     |
+| ------------- | ------------------------------ | -------------- | ----------------------------------------------- |
+| `value`       | `string`                       | `""`           | Selected value(s), comma-separated for multiple |
+| `multiple`    | `boolean`                      | `false`        | Allow multiple selection                        |
+| `label`       | `string`                       | `""`           | Group label                                     |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout direction                                |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `option` | Button | Selectable option (use `data-value`) |
+| Slot     | Element | Description                          |
+| -------- | ------- | ------------------------------------ |
+| `option` | Button  | Selectable option (use `data-value`) |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
+| Event    | Detail      | Description       |
+| -------- | ----------- | ----------------- |
 | `change` | `{ value }` | Selection changed |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `ArrowRight` / `ArrowDown` | Next option |
-| `ArrowLeft` / `ArrowUp` | Previous option |
-| `Space` | Select focused option |
+| Key                        | Action                |
+| -------------------------- | --------------------- |
+| `ArrowRight` / `ArrowDown` | Next option           |
+| `ArrowLeft` / `ArrowUp`    | Previous option       |
+| `Space`                    | Select focused option |
 
 ## Examples
 

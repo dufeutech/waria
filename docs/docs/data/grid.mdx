@@ -27,32 +27,58 @@ Interactive data grid with keyboard navigation.
 </w-grid>
 ```
 
+### Sized columns
+
+Use `size="N"` on a cell slot to give it a wider flex grow value. Sizes 1–12 are supported.
+
+```html
+<w-grid label="Inventory">
+  <w-slot row>
+    <div>
+      <w-slot cell size="2"><div>Product</div></w-slot>
+      <w-slot cell><div>Category</div></w-slot>
+      <w-slot cell><div>Price</div></w-slot>
+    </div>
+  </w-slot>
+</w-grid>
+```
+
+### Layout
+
+Rows default to `display: flex` and cells default to `flex: 1`, so a bare grid lays out as a horizontal row of equal-width cells without any inline styles. `<w-slot cell size="N">` sets `flex: N` on the cell (1–12). Defaults are applied with zero specificity (`:where()`), so any inline `style="flex: ..."` or class-based rule overrides them — useful for non-numeric values like `auto` or fixed widths.
+
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | `""` | Accessible label |
+| Prop    | Type     | Default | Description      |
+| ------- | -------- | ------- | ---------------- |
+| `label` | `string` | `""`    | Accessible label |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `row` | Container | Grid row |
-| `cell` | Any | Grid cell |
-| `rowheader` | Any | Row header cell |
+| Slot        | Element   | Description     |
+| ----------- | --------- | --------------- |
+| `row`       | Container | Grid row        |
+| `cell`      | Any       | Grid cell       |
+| `rowheader` | Any       | Row header cell |
+
+## Cell Attributes
+
+| Attribute | Values   | Description                              |
+| --------- | -------- | ---------------------------------------- |
+| `size`    | `1`–`12` | Sets `flex: N` on the cell. Default `1`. |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `ArrowRight` | Next cell |
-| `ArrowLeft` | Previous cell |
-| `ArrowDown` | Cell below |
-| `ArrowUp` | Cell above |
-| `Home` | First cell in row |
-| `End` | Last cell in row |
-| `Ctrl+Home` | First cell in grid |
-| `Ctrl+End` | Last cell in grid |
+| Key          | Action             |
+| ------------ | ------------------ |
+| `ArrowRight` | Next cell          |
+| `ArrowLeft`  | Previous cell      |
+| `ArrowDown`  | Cell below         |
+| `ArrowUp`    | Cell above         |
+| `Home`       | First cell in row  |
+| `End`        | Last cell in row   |
+| `Ctrl+Home`  | First cell in grid |
+| `Ctrl+End`   | Last cell in grid  |
 
 ## Accessibility
 

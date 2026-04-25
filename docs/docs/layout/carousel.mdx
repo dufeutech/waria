@@ -29,43 +29,43 @@ Image/content carousel with navigation.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `number` | `0` | Current slide index |
-| `loop` | `boolean` | `true` | Loop at ends |
-| `autoplay` | `number` | `0` | Auto-advance interval (ms), 0 to disable |
-| `label` | `string` | `""` | Accessible label |
+| Prop       | Type      | Default | Description                              |
+| ---------- | --------- | ------- | ---------------------------------------- |
+| `value`    | `number`  | `0`     | Current slide index                      |
+| `loop`     | `boolean` | `true`  | Loop at ends                             |
+| `autoplay` | `number`  | `0`     | Auto-advance interval (ms), 0 to disable |
+| `label`    | `string`  | `""`    | Accessible label                         |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `item` | Any | Carousel slides |
-| `prev` | Button | Previous slide button |
-| `next` | Button | Next slide button |
-| `indicators` | Container | Indicator container |
-| `indicator` | Button | Individual slide indicators |
+| Slot         | Element   | Description                 |
+| ------------ | --------- | --------------------------- |
+| `item`       | Any       | Carousel slides             |
+| `prev`       | Button    | Previous slide button       |
+| `next`       | Button    | Next slide button           |
+| `indicators` | Container | Indicator container         |
+| `indicator`  | Button    | Individual slide indicators |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
+| Event    | Detail      | Description   |
+| -------- | ----------- | ------------- |
 | `change` | `{ value }` | Slide changed |
 
 ## Methods
 
-| Method | Description |
-|--------|-------------|
-| `prev()` | Go to previous slide |
-| `next()` | Go to next slide |
+| Method        | Description          |
+| ------------- | -------------------- |
+| `prev()`      | Go to previous slide |
+| `next()`      | Go to next slide     |
 | `goTo(index)` | Go to specific slide |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `ArrowLeft` | Previous slide |
-| `ArrowRight` | Next slide |
+| Key          | Action         |
+| ------------ | -------------- |
+| `ArrowLeft`  | Previous slide |
+| `ArrowRight` | Next slide     |
 
 ## Accessibility
 

@@ -21,44 +21,44 @@ Resizable nested panel layouts for IDEs, dashboards, and multi-panel application
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `direction` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Split direction |
-| `min` | `number` | `0` | Default minimum size (px) for all panes |
-| `step` | `number` | `10` | Keyboard resize step (px) |
+| Prop        | Type                           | Default        | Description                             |
+| ----------- | ------------------------------ | -------------- | --------------------------------------- |
+| `direction` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Split direction                         |
+| `min`       | `number`                       | `0`            | Default minimum size (px) for all panes |
+| `step`      | `number`                       | `10`           | Keyboard resize step (px)               |
 
 ## Pane Attributes
 
 Applied to `w-slot[item]` elements:
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `data-size` | `string` | `1fr` | Initial size (`px`, `fr`, or `%`) |
-| `data-min` | `string` | `0` | Minimum size in px |
-| `name` | `string` | auto | Identifier for state persistence |
+| Attribute   | Type     | Default | Description                       |
+| ----------- | -------- | ------- | --------------------------------- |
+| `data-size` | `string` | `1fr`   | Initial size (`px`, `fr`, or `%`) |
+| `data-min`  | `string` | `0`     | Minimum size in px                |
+| `name`      | `string` | auto    | Identifier for state persistence  |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
+| Event    | Detail                              | Description                  |
+| -------- | ----------------------------------- | ---------------------------- |
 | `resize` | `{ sizes: Record<string, string> }` | Fired after resize completes |
 
 ## Methods
 
-| Method | Returns | Description |
-|--------|---------|-------------|
+| Method       | Returns                  | Description            |
+| ------------ | ------------------------ | ---------------------- |
 | `getSizes()` | `Record<string, string>` | Get current pane sizes |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Focus resizer |
-| `ArrowLeft` / `ArrowRight` | Resize horizontal split |
-| `ArrowUp` / `ArrowDown` | Resize vertical split |
-| `Home` | Collapse pane to minimum |
-| `End` | Expand pane to maximum |
-| `Enter` | Toggle collapse/restore |
+| Key                        | Action                   |
+| -------------------------- | ------------------------ |
+| `Tab`                      | Focus resizer            |
+| `ArrowLeft` / `ArrowRight` | Resize horizontal split  |
+| `ArrowUp` / `ArrowDown`    | Resize vertical split    |
+| `Home`                     | Collapse pane to minimum |
+| `End`                      | Expand pane to maximum   |
+| `Enter`                    | Toggle collapse/restore  |
 
 ## Examples
 
@@ -120,11 +120,11 @@ Applied to `w-slot[item]` elements:
 </w-split>
 
 <script>
-  const split = document.getElementById('my-split');
+  const split = document.getElementById("my-split");
 
   // Save on resize
-  split.addEventListener('resize', (e) => {
-    localStorage.setItem('split-sizes', JSON.stringify(e.detail.sizes));
+  split.addEventListener("resize", (e) => {
+    localStorage.setItem("split-sizes", JSON.stringify(e.detail.sizes));
   });
 
   // Restore on load (via data-size attributes before init)

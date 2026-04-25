@@ -30,44 +30,44 @@ Tabbed interface with automatic or manual activation. Supports nested tabs witho
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | `""` | Currently selected tab name |
-| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Tab list orientation |
-| `activation` | `"automatic"` \| `"manual"` | `"automatic"` | When tabs activate |
+| Prop          | Type                           | Default        | Description                 |
+| ------------- | ------------------------------ | -------------- | --------------------------- |
+| `value`       | `string`                       | `""`           | Currently selected tab name |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Tab list orientation        |
+| `activation`  | `"automatic"` \| `"manual"`    | `"automatic"`  | When tabs activate          |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `list` | Container | Wrapper for tab buttons (becomes tablist) |
-| `tab` | Button | Tab button inside `w-slot[list]` (requires `name` attribute) |
-| `panels` | Container | Wrapper for all tab panels |
-| `panel` | Any | Tab panel content inside `w-slot[panels]` (requires matching `name`) |
+| Slot     | Element   | Description                                                          |
+| -------- | --------- | -------------------------------------------------------------------- |
+| `list`   | Container | Wrapper for tab buttons (becomes tablist)                            |
+| `tab`    | Button    | Tab button inside `w-slot[list]` (requires `name` attribute)         |
+| `panels` | Container | Wrapper for all tab panels                                           |
+| `panel`  | Any       | Tab panel content inside `w-slot[panels]` (requires matching `name`) |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
+| Event    | Detail      | Description                     |
+| -------- | ----------- | ------------------------------- |
 | `change` | `{ value }` | Fired when selected tab changes |
 
 ## Methods
 
-| Method | Description |
-|--------|-------------|
-| `selectTab(name)` | Select a tab by name |
+| Method             | Description                         |
+| ------------------ | ----------------------------------- |
+| `selectTab(name)`  | Select a tab by name                |
 | `getSelectedTab()` | Get the currently selected tab name |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `ArrowRight` | Focus next tab (horizontal) |
-| `ArrowLeft` | Focus previous tab (horizontal) |
-| `ArrowDown` | Focus next tab (vertical) |
-| `ArrowUp` | Focus previous tab (vertical) |
-| `Home` | Focus first tab |
-| `End` | Focus last tab |
+| Key               | Action                             |
+| ----------------- | ---------------------------------- |
+| `ArrowRight`      | Focus next tab (horizontal)        |
+| `ArrowLeft`       | Focus previous tab (horizontal)    |
+| `ArrowDown`       | Focus next tab (vertical)          |
+| `ArrowUp`         | Focus previous tab (vertical)      |
+| `Home`            | Focus first tab                    |
+| `End`             | Focus last tab                     |
 | `Enter` / `Space` | Activate focused tab (manual mode) |
 
 ## Examples
@@ -88,7 +88,9 @@ Tabbed interface with automatic or manual activation. Supports nested tabs witho
     <div>
       <w-slot panel name="profile"><div>Profile settings...</div></w-slot>
       <w-slot panel name="settings"><div>General settings...</div></w-slot>
-      <w-slot panel name="notifications"><div>Notification preferences...</div></w-slot>
+      <w-slot panel name="notifications"
+        ><div>Notification preferences...</div></w-slot
+      >
     </div>
   </w-slot>
 </w-tabs>

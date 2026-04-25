@@ -17,39 +17,39 @@ Accessible tooltips with hover and focus triggers.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `open` | `boolean` | `false` | Whether the tooltip is visible |
-| `placement` | `string` | `"top"` | Position relative to trigger |
-| `delay` | `number` | `300` | Delay before showing (ms) |
-| `closeDelay` | `number` | `100` | Delay before hiding (ms) |
-| `portal` | `boolean` | `true` | Teleport to body for z-index safety |
+| Prop         | Type      | Default | Description                         |
+| ------------ | --------- | ------- | ----------------------------------- |
+| `open`       | `boolean` | `false` | Whether the tooltip is visible      |
+| `placement`  | `string`  | `"top"` | Position relative to trigger        |
+| `delay`      | `number`  | `300`   | Delay before showing (ms)           |
+| `closeDelay` | `number`  | `100`   | Delay before hiding (ms)            |
+| `portal`     | `boolean` | `true`  | Teleport to body for z-index safety |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `trigger` | Any | Element that shows tooltip on hover/focus |
-| `content` | Any | Tooltip content |
+| Slot      | Element | Description                               |
+| --------- | ------- | ----------------------------------------- |
+| `trigger` | Any     | Element that shows tooltip on hover/focus |
+| `content` | Any     | Tooltip content                           |
 
 ## Events
 
-| Event | Description |
-|-------|-------------|
+| Event  | Description                        |
+| ------ | ---------------------------------- |
 | `show` | Fired when tooltip becomes visible |
-| `hide` | Fired when tooltip is hidden |
+| `hide` | Fired when tooltip is hidden       |
 
 ## Methods
 
-| Method | Description |
-|--------|-------------|
+| Method   | Description                  |
+| -------- | ---------------------------- |
 | `show()` | Show the tooltip immediately |
 | `hide()` | Hide the tooltip immediately |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
+| Key      | Action       |
+| -------- | ------------ |
 | `Escape` | Hide tooltip |
 
 ## Examples
@@ -73,6 +73,7 @@ Accessible tooltips with hover and focus triggers.
 ```
 
 Available placements:
+
 - `top`, `top-start`, `top-end`
 - `bottom`, `bottom-start`, `bottom-end`
 - `left`, `left-start`, `left-end`
@@ -95,13 +96,23 @@ Available placements:
 ## CSS Transitions
 
 ```css
-.tooltip-enter { }
-.tooltip-enter-from { opacity: 0; }
-.tooltip-enter-to { opacity: 1; }
+.tooltip-enter {
+}
+.tooltip-enter-from {
+  opacity: 0;
+}
+.tooltip-enter-to {
+  opacity: 1;
+}
 
-.tooltip-leave { }
-.tooltip-leave-from { opacity: 1; }
-.tooltip-leave-to { opacity: 0; }
+.tooltip-leave {
+}
+.tooltip-leave-from {
+  opacity: 1;
+}
+.tooltip-leave-to {
+  opacity: 0;
+}
 ```
 
 ## Styling

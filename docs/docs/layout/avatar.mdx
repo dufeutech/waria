@@ -17,16 +17,16 @@ User avatar with image and fallback.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `size` | `string` | `"md"` | Size variant |
+| Prop   | Type     | Default | Description  |
+| ------ | -------- | ------- | ------------ |
+| `size` | `string` | `"md"`  | Size variant |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `image` | Image | User's avatar image |
-| `fallback` | Any | Shown when image fails to load |
+| Slot       | Element | Description                    |
+| ---------- | ------- | ------------------------------ |
+| `image`    | Image   | User's avatar image            |
+| `fallback` | Any     | Shown when image fails to load |
 
 ## Sizes
 
@@ -47,10 +47,22 @@ w-avatar {
   background: #e0e0e0;
 }
 
-w-avatar[size="sm"] { width: 32px; height: 32px; }
-w-avatar[size="md"] { width: 40px; height: 40px; }
-w-avatar[size="lg"] { width: 48px; height: 48px; }
-w-avatar[size="xl"] { width: 64px; height: 64px; }
+w-avatar[size="sm"] {
+  width: 32px;
+  height: 32px;
+}
+w-avatar[size="md"] {
+  width: 40px;
+  height: 40px;
+}
+w-avatar[size="lg"] {
+  width: 48px;
+  height: 48px;
+}
+w-avatar[size="xl"] {
+  width: 64px;
+  height: 64px;
+}
 ```
 
 ## Accessibility

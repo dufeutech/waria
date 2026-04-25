@@ -25,34 +25,59 @@ Hierarchical grid combining tree and grid patterns.
 </w-treegrid>
 ```
 
+### Sized columns
+
+Use `size="N"` on a cell slot to give it a wider flex grow value. Sizes 1–12 are supported.
+
+```html
+<w-treegrid label="File browser">
+  <w-slot row data-level="1" expandable>
+    <div>
+      <w-slot cell size="2"><div>Name</div></w-slot>
+      <w-slot cell><div>Type</div></w-slot>
+    </div>
+  </w-slot>
+</w-treegrid>
+```
+
+### Layout
+
+Rows default to `display: flex` and cells default to `flex: 1`, so a bare treegrid lays out as a horizontal row of equal-width cells without any inline styles. `<w-slot cell size="N">` sets `flex: N` on the cell (1–12). Defaults are applied with zero specificity (`:where()`), so any inline `style="flex: ..."` or class-based rule overrides them — note that custom cell classes (e.g. a `.treegrid-cell { flex: 1 }` rule) will override `size` because class selectors out-rank `:where()`.
+
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | `""` | Accessible label |
+| Prop    | Type     | Default | Description      |
+| ------- | -------- | ------- | ---------------- |
+| `label` | `string` | `""`    | Accessible label |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `row` | Container | Grid row (use `data-level`, `expandable` attributes) |
-| `cell` | Any | Grid cell |
+| Slot   | Element   | Description                                          |
+| ------ | --------- | ---------------------------------------------------- |
+| `row`  | Container | Grid row (use `data-level`, `expandable` attributes) |
+| `cell` | Any       | Grid cell                                            |
 
 ## Row Attributes
 
-| Attribute | Description |
-|-----------|-------------|
+| Attribute    | Description                   |
+| ------------ | ----------------------------- |
 | `data-level` | Nesting level (1, 2, 3, etc.) |
-| `expandable` | Row can be expanded |
+| `expandable` | Row can be expanded           |
+
+## Cell Attributes
+
+| Attribute | Values   | Description                              |
+| --------- | -------- | ---------------------------------------- |
+| `size`    | `1`–`12` | Sets `flex: N` on the cell. Default `1`. |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `ArrowRight` | Expand row or move right |
-| `ArrowLeft` | Collapse row or move left |
-| `ArrowDown` | Next visible row |
-| `ArrowUp` | Previous visible row |
+| Key          | Action                    |
+| ------------ | ------------------------- |
+| `ArrowRight` | Expand row or move right  |
+| `ArrowLeft`  | Collapse row or move left |
+| `ArrowDown`  | Next visible row          |
+| `ArrowUp`    | Previous visible row      |
 
 ## Accessibility
 

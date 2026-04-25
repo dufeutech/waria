@@ -22,25 +22,25 @@ URL-based view container for single-page routing.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `path` | `string` | `""` | URL path that activates this view |
-| `label` | `string` | `""` | Accessible label (adds landmark role) |
+| Prop     | Type      | Default | Description                           |
+| -------- | --------- | ------- | ------------------------------------- |
+| `path`   | `string`  | `""`    | URL path that activates this view     |
+| `label`  | `string`  | `""`    | Accessible label (adds landmark role) |
 | `active` | `boolean` | `false` | Whether the view is currently visible |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
+| Event         | Detail             | Description                   |
+| ------------- | ------------------ | ----------------------------- |
 | `view-change` | `{ active, path }` | Fired when visibility changes |
 
 ## Methods
 
-| Method | Description |
-|--------|-------------|
-| `navigate()` | Navigate to this view's path |
-| `isActive()` | Check if currently active |
-| `refresh()` | Force refresh visibility state |
+| Method       | Description                    |
+| ------------ | ------------------------------ |
+| `navigate()` | Navigate to this view's path   |
+| `isActive()` | Check if currently active      |
+| `refresh()`  | Force refresh visibility state |
 
 ## Examples
 
@@ -138,8 +138,12 @@ w-view[active] {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 ```
 

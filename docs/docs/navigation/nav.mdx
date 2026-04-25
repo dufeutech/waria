@@ -26,9 +26,9 @@ Site navigation with URL synchronization and roving tabindex.
 
 ## Slots
 
-| Slot   | Element               | Description                                              |
-| ------ | --------------------- | -------------------------------------------------------- |
-| `item` | `w-link` / `button`   | Navigation items (uses `href` or `data-value` for value) |
+| Slot   | Element             | Description                                              |
+| ------ | ------------------- | -------------------------------------------------------- |
+| `item` | `w-link` / `button` | Navigation items (uses `href` or `data-value` for value) |
 
 ## Events
 
@@ -71,7 +71,9 @@ Site navigation with URL synchronization and roving tabindex.
 ```html
 <w-nav label="Resources">
   <w-slot item><w-link href="/docs">Docs</w-link></w-slot>
-  <w-slot item><w-link href="https://github.com" external>GitHub</w-link></w-slot>
+  <w-slot item
+    ><w-link href="https://github.com" external>GitHub</w-link></w-slot
+  >
 </w-nav>
 ```
 

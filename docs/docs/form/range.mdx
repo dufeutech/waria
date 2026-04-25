@@ -21,41 +21,41 @@ Slider input for selecting a value in a range.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `number` | `0` | Current value |
-| `min` | `number` | `0` | Minimum value |
-| `max` | `number` | `100` | Maximum value |
-| `step` | `number` | `1` | Step increment |
-| `label` | `string` | `""` | Accessible label |
-| `disabled` | `boolean` | `false` | Disable slider |
+| Prop          | Type                           | Default        | Description        |
+| ------------- | ------------------------------ | -------------- | ------------------ |
+| `value`       | `number`                       | `0`            | Current value      |
+| `min`         | `number`                       | `0`            | Minimum value      |
+| `max`         | `number`                       | `100`          | Maximum value      |
+| `step`        | `number`                       | `1`            | Step increment     |
+| `label`       | `string`                       | `""`           | Accessible label   |
+| `disabled`    | `boolean`                      | `false`        | Disable slider     |
 | `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Slider orientation |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `track` | Container | Slider track container |
-| `fill` | Element | Filled portion of track |
-| `thumb` | Element | Draggable thumb |
+| Slot    | Element   | Description             |
+| ------- | --------- | ----------------------- |
+| `track` | Container | Slider track container  |
+| `fill`  | Element   | Filled portion of track |
+| `thumb` | Element   | Draggable thumb         |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `change` | `{ value }` | Value changed (on release) |
-| `input` | `{ value }` | Value changing (while dragging) |
+| Event    | Detail      | Description                     |
+| -------- | ----------- | ------------------------------- |
+| `change` | `{ value }` | Value changed (on release)      |
+| `input`  | `{ value }` | Value changing (while dragging) |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
-| `ArrowRight` / `ArrowUp` | Increment |
-| `ArrowLeft` / `ArrowDown` | Decrement |
-| `Home` | Set to minimum |
-| `End` | Set to maximum |
-| `PageUp` | Increment by 10% |
-| `PageDown` | Decrement by 10% |
+| Key                       | Action           |
+| ------------------------- | ---------------- |
+| `ArrowRight` / `ArrowUp`  | Increment        |
+| `ArrowLeft` / `ArrowDown` | Decrement        |
+| `Home`                    | Set to minimum   |
+| `End`                     | Set to maximum   |
+| `PageUp`                  | Increment by 10% |
+| `PageDown`                | Decrement by 10% |
 
 ## Accessibility
 

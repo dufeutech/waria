@@ -27,40 +27,40 @@ Custom select dropdown with full keyboard support.
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | `""` | Currently selected value |
-| `open` | `boolean` | `false` | Whether dropdown is open |
-| `disabled` | `boolean` | `false` | Disable the select |
-| `persistent` | `boolean` | `false` | Prevent closing via Escape or outside click |
-| `placeholder` | `string` | `""` | Placeholder text |
-| `portal` | `boolean` | `true` | Teleport listbox to body |
+| Prop          | Type      | Default | Description                                 |
+| ------------- | --------- | ------- | ------------------------------------------- |
+| `value`       | `string`  | `""`    | Currently selected value                    |
+| `open`        | `boolean` | `false` | Whether dropdown is open                    |
+| `disabled`    | `boolean` | `false` | Disable the select                          |
+| `persistent`  | `boolean` | `false` | Prevent closing via Escape or outside click |
+| `placeholder` | `string`  | `""`    | Placeholder text                            |
+| `portal`      | `boolean` | `true`  | Teleport listbox to body                    |
 
 ## Slots
 
-| Slot | Element | Description |
-|------|---------|-------------|
-| `trigger` | Button | The select button |
-| `display` | Span | Shows selected value text |
-| `listbox` | Container | Options container |
-| `option` | Any | Selectable options (use `data-value`) |
+| Slot      | Element   | Description                           |
+| --------- | --------- | ------------------------------------- |
+| `trigger` | Button    | The select button                     |
+| `display` | Span      | Shows selected value text             |
+| `listbox` | Container | Options container                     |
+| `option`  | Any       | Selectable options (use `data-value`) |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
+| Event    | Detail      | Description                  |
+| -------- | ----------- | ---------------------------- |
 | `change` | `{ value }` | Fired when selection changes |
 
 ## Keyboard
 
-| Key | Action |
-|-----|--------|
+| Key               | Action                        |
+| ----------------- | ----------------------------- |
 | `Enter` / `Space` | Open dropdown / Select option |
-| `ArrowDown` | Open dropdown / Next option |
-| `ArrowUp` | Previous option |
-| `Home` | First option |
-| `End` | Last option |
-| `Escape` | Close dropdown |
+| `ArrowDown`       | Open dropdown / Next option   |
+| `ArrowUp`         | Previous option               |
+| `Home`            | First option                  |
+| `End`             | Last option                   |
+| `Escape`          | Close dropdown                |
 
 ## Accessibility
 

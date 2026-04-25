@@ -14,11 +14,11 @@ Accessible link component with external link handling and router integration.
 
 ## Props
 
-| Prop       | Type      | Default     | Description                           |
-|------------|-----------|-------------|---------------------------------------|
-| `href`     | `string`  | `""`        | Link destination                      |
-| `external` | `boolean` | `false`     | Opens in new tab with security        |
-| `disabled` | `boolean` | `false`     | Disables the link                     |
+| Prop       | Type      | Default     | Description                                     |
+| ---------- | --------- | ----------- | ----------------------------------------------- |
+| `href`     | `string`  | `""`        | Link destination                                |
+| `external` | `boolean` | `false`     | Opens in new tab with security                  |
+| `disabled` | `boolean` | `false`     | Disables the link                               |
 | `variant`  | `string`  | `"default"` | Style variant: `default`, `subtle`, `underline` |
 
 ## Examples
@@ -32,12 +32,11 @@ Accessible link component with external link handling and router integration.
 ### External Link
 
 ```html
-<w-link href="https://github.com" external>
-  View on GitHub
-</w-link>
+<w-link href="https://github.com" external> View on GitHub </w-link>
 ```
 
 When `external` is set:
+
 - Opens in new tab (`target="_blank"`)
 - Adds `rel="noopener noreferrer"` for security
 - Prevents tabnabbing attacks
@@ -45,9 +44,7 @@ When `external` is set:
 ### Disabled Link
 
 ```html
-<w-link href="/premium" disabled>
-  Premium Feature (Coming Soon)
-</w-link>
+<w-link href="/premium" disabled> Premium Feature (Coming Soon) </w-link>
 ```
 
 ### With Navigation
@@ -58,7 +55,9 @@ When `external` is set:
 <w-nav label="Main navigation">
   <w-slot item><w-link href="/home">Home</w-link></w-slot>
   <w-slot item><w-link href="/about">About</w-link></w-slot>
-  <w-slot item><w-link href="https://docs.example.com" external>Docs</w-link></w-slot>
+  <w-slot item
+    ><w-link href="https://docs.example.com" external>Docs</w-link></w-slot
+  >
 </w-nav>
 ```
 
