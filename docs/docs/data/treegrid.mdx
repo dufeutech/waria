@@ -40,15 +40,33 @@ Use `size="N"` on a cell slot to give it a wider flex grow value. Sizes 1–12 a
 </w-treegrid>
 ```
 
+### Fixed height + sticky header
+
+Set `height` on the treegrid to make it scroll, and add `sticky` to a row slot to pin it to the top. Give the header row a solid background so scrolling content doesn't bleed through.
+
+```html
+<w-treegrid height="240px">
+  <w-slot row sticky>
+    <div style="background: #f5f5f5;">
+      <w-slot cell><div>Name</div></w-slot>
+      <w-slot cell><div>Type</div></w-slot>
+    </div>
+  </w-slot>
+  <!-- many rows… -->
+</w-treegrid>
+```
+
 ### Layout
 
 Rows default to `display: flex` and cells default to `flex: 1`, so a bare treegrid lays out as a horizontal row of equal-width cells without any inline styles. `<w-slot cell size="N">` sets `flex: N` on the cell (1–12). Defaults are applied with zero specificity (`:where()`), so any inline `style="flex: ..."` or class-based rule overrides them — note that custom cell classes (e.g. a `.treegrid-cell { flex: 1 }` rule) will override `size` because class selectors out-rank `:where()`.
 
 ## Props
 
-| Prop    | Type     | Default | Description      |
-| ------- | -------- | ------- | ---------------- |
-| `label` | `string` | `""`    | Accessible label |
+| Prop            | Type                              | Default    | Description                                                              |
+| --------------- | --------------------------------- | ---------- | ------------------------------------------------------------------------ |
+| `label`         | `string`                          | `""`       | Accessible label                                                         |
+| `selectionMode` | `"none" \| "single" \| "multiple"` | `"single"` | Selection behavior on rows                                               |
+| `height`        | `string`                          | —          | CSS height (e.g. `"240px"`, `"50vh"`). Applies `overflow: auto` for you. |
 
 ## Slots
 
@@ -59,10 +77,11 @@ Rows default to `display: flex` and cells default to `flex: 1`, so a bare treegr
 
 ## Row Attributes
 
-| Attribute    | Description                   |
-| ------------ | ----------------------------- |
-| `data-level` | Nesting level (1, 2, 3, etc.) |
-| `expandable` | Row can be expanded           |
+| Attribute    | Description                                                        |
+| ------------ | ------------------------------------------------------------------ |
+| `data-level` | Nesting level (1, 2, 3, etc.)                                      |
+| `expandable` | Row can be expanded                                                |
+| `sticky`     | Pins the row to the top of a scrolling treegrid (`position: sticky`) |
 
 ## Cell Attributes
 

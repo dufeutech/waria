@@ -94,6 +94,8 @@ type WSlotAttributes = WariaBaseAttributes & {
   row?: boolean;
   // Grid cell flex size (1–12) — sets `flex: N` on the inner element
   size?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  // Grid row sticky header — pins the row to the top while the grid scrolls
+  sticky?: boolean;
   // Range slots
   knob?: boolean;
   fill?: boolean;
@@ -361,12 +363,14 @@ declare module "preact" {
         label?: string;
         selectionMode?: "none" | "cell" | "row";
         multiSelect?: boolean;
+        height?: string;
       };
 
       // Tree Grid
       "w-treegrid": WariaBaseAttributes & {
         label?: string;
         selectionMode?: "none" | "single" | "multiple";
+        height?: string;
       };
 
       // View

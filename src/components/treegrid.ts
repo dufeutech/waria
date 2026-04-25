@@ -21,12 +21,21 @@ if (typeof document !== "undefined" && !document.getElementById(STYLE_ID)) {
   const style = document.createElement("style");
   style.id = STYLE_ID;
   style.textContent = `
+:where(w-treegrid[height]) {
+  display: block;
+  overflow: auto;
+}
 :where(w-treegrid) > :where(w-slot[row]) > * {
   display: flex;
 }
 :where(w-treegrid) :where(w-slot[cell]) > * {
   flex: 1;
   min-width: 0;
+}
+:where(w-treegrid) > :where(w-slot[row][sticky]) > * {
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 ${sizeRules}
 `;
@@ -39,6 +48,7 @@ defineComponent({
   props: [
     { name: "label", type: String, default: "Tree Grid" },
     { name: "selectionMode", type: String, default: "single" },
+    { name: "height", type: String, default: null },
   ],
 
   children: {
@@ -283,7 +293,13 @@ defineComponent({
       });
     };
 
+    const applyHeight = (): void => {
+      const h = ctx.element.getAttribute("height");
+      ctx.element.style.height = h ?? "";
+    };
+
     // Initial setup
+    applyHeight();
     initializeVisibility();
     updateAria();
 
@@ -462,8 +478,12 @@ defineComponent({
     // Watch for attribute changes
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (["label", "selectionMode"].includes(mutation.attributeName ?? "")) {
+        const name = mutation.attributeName ?? "";
+        if (["label", "selectionMode"].includes(name)) {
           updateAria();
+        }
+        if (name === "height") {
+          applyHeight();
         }
       }
     });

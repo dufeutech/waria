@@ -22,12 +22,21 @@ if (typeof document !== "undefined" && !document.getElementById(STYLE_ID)) {
   const style = document.createElement("style");
   style.id = STYLE_ID;
   style.textContent = `
+:where(w-grid[height]) {
+  display: block;
+  overflow: auto;
+}
 :where(w-grid) > :where(w-slot[row]) > * {
   display: flex;
 }
 :where(w-grid) :where(w-slot[cell]) > * {
   flex: 1;
   min-width: 0;
+}
+:where(w-grid) > :where(w-slot[row][sticky]) > * {
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 ${sizeRules}
 `;
@@ -41,6 +50,7 @@ defineComponent({
     { name: "label", type: String, default: "Grid" },
     { name: "selectionMode", type: String, default: "cell" },
     { name: "multiSelect", type: Boolean, default: false },
+    { name: "height", type: String, default: null },
   ],
 
   children: {
@@ -134,43 +144,40 @@ defineComponent({
     const selectCell = (cell: HTMLElement, toggle = false): void => {
       if (el.selectionMode === "none") return;
 
-      const isSelected = cell.getAttribute(ARIA.selected) === "true";
+      const row = cell.closest(SLOT.row) as HTMLElement | null;
+      // In row mode, selection lives on the row; in cell mode, on the cell.
+      const target = el.selectionMode === "row" && row ? row : cell;
+      const isSelected = target.getAttribute(ARIA.selected) === "true";
 
       if (!el.multiSelect) {
         // Deselect all other cells/rows
         const rows = getRows();
-        rows.forEach((row) => {
-          row.removeAttribute(ARIA.selected);
-          getCells(row).forEach((c) => c.removeAttribute(ARIA.selected));
+        rows.forEach((r) => {
+          r.removeAttribute(ARIA.selected);
+          getCells(r).forEach((c) => c.removeAttribute(ARIA.selected));
         });
       }
 
       if (toggle && isSelected) {
-        cell.removeAttribute(ARIA.selected);
+        target.removeAttribute(ARIA.selected);
       } else {
-        cell.setAttribute(ARIA.selected, "true");
-      }
-
-      // If row selection mode, also select the row
-      if (el.selectionMode === "row") {
-        const row = cell.closest(SLOT.row) as HTMLElement | null;
-        if (row) {
-          if (toggle && isSelected) {
-            row.removeAttribute(ARIA.selected);
-          } else {
-            row.setAttribute(ARIA.selected, "true");
-          }
-        }
+        target.setAttribute(ARIA.selected, "true");
       }
 
       ctx.emit("select", {
         cell,
-        row: cell.closest(SLOT.row),
+        row,
         rowIndex: currentRowIndex,
         cellIndex: currentCellIndex,
       });
     };
 
+    const applyHeight = (): void => {
+      const h = ctx.element.getAttribute("height");
+      ctx.element.style.height = h ?? "";
+    };
+
+    applyHeight();
     updateAria();
 
     Object.assign(ctx.element, {
@@ -329,12 +336,12 @@ defineComponent({
     // Watch for attribute changes
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (
-          ["label", "selectionMode", "multiSelect"].includes(
-            mutation.attributeName ?? ""
-          )
-        ) {
+        const name = mutation.attributeName ?? "";
+        if (["label", "selectionMode", "multiSelect"].includes(name)) {
           updateAria();
+        }
+        if (name === "height") {
+          applyHeight();
         }
       }
     });

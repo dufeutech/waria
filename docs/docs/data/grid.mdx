@@ -43,15 +43,34 @@ Use `size="N"` on a cell slot to give it a wider flex grow value. Sizes 1–12 a
 </w-grid>
 ```
 
+### Fixed height + sticky header
+
+Set `height` on the grid to make it scroll, and add `sticky` to a row slot to pin it to the top. Give the header row a solid background so scrolling content doesn't bleed through.
+
+```html
+<w-grid height="240px">
+  <w-slot row sticky>
+    <div style="background: #f5f5f5;">
+      <w-slot cell><div>Product</div></w-slot>
+      <w-slot cell><div>Price</div></w-slot>
+    </div>
+  </w-slot>
+  <!-- many rows… -->
+</w-grid>
+```
+
 ### Layout
 
 Rows default to `display: flex` and cells default to `flex: 1`, so a bare grid lays out as a horizontal row of equal-width cells without any inline styles. `<w-slot cell size="N">` sets `flex: N` on the cell (1–12). Defaults are applied with zero specificity (`:where()`), so any inline `style="flex: ..."` or class-based rule overrides them — useful for non-numeric values like `auto` or fixed widths.
 
 ## Props
 
-| Prop    | Type     | Default | Description      |
-| ------- | -------- | ------- | ---------------- |
-| `label` | `string` | `""`    | Accessible label |
+| Prop             | Type                         | Default  | Description                                                              |
+| ---------------- | ---------------------------- | -------- | ------------------------------------------------------------------------ |
+| `label`          | `string`                     | `""`     | Accessible label                                                         |
+| `selectionMode`  | `"none" \| "cell" \| "row"`  | `"cell"` | What gets `aria-selected` on click/Enter — the cell or the whole row     |
+| `multiSelect`    | `boolean`                    | `false`  | Allow multiple cells/rows to be selected at once                         |
+| `height`         | `string`                     | —        | CSS height (e.g. `"240px"`, `"50vh"`). Applies `overflow: auto` for you. |
 
 ## Slots
 
@@ -60,6 +79,12 @@ Rows default to `display: flex` and cells default to `flex: 1`, so a bare grid l
 | `row`       | Container | Grid row        |
 | `cell`      | Any       | Grid cell       |
 | `rowheader` | Any       | Row header cell |
+
+## Row Attributes
+
+| Attribute | Values    | Description                                                      |
+| --------- | --------- | ---------------------------------------------------------------- |
+| `sticky`  | _boolean_ | Pins the row to the top of a scrolling grid (`position: sticky`) |
 
 ## Cell Attributes
 

@@ -1,8 +1,8 @@
 <w-view class="view" path="/Grid">
     <h2>Grid</h2>
-    <w-grid label="Product Inventory" selectionMode="cell"
-        style="display: block; border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
-        <w-slot row>
+    <w-grid label="Product Inventory" selectionMode="row" height="140px"
+        style="border: 1px solid #ddd; border-radius: 4px;">
+        <w-slot row sticky>
             <div style="background: #f5f5f5; font-weight: bold;">
                 <w-slot cell size="2">
                     <div style="padding: 0.75rem; border-right: 1px solid #ddd;">Product</div>

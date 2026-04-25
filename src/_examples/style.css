@@ -522,8 +522,12 @@ w-tree [slot="item"] > * {
   background: #eef2ff;
 }
 
-w-grid [slot="cell"][aria-selected="true"] {
+w-grid [role="gridcell"][aria-selected="true"] {
   background-color: #dbeafe;
+}
+
+w-grid [role="row"][aria-selected="true"] {
+  background-color: #eef2ff;
 }
 
 /* ============================================
