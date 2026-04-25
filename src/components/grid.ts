@@ -8,43 +8,24 @@ interface GridElement extends HTMLElement {
   multiSelect: boolean;
 }
 
-// Default layout for rows/cells so consumers don't have to set
-// `display: flex` and `flex: N` inline. `:where()` keeps specificity at 0
-// so any class, attribute, or inline style overrides cleanly.
-// `size="N"` (1–12) sets the cell's flex grow value declaratively.
-const STYLE_ID = "w-grid-defaults";
-if (typeof document !== "undefined" && !document.getElementById(STYLE_ID)) {
-  const sizeRules = Array.from({ length: 12 }, (_, i) => {
-    const n = i + 1;
-    return `:where(w-grid) :where(w-slot[cell][size="${n}"]) > * { flex: ${n}; }`;
-  }).join("\n");
-
-  const style = document.createElement("style");
-  style.id = STYLE_ID;
-  style.textContent = `
-:where(w-grid[height]) {
-  display: block;
-  overflow: auto;
-}
-:where(w-grid) > :where(w-slot[row]) > * {
-  display: flex;
-}
-:where(w-grid) :where(w-slot[cell]) > * {
-  flex: 1;
-  min-width: 0;
-}
-:where(w-grid) > :where(w-slot[row][sticky]) > * {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-${sizeRules}
-`;
-  document.head.appendChild(style);
-}
+// Per-cell flex sizes, declared once. `size="N"` (1–12) sets `flex: N`.
+const GRID_SIZE_RULES = Array.from({ length: 12 }, (_, i) => {
+  const n = i + 1;
+  return `w-grid w-slot[cell][size="${n}"] > * { flex: ${n}; }`;
+}).join("\n");
 
 defineComponent({
   tag: "w-grid",
+
+  styles: `
+    w-grid[height] { display: block; overflow: auto; }
+    w-grid > w-slot[row] > * { display: flex; }
+    w-grid w-slot[cell] > * { flex: 1; min-width: 0; }
+    w-grid > w-slot[row][sticky] > * {
+      position: sticky; top: 0; z-index: 1;
+    }
+    ${GRID_SIZE_RULES}
+  `,
 
   props: [
     { name: "label", type: String, default: "Grid" },

@@ -7,6 +7,13 @@ interface ScrollbarElement extends HTMLElement {
 defineComponent({
   tag: "w-scrollbar",
 
+  styles: `
+    w-scrollbar { display: block; }
+    w-scrollbar[orientation="horizontal"] { overflow-x: auto; overflow-y: hidden; }
+    w-scrollbar[orientation="vertical"]   { overflow-x: hidden; overflow-y: auto; }
+    w-scrollbar[orientation="both"]       { overflow: auto; }
+  `,
+
   props: [{ name: "orientation", type: String, default: "vertical" }],
 
   aria: {
@@ -16,36 +23,10 @@ defineComponent({
   setup(ctx) {
     const el = ctx.element as unknown as ScrollbarElement;
 
-    const applyStyles = (): void => {
-      // Set display to block if not set
-      if (!el.style.display) {
-        el.style.display = "block";
-      }
-
-      // Make focusable for keyboard scrolling (WCAG requirement)
-      if (!el.hasAttribute("tabindex")) {
-        el.setAttribute("tabindex", "0");
-      }
-
-      // Apply overflow based on orientation
-      switch (el.orientation) {
-        case "horizontal":
-          el.style.overflowX = "auto";
-          el.style.overflowY = "hidden";
-          break;
-        case "both":
-          el.style.overflow = "auto";
-          break;
-        case "vertical":
-        default:
-          el.style.overflowX = "hidden";
-          el.style.overflowY = "auto";
-          break;
-      }
-    };
-
-    // Apply initial styles
-    applyStyles();
+    // Make focusable for keyboard scrolling (WCAG requirement)
+    if (!el.hasAttribute("tabindex")) {
+      el.setAttribute("tabindex", "0");
+    }
 
     // Handle wheel events - convert vertical wheel to horizontal scroll when horizontal
     const handleWheel = (e: WheelEvent): void => {
@@ -58,18 +39,7 @@ defineComponent({
 
     el.addEventListener("wheel", handleWheel, { passive: false });
 
-    // Watch for orientation changes
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.attributeName === "orientation") {
-          applyStyles();
-        }
-      }
-    });
-
-    observer.observe(el, { attributes: true });
     ctx.onCleanup(() => {
-      observer.disconnect();
       el.removeEventListener("wheel", handleWheel);
     });
 

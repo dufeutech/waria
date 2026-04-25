@@ -9,6 +9,12 @@ interface SeparatorElement extends HTMLElement {
 defineComponent({
   tag: "w-separator",
 
+  styles: `
+    w-separator { display: block; flex-shrink: 0; background: currentColor; opacity: 0.2; }
+    w-separator[orientation="horizontal"] { width: 100%; height: 1px; }
+    w-separator[orientation="vertical"]   { width: 1px; height: 100%; align-self: stretch; }
+  `,
+
   props: [
     { name: "orientation", type: String, default: "horizontal" },
     { name: "decorative", type: Boolean, default: false },

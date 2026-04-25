@@ -8,6 +8,10 @@ import { SLOT, ARIA, KEY } from "../constants";
 defineComponent({
   tag: "w-hover-card",
 
+  styles: `
+    w-hover-card { display: contents; }
+  `,
+
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "placement", type: String, default: "bottom" },

@@ -68,6 +68,10 @@ const setupGlobalListeners = (): void => {
 defineComponent({
   tag: "w-view",
 
+  styles: `
+    w-view { display: block; }
+  `,
+
   props: [
     { name: "path", type: String, default: "" },
     { name: "label", type: String, default: "" },

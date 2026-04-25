@@ -6,21 +6,11 @@
     <w-scrollbar orientation="horizontal" class="custom-scrollbar"
         style="width: 300px; border: 1px solid #ddd; border-radius: 4px; padding: 1rem;">
         <div style="display: flex; gap: 1rem; width: max-content;">
-            <div
-                style="width: 150px; height: 100px; background: #e3f2fd; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                Card 1</div>
-            <div
-                style="width: 150px; height: 100px; background: #f3e5f5; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                Card 2</div>
-            <div
-                style="width: 150px; height: 100px; background: #e8f5e9; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                Card 3</div>
-            <div
-                style="width: 150px; height: 100px; background: #fff3e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                Card 4</div>
-            <div
-                style="width: 150px; height: 100px; background: #fce4ec; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                Card 5</div>
+            <div class="scrollbar-card" style="background: #e3f2fd;">Card 1</div>
+            <div class="scrollbar-card" style="background: #f3e5f5;">Card 2</div>
+            <div class="scrollbar-card" style="background: #e8f5e9;">Card 3</div>
+            <div class="scrollbar-card" style="background: #fff3e0;">Card 4</div>
+            <div class="scrollbar-card" style="background: #fce4ec;">Card 5</div>
         </div>
     </w-scrollbar>
 
@@ -35,6 +25,16 @@
     </w-scrollbar>
 
     <style>
+        .scrollbar-card {
+            width: 150px;
+            height: 100px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
         .custom-scrollbar {
             scrollbar-width: thin;
             scrollbar-color: #888 #f0f0f0;

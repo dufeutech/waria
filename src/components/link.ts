@@ -11,6 +11,18 @@ interface LinkElement extends HTMLElement {
 defineComponent({
   tag: "w-link",
 
+  styles: `
+    w-link { display: inline; }
+    w-link > a { color: inherit; text-decoration: inherit; outline: revert; }
+    w-link[variant="subtle"] > a    { text-decoration: none; }
+    w-link[variant="underline"] > a { text-decoration: underline; }
+    w-link[disabled] > a {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  `,
+
   props: [
     { name: "href", type: String, default: "" },
     { name: "external", type: Boolean, default: false },
@@ -31,8 +43,6 @@ defineComponent({
       } else {
         // Wrap text content in anchor
         anchorElement = document.createElement("a");
-        anchorElement.style.color = "inherit";
-        anchorElement.style.textDecoration = "inherit";
 
         // Move all children to the anchor
         while (el.firstChild) {
@@ -68,9 +78,6 @@ defineComponent({
       if (el.disabled) {
         anchorElement.setAttribute(ARIA.disabled, "true");
         anchorElement.tabIndex = -1;
-        anchorElement.style.pointerEvents = "none";
-        anchorElement.style.opacity = "0.5";
-        anchorElement.style.cursor = "not-allowed";
 
         // Prevent navigation when disabled
         anchorElement.onclick = (e) => {
@@ -80,40 +87,15 @@ defineComponent({
       } else {
         anchorElement.removeAttribute(ARIA.disabled);
         anchorElement.tabIndex = 0;
-        anchorElement.style.pointerEvents = "";
-        anchorElement.style.opacity = "";
-        anchorElement.style.cursor = "";
         anchorElement.onclick = null;
       }
     };
 
-    const updateStyles = (): void => {
-      // Base styles
-      el.style.display = "inline";
-
-      if (!anchorElement) return;
-
-      // Variant styles
-      switch (el.variant) {
-        case "subtle":
-          anchorElement.style.textDecoration = "none";
-          break;
-        case "underline":
-          anchorElement.style.textDecoration = "underline";
-          break;
-        default:
-          anchorElement.style.textDecoration = "";
-      }
-
-      // Focus styles via pseudo-class (handled by browser default)
-      anchorElement.style.outline = "revert";
-    };
-
     // Initial setup
     createAnchor();
-    updateStyles();
 
-    // Observe attribute changes
+    // Observe attribute changes (variant is CSS-driven; href/external/disabled
+    // touch ARIA and listeners so they still need JS handling).
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (
@@ -122,8 +104,6 @@ defineComponent({
           mutation.attributeName === "disabled"
         ) {
           updateAnchor();
-        } else if (mutation.attributeName === "variant") {
-          updateStyles();
         }
       }
     });

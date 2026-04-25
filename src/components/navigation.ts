@@ -41,6 +41,13 @@ const normalizePath = (path: string): string => {
 defineComponent({
   tag: "w-nav",
 
+  styles: `
+    w-nav { display: flex; }
+    w-nav[orientation="horizontal"] { flex-direction: row; }
+    w-nav[orientation="vertical"]   { flex-direction: column; }
+    w-nav[orientation="vertical"] > w-slot[item] > * { width: 100%; }
+  `,
+
   props: [
     { name: "label", type: String, default: "Navigation" },
     { name: "orientation", type: String, default: "horizontal" },
@@ -89,9 +96,6 @@ defineComponent({
       const currentValue = el.value;
 
       items.forEach((item) => {
-        if (el.orientation === "vertical") {
-          item.style.width = "100%";
-        }
         const itemValue = getItemValue(item);
         if (currentValue && itemValue === currentValue) {
           item.setAttribute("aria-current", "page");
@@ -289,11 +293,6 @@ defineComponent({
         }
       },
     });
-
-    el.style.display = "flex";
-    if (el.orientation === "vertical") {
-      el.style.flexDirection = "column";
-    }
 
     // Watch for attribute changes
     const observer = new MutationObserver((mutations) => {

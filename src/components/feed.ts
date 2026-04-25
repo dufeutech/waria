@@ -18,6 +18,10 @@ interface FeedElement extends HTMLElement {
 defineComponent({
   tag: "w-feed",
 
+  styles: `
+    w-feed { display: block; }
+  `,
+
   props: [
     { name: "label", type: String, default: "Feed" },
     { name: "busy", type: Boolean, default: false },

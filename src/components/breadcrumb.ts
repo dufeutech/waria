@@ -10,6 +10,19 @@ interface BreadcrumbElement extends HTMLElement {
 defineComponent({
   tag: "w-breadcrumb",
 
+  styles: `
+    w-breadcrumb { display: block; }
+    w-breadcrumb > w-slot[list] > * {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+  `,
+
   props: [
     { name: "separator", type: String, default: "/" },
     { name: "label", type: String, default: "" },

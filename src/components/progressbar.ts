@@ -13,6 +13,15 @@ interface ProgressbarElement extends HTMLElement {
 defineComponent({
   tag: "w-progressbar",
 
+  styles: `
+    w-progressbar {
+      display: block;
+      position: relative;
+      --w-fill: 0%;
+    }
+    w-progressbar > w-slot[dot] > * { width: var(--w-fill); }
+  `,
+
   props: [
     { name: "value", type: Number, default: 0 },
     { name: "min", type: Number, default: 0 },
@@ -31,9 +40,6 @@ defineComponent({
 
   setup(ctx) {
     const el = ctx.element as unknown as ProgressbarElement;
-
-    const getIndicator = (): HTMLElement | null =>
-      ctx.query<HTMLElement>(SLOT.dot);
 
     const updateAria = (): void => {
       ctx.element.setAttribute(ARIA.valuemin, String(el.min));
@@ -54,13 +60,13 @@ defineComponent({
     };
 
     const updateVisual = (): void => {
-      // Calculate percentage for visual indicator
-      const indicator = getIndicator();
-      if (indicator && !el.indeterminate) {
-        const range = el.max - el.min;
-        const percentage = range > 0 ? ((el.value - el.min) / range) * 100 : 0;
-        indicator.style.width = `${Math.max(0, Math.min(100, percentage))}%`;
-      }
+      if (el.indeterminate) return;
+      const range = el.max - el.min;
+      const percentage = range > 0 ? ((el.value - el.min) / range) * 100 : 0;
+      ctx.element.style.setProperty(
+        "--w-fill",
+        `${Math.max(0, Math.min(100, percentage))}%`
+      );
     };
 
     updateAria();

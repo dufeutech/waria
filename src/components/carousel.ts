@@ -13,6 +13,25 @@ interface CarouselElement extends HTMLElement {
 defineComponent({
   tag: "w-carousel",
 
+  styles: `
+    w-carousel { display: block; position: relative; }
+    w-carousel > w-slot[body] > * { display: block; overflow: hidden; }
+    w-carousel > w-slot[prev] > *,
+    w-carousel > w-slot[next] > * {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+    w-carousel > w-slot[prev] > * { left: var(--w-carousel-arrow-inset, 0.5rem); }
+    w-carousel > w-slot[next] > * { right: var(--w-carousel-arrow-inset, 0.5rem); }
+    w-carousel > w-slot[dots] > * {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+  `,
+
   props: [
     { name: "label", type: String, default: "Carousel" },
     { name: "current", type: Number, default: 0 },

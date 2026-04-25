@@ -7,6 +7,10 @@ const TOGGLE_ATTR: string = "toggle";
 defineComponent({
   tag: "w-tree",
 
+  styles: `
+    w-tree { display: block; }
+  `,
+
   props: [
     { name: "value", type: String, default: "" },
     { name: "expanded", type: String, default: "" }, // Comma-separated expanded item names

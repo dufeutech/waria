@@ -7,87 +7,35 @@
             </button>
         </w-slot>
         <w-slot body>
-            <div
-                style="background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 180px;">
+            <div class="menu-panel">
+                <w-slot item><button class="menu-item" name="new">New File</button></w-slot>
+                <w-slot item><button class="menu-item" name="open">Open...</button></w-slot>
+                <hr class="menu-sep" />
                 <w-slot item>
-                    <button name="new"
-                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                        New File
-                    </button>
-                </w-slot>
-                <w-slot item>
-                    <button name="open"
-                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                        Open...
-                    </button>
-                </w-slot>
-                <hr style="margin: 0.25rem 0; border: none; border-top: 1px solid #eee;" />
-                <w-slot item>
-                    <div name="export"
-                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                    <div class="menu-item" name="export">
                         <span>Export</span>
                         <span style="float: right;" w-icon>▶</span>
                         <w-slot sub>
-                            <div hidden
-                                style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 160px;">
+                            <div hidden class="menu-panel">
+                                <w-slot item><button class="menu-item" name="export-pdf">PDF</button></w-slot>
+                                <w-slot item><button class="menu-item" name="export-png">PNG</button></w-slot>
                                 <w-slot item>
-                                    <button name="export-pdf"
-                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                        PDF
-                                    </button>
-                                </w-slot>
-                                <w-slot item>
-                                    <button name="export-png"
-                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                        PNG
-                                    </button>
-                                </w-slot>
-                                <w-slot item>
-                                    <div name="export-vector"
-                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                                    <div class="menu-item" name="export-vector">
                                         <span>Vector</span>
                                         <span style="float: right;" w-icon>▶</span>
                                         <w-slot sub>
-                                            <div hidden
-                                                style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 140px;">
+                                            <div hidden class="menu-panel">
+                                                <w-slot item><button class="menu-item" name="export-svg">SVG</button></w-slot>
+                                                <w-slot item><button class="menu-item" name="export-eps">EPS</button></w-slot>
                                                 <w-slot item>
-                                                    <button name="export-svg"
-                                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                                        SVG
-                                                    </button>
-                                                </w-slot>
-                                                <w-slot item>
-                                                    <button name="export-eps"
-                                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                                        EPS
-                                                    </button>
-                                                </w-slot>
-                                                <w-slot item>
-                                                    <div name="export-ai"
-                                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                                                    <div class="menu-item" name="export-ai">
                                                         <span>Adobe</span>
                                                         <span style="float: right;" w-icon>▶</span>
                                                         <w-slot sub>
-                                                            <div hidden
-                                                                style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 120px;">
-                                                                <w-slot item>
-                                                                    <button name="export-ai-cs6"
-                                                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                                                        AI (CS6)
-                                                                    </button>
-                                                                </w-slot>
-                                                                <w-slot item>
-                                                                    <button name="export-ai-cc"
-                                                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                                                        AI (CC)
-                                                                    </button>
-                                                                </w-slot>
-                                                                <w-slot item>
-                                                                    <button name="export-psd"
-                                                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                                                        PSD
-                                                                    </button>
-                                                                </w-slot>
+                                                            <div hidden class="menu-panel">
+                                                                <w-slot item><button class="menu-item" name="export-ai-cs6">AI (CS6)</button></w-slot>
+                                                                <w-slot item><button class="menu-item" name="export-ai-cc">AI (CC)</button></w-slot>
+                                                                <w-slot item><button class="menu-item" name="export-psd">PSD</button></w-slot>
                                                             </div>
                                                         </w-slot>
                                                     </div>
@@ -100,48 +48,51 @@
                         </w-slot>
                     </div>
                 </w-slot>
-                <hr style="margin: 0.25rem 0; border: none; border-top: 1px solid #eee;" />
+                <hr class="menu-sep" />
                 <w-slot item>
-                    <div name="edit"
-                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; position: relative;">
+                    <div class="menu-item" name="edit">
                         <span>Edit</span>
                         <span style="float: right;" w-icon>▶</span>
                         <w-slot sub>
-                            <div hidden
-                                style="position: absolute; left: 100%; top: 0; background: white; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 140px;">
-                                <w-slot item>
-                                    <button name="cut"
-                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                        Cut
-                                    </button>
-                                </w-slot>
-                                <w-slot item>
-                                    <button name="copy"
-                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                        Copy
-                                    </button>
-                                </w-slot>
-                                <w-slot item>
-                                    <button name="paste"
-                                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                                        Paste
-                                    </button>
-                                </w-slot>
+                            <div hidden class="menu-panel">
+                                <w-slot item><button class="menu-item" name="cut">Cut</button></w-slot>
+                                <w-slot item><button class="menu-item" name="copy">Copy</button></w-slot>
+                                <w-slot item><button class="menu-item" name="paste">Paste</button></w-slot>
                             </div>
                         </w-slot>
                     </div>
                 </w-slot>
-                <hr style="margin: 0.25rem 0; border: none; border-top: 1px solid #eee;" />
-                <w-slot item>
-                    <button name="settings"
-                        style="display: block; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                        Settings
-                    </button>
-                </w-slot>
+                <hr class="menu-sep" />
+                <w-slot item><button class="menu-item" name="settings">Settings</button></w-slot>
             </div>
         </w-slot>
     </w-menu>
     <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
         Use Arrow keys to navigate, ArrowRight to open sub-menu, ArrowLeft to close, Escape to close all.
     </p>
+
+    <style>
+        .menu-panel {
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            min-width: 160px;
+        }
+
+        .menu-item {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .menu-sep {
+            margin: 0.25rem 0;
+            border: none;
+            border-top: 1px solid #eee;
+        }
+    </style>
 </w-view>

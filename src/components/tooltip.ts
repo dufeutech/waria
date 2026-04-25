@@ -7,6 +7,11 @@ import { SLOT, ARIA, KEY } from "../constants";
 defineComponent({
   tag: "w-tooltip",
 
+  styles: `
+    w-tooltip { display: contents; }
+    [role="tooltip"]:not([hidden]) { pointer-events: none; }
+  `,
+
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "placement", type: String, default: "top" },

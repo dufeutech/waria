@@ -13,6 +13,13 @@ interface ChoiceElement extends HTMLElement {
 defineComponent({
   tag: "w-choice",
 
+  styles: `
+    w-choice { display: flex; gap: 0.5rem; }
+    w-choice[orientation="horizontal"] { flex-direction: row; flex-wrap: wrap; }
+    w-choice[orientation="vertical"]   { flex-direction: column; }
+    w-choice[disabled] { pointer-events: none; }
+  `,
+
   props: [
     { name: "value", type: String, default: "" },
     { name: "mode", type: String, default: "radio" },

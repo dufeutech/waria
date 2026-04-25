@@ -1,33 +1,27 @@
 <w-view class="view" path="/Toggles">
     <h2>Toggles</h2>
     <p>Multiple selection:</p>
-    <w-toggles value="bold" multiple label="Text formatting" style="display: inline-flex; gap: 0;">
-        <w-slot item>
-            <button name="bold"
-                style="padding: 0.5rem 1rem; border: 1px solid #ccc; cursor: pointer;">B</button>
-        </w-slot>
-        <w-slot item>
-            <button name="italic"
-                style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">I</button>
-        </w-slot>
-        <w-slot item>
-            <button name="underline"
-                style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">U</button>
-        </w-slot>
+    <w-toggles value="bold" multiple label="Text formatting">
+        <w-slot item><button name="bold" class="toggles-btn">B</button></w-slot>
+        <w-slot item><button name="italic" class="toggles-btn">I</button></w-slot>
+        <w-slot item><button name="underline" class="toggles-btn">U</button></w-slot>
     </w-toggles>
     <p style="margin-top: 1rem;">Single selection:</p>
-    <w-toggles value="left" label="Text alignment" style="display: inline-flex; gap: 0;">
-        <w-slot item>
-            <button name="left"
-                style="padding: 0.5rem 1rem; border: 1px solid #ccc; cursor: pointer;">Left</button>
-        </w-slot>
-        <w-slot item>
-            <button name="center"
-                style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">Center</button>
-        </w-slot>
-        <w-slot item>
-            <button name="right"
-                style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-left: none; cursor: pointer;">Right</button>
-        </w-slot>
+    <w-toggles value="left" label="Text alignment">
+        <w-slot item><button name="left" class="toggles-btn">Left</button></w-slot>
+        <w-slot item><button name="center" class="toggles-btn">Center</button></w-slot>
+        <w-slot item><button name="right" class="toggles-btn">Right</button></w-slot>
     </w-toggles>
+
+    <style>
+        .toggles-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        w-toggles w-slot[item]:not(:first-child) > .toggles-btn {
+            border-left: none;
+        }
+    </style>
 </w-view>

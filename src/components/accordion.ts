@@ -5,6 +5,10 @@ import { SLOT, ARIA, getSlotName } from "../constants";
 defineComponent({
   tag: "w-accordion",
 
+  styles: `
+    w-accordion { display: block; }
+  `,
+
   props: [
     { name: "value", type: String, default: "" }, // Comma-separated for multiple
     { name: "multiple", type: Boolean, default: false },

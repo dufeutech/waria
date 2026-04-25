@@ -23,6 +23,21 @@ const RESIZER_SIZE = 8;
 defineComponent({
   tag: "w-split",
 
+  styles: `
+    w-split { display: grid; --w-split-template: 1fr; }
+    w-split[direction="horizontal"] {
+      grid-template-columns: var(--w-split-template);
+      grid-template-rows: 1fr;
+    }
+    w-split[direction="vertical"] {
+      grid-template-rows: var(--w-split-template);
+      grid-template-columns: 1fr;
+    }
+    w-split > .w-split-resizer { background: transparent; touch-action: none; user-select: none; }
+    w-split[direction="horizontal"] > .w-split-resizer { cursor: col-resize; }
+    w-split[direction="vertical"]   > .w-split-resizer { cursor: row-resize; }
+  `,
+
   props: [
     { name: "direction", type: String, default: "horizontal" },
     { name: "min", type: Number, default: 0 },
@@ -74,9 +89,9 @@ defineComponent({
       return Math.round((paneSize / totalSize) * 100);
     };
 
-    // Update grid layout
+    // Update grid layout. Layout axis is selected in CSS via [direction];
+    // we just feed the per-pane template through a custom property.
     const updateLayout = (): void => {
-      const isHorizontal = el.direction === "horizontal";
       const template = paneStates
         .map((pane, i) => {
           const size = pane.collapsed ? `${pane.minSize}px` : `${pane.size}px`;
@@ -84,13 +99,7 @@ defineComponent({
         })
         .join(" ");
 
-      if (isHorizontal) {
-        el.style.gridTemplateColumns = template;
-        el.style.gridTemplateRows = "";
-      } else {
-        el.style.gridTemplateRows = template;
-        el.style.gridTemplateColumns = "";
-      }
+      el.style.setProperty("--w-split-template", template);
     };
 
     // Update ARIA attributes on a resizer
@@ -356,9 +365,6 @@ defineComponent({
       resizers.forEach((r) => r.remove());
       resizers = [];
       paneStates = [];
-
-      // Set up container styles
-      el.style.display = "grid";
 
       // Get available space
       const rect = el.getBoundingClientRect();

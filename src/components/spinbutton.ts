@@ -17,6 +17,15 @@ interface SpinbuttonElement extends HTMLElement {
 defineComponent({
   tag: "w-spinbutton",
 
+  styles: `
+    w-spinbutton {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    w-spinbutton[disabled] { pointer-events: none; }
+  `,
+
   props: [
     { name: "min", type: Number, default: 0 },
     { name: "max", type: Number, default: 100 },

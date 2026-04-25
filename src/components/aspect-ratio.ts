@@ -4,31 +4,16 @@ interface AspectRatioElement extends HTMLElement {
   ratio: string;
 }
 
-// Default layout: container becomes a relatively-positioned block with the
-// requested aspect-ratio; any direct child (or `<w-slot body>` content)
-// absolutely fills it. `:where()` keeps specificity at 0 so users can override.
-const STYLE_ID = "w-aspect-ratio-defaults";
-if (typeof document !== "undefined" && !document.getElementById(STYLE_ID)) {
-  const style = document.createElement("style");
-  style.id = STYLE_ID;
-  style.textContent = `
-:where(w-aspect-ratio) {
-  display: block;
-  position: relative;
-  width: 100%;
-}
-:where(w-aspect-ratio) > :where(:not(w-slot)),
-:where(w-aspect-ratio) > :where(w-slot[body]) > * {
-  position: absolute;
-  inset: 0;
-  object-fit: cover;
-}
-`;
-  document.head.appendChild(style);
-}
-
 defineComponent({
   tag: "w-aspect-ratio",
+
+  styles: `
+    w-aspect-ratio { display: block; position: relative; width: 100%; }
+    w-aspect-ratio > :not(w-slot),
+    w-aspect-ratio > w-slot[body] > * {
+      position: absolute; inset: 0; object-fit: cover;
+    }
+  `,
 
   props: [{ name: "ratio", type: String, default: "1/1" }],
 

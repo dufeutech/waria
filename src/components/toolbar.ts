@@ -11,6 +11,12 @@ interface ToolbarElement extends HTMLElement {
 defineComponent({
   tag: "w-toolbar",
 
+  styles: `
+    w-toolbar { display: flex; gap: 0.25rem; }
+    w-toolbar[orientation="horizontal"] { flex-direction: row; align-items: center; }
+    w-toolbar[orientation="vertical"]   { flex-direction: column; align-items: stretch; }
+  `,
+
   props: [
     { name: "label", type: String, default: "Toolbar" },
     { name: "orientation", type: String, default: "horizontal" },

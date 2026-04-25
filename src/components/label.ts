@@ -75,6 +75,12 @@ const findFocusableElement = (element: Element): HTMLElement | null => {
 defineComponent({
   tag: "w-label",
 
+  styles: `
+    w-label { cursor: pointer; }
+    w-label[disabled] { cursor: default; pointer-events: none; }
+    w-label[disabled] > label { color: #666; }
+  `,
+
   props: [
     { name: "for", type: String, default: "" },
     { name: "required", type: Boolean, default: false },
@@ -172,24 +178,7 @@ defineComponent({
       }
     };
 
-    const updateStyles = (): void => {
-      if (!nativeLabel) return;
-
-      const cursor = !el.disabled && getTargetElement() ? "pointer" : "default";
-      el.style.cursor = cursor;
-      nativeLabel.style.cursor = cursor;
-
-      if (el.disabled) {
-        nativeLabel.style.color = "#666666";
-        nativeLabel.style.pointerEvents = "none";
-      } else {
-        nativeLabel.style.color = "";
-        nativeLabel.style.pointerEvents = "";
-      }
-    };
-
     wrapContent();
-    updateStyles();
     // Defer one frame so the target's setup (which may set role/ids on its
     // inner focusable) has a chance to run before we resolve the association.
     requestAnimationFrame(associateLabel);
@@ -197,15 +186,12 @@ defineComponent({
     // Observe attribute changes
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (mutation.attributeName === "for") {
-          associateLabel();
-          updateStyles();
-        } else if (
+        if (
+          mutation.attributeName === "for" ||
           mutation.attributeName === "disabled" ||
           mutation.attributeName === "required"
         ) {
           associateLabel();
-          updateStyles();
         }
       }
     });

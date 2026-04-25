@@ -18,6 +18,13 @@ import type {
 // Queue of pending component schemas (for lazy initialization)
 const pendingComponents: ComponentSchema<HTMLElement & WComponent>[] = [];
 
+// Accumulated structural CSS contributed by component schemas. Flushed into
+// a single `@layer waria` stylesheet on init().
+const pendingStyles: string[] = [];
+
+// The single CSSStyleSheet adopted by the document. Created on first init().
+let wariaSheet: CSSStyleSheet | null = null;
+
 // Whether the library has been initialized
 let initialized = false;
 
@@ -222,6 +229,24 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
         }
       }
 
+      // Reflect prop defaults onto the host's attributes so CSS attribute
+      // selectors like `[orientation="horizontal"]` match without the user
+      // having to spell out the default. Booleans only reflect when their
+      // default is true (presence === true). Skip props with reflect: false
+      // and props that are already explicitly set on the element.
+      for (const prop of props) {
+        if (prop.reflect === false) continue;
+        if (prop.default === undefined || prop.default === null) continue;
+        const attrName = prop.attribute ?? toKebabCase(prop.name);
+        if (this.hasAttribute(attrName)) continue;
+        if (prop.type === Boolean) {
+          if (prop.default === true) this.setAttribute(attrName, "");
+          continue;
+        }
+        const attrValue = toAttributeValue(prop.default, prop.type);
+        if (attrValue !== null) this.setAttribute(attrName, attrValue);
+      }
+
       // Setup ARIA
       if (aria?.role) {
         this.setAttribute("role", aria.role);
@@ -368,6 +393,16 @@ function registerComponent<T extends HTMLElement = HTMLElement & WComponent>(
 export function defineComponent<
   T extends HTMLElement = HTMLElement & WComponent,
 >(schema: ComponentSchema<T>): void {
+  if (schema.styles) {
+    if (initialized && wariaSheet) {
+      // Library already running — append to the live stylesheet.
+      appendToWariaSheet(schema.styles);
+    } else {
+      // Queue for the first init() flush.
+      pendingStyles.push(schema.styles);
+    }
+  }
+
   if (initialized) {
     // Already initialized - register immediately
     registerComponent(schema);
@@ -377,6 +412,49 @@ export function defineComponent<
       schema as unknown as ComponentSchema<HTMLElement & WComponent>,
     );
   }
+}
+
+/**
+ * Build the document-adopted stylesheet from accumulated component CSS.
+ * Wraps every contribution in `@layer waria { ... }` so user CSS in the
+ * implicit unlayered group beats library defaults regardless of specificity.
+ */
+function flushWariaSheet(): void {
+  if (typeof document === "undefined") return;
+  if (pendingStyles.length === 0) return;
+
+  const css = `@layer waria {\n${pendingStyles.join("\n\n")}\n}`;
+
+  if (
+    typeof CSSStyleSheet !== "undefined" &&
+    "adoptedStyleSheets" in Document.prototype
+  ) {
+    wariaSheet = new CSSStyleSheet();
+    wariaSheet.replaceSync(css);
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, wariaSheet];
+  } else {
+    // Fallback: inject a <style> tag at the very top of <head> so user
+    // stylesheets that follow win on equal specificity too.
+    const style = document.createElement("style");
+    style.setAttribute("data-waria", "");
+    style.textContent = css;
+    document.head.insertBefore(style, document.head.firstChild);
+  }
+
+  pendingStyles.length = 0;
+}
+
+/**
+ * Append a late-defined component's styles to the already-adopted sheet.
+ */
+function appendToWariaSheet(css: string): void {
+  if (!wariaSheet) return;
+  // Insert as a new top-level @layer waria block; the cascade folds
+  // identically-named layer blocks together.
+  wariaSheet.insertRule(
+    `@layer waria { ${css} }`,
+    wariaSheet.cssRules.length,
+  );
 }
 
 /**
@@ -402,6 +480,10 @@ export function init(): void {
   }
 
   initialized = true;
+
+  // Flush the structural stylesheet first so styles are present before any
+  // component connects.
+  flushWariaSheet();
 
   // Register all pending components
   for (const schema of pendingComponents) {

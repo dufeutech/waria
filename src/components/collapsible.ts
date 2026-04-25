@@ -13,6 +13,10 @@ interface CollapsibleElement extends HTMLElement {
 defineComponent({
   tag: "w-collapsible",
 
+  styles: `
+    w-collapsible { display: block; }
+  `,
+
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "disabled", type: Boolean, default: false },

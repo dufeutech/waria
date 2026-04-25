@@ -2,55 +2,65 @@
     <h2>Context Menu</h2>
     <w-context-menu>
         <w-slot trigger>
-            <div
-                style="border: 2px dashed #ccc; border-radius: 8px; padding: 3rem; text-align: center; background: #f9f9f9; cursor: context-menu;">
+            <div class="ctx-target">
                 <p style="margin: 0; color: #666;">Right-click anywhere in this area</p>
                 <p style="margin: 0.5rem 0 0; font-size: 0.9rem; color: #666;">to open the context menu</p>
             </div>
         </w-slot>
         <w-slot body>
-            <div hidden
-                style="background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); min-width: 180px; padding: 0.25rem 0;">
-                <w-slot item>
-                    <button name="cut"
-                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                        ✂️ Cut
-                    </button>
-                </w-slot>
-                <w-slot item>
-                    <button name="copy"
-                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                        📋 Copy
-                    </button>
-                </w-slot>
-                <w-slot item>
-                    <button name="paste"
-                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                        📄 Paste
-                    </button>
-                </w-slot>
-                <w-slot sep>
-                    <div style="height: 1px; background: #eee; margin: 0.25rem 0;"></div>
-                </w-slot>
-                <w-slot item>
-                    <button name="select-all"
-                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left;">
-                        ☑️ Select All
-                    </button>
-                </w-slot>
-                <w-slot sep>
-                    <div style="height: 1px; background: #eee; margin: 0.25rem 0;"></div>
-                </w-slot>
-                <w-slot item>
-                    <button name="delete"
-                        style="display: block; width: 100%; padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; text-align: left; color: #dc3545;">
-                        🗑️ Delete
-                    </button>
-                </w-slot>
+            <div hidden class="ctx-panel">
+                <w-slot item><button name="cut" class="ctx-item">✂️ Cut</button></w-slot>
+                <w-slot item><button name="copy" class="ctx-item">📋 Copy</button></w-slot>
+                <w-slot item><button name="paste" class="ctx-item">📄 Paste</button></w-slot>
+                <w-slot sep><div class="ctx-sep"></div></w-slot>
+                <w-slot item><button name="select-all" class="ctx-item">☑️ Select All</button></w-slot>
+                <w-slot sep><div class="ctx-sep"></div></w-slot>
+                <w-slot item><button name="delete" class="ctx-item" style="color: #dc3545;">🗑️ Delete</button></w-slot>
             </div>
         </w-slot>
     </w-context-menu>
     <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
         Use Arrow keys to navigate. Enter/Space to select. Escape to close.
     </p>
+
+    <style>
+        .ctx-target {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            background: #f9f9f9;
+            cursor: context-menu;
+        }
+
+        .ctx-panel {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            padding: 0.25rem 0;
+        }
+
+        .ctx-item {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .ctx-item:hover,
+        .ctx-item:focus {
+            background: #f0f0f0;
+        }
+
+        .ctx-sep {
+            height: 1px;
+            background: #eee;
+            margin: 0.25rem 0;
+        }
+    </style>
 </w-view>

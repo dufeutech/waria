@@ -141,13 +141,14 @@ w-nav [aria-current="page"].router-button {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.view > h2 {
+.view>h2 {
   margin-bottom: 32px;
   font-size: 28px;
   font-weight: 600;
@@ -204,8 +205,8 @@ button:active {
 /* ============================================
    Web Component Icons
    ============================================ */
-[aria-expanded="true"] > [w-icon],
-[aria-expanded="true"] > * > [w-icon] {
+[aria-expanded="true"]>[w-icon],
+[aria-expanded="true"]>*>[w-icon] {
   transform: rotate(90deg);
   display: inline-block;
   transition: transform 0.2s ease;
@@ -266,15 +267,10 @@ w-switch[disabled] .switch-track {
    Choice Component
    ============================================ */
 .choice-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   max-width: 300px;
 }
 
 .choice-group.horizontal {
-  flex-direction: row;
-  flex-wrap: wrap;
   max-width: none;
 }
 
@@ -411,7 +407,7 @@ w-tree [slot="item"]:focus {
   outline-offset: -2px;
 }
 
-w-tree [slot="item"] > * {
+w-tree [slot="item"]>* {
   user-select: none;
 }
 
@@ -576,13 +572,14 @@ w-nav:not(.router)[orientation="vertical"] {
   width: 200px;
 }
 
-w-nav:not(.router) [slot="item"] {
+w-nav:not(.router) w-slot[item]>* {
   padding: 10px 16px;
   border-radius: 6px;
   transition: all 0.15s ease;
+  display: block;
 }
 
-w-nav:not(.router) [slot="item"]:hover:not([aria-current="page"]) {
+w-nav:not(.router) w-slot[item]>*:hover:not([aria-current="page"]) {
   background: rgba(0, 0, 0, 0.05);
 }
 
@@ -621,4 +618,13 @@ w-nav:not(.router) [slot="item"]:hover:not([aria-current="page"]) {
 
 .viewer::-webkit-scrollbar-thumb:hover {
   background: #a1a1a1;
+}
+
+/* Carousel */
+w-carousel .active {
+  background: red;
+}
+
+w-accordion [aria-expanded="true"] {
+  background: red;
 }

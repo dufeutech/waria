@@ -14,6 +14,33 @@ interface AvatarElement extends HTMLElement {
 defineComponent({
   tag: "w-avatar",
 
+  styles: `
+    w-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+      vertical-align: middle;
+      background: #e2e8f0;
+      color: #475569;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1rem;
+      border-radius: 50%;
+    }
+    /* Size variants */
+    w-avatar[size="small"]  { width: 2rem;   height: 2rem;   font-size: 0.75rem; }
+    w-avatar[size="medium"] { width: 2.5rem; height: 2.5rem; font-size: 1rem; }
+    w-avatar[size="large"]  { width: 3rem;   height: 3rem;   font-size: 1.25rem; }
+    /* Shape variants */
+    w-avatar[shape="circle"]  { border-radius: 50%; }
+    w-avatar[shape="square"]  { border-radius: 0; }
+    w-avatar[shape="rounded"] { border-radius: 0.375rem; }
+    /* Image and fallback fill the host */
+    w-avatar > img { width: 100%; height: 100%; object-fit: cover; }
+  `,
+
   props: [
     { name: "src", type: String, default: "" },
     { name: "fallback", type: String, default: "" },
@@ -66,9 +93,6 @@ defineComponent({
       if (el.src && !slottedImage) {
         if (!imgElement) {
           imgElement = document.createElement("img");
-          imgElement.style.width = "100%";
-          imgElement.style.height = "100%";
-          imgElement.style.objectFit = "cover";
           imgElement.setAttribute(ARIA.hidden, "true"); // Avatar itself has the label
 
           imgElement.onload = () => {
@@ -102,11 +126,6 @@ defineComponent({
         if (!fallbackEl) {
           fallbackEl = document.createElement("span");
           fallbackEl.className = "w-avatar-fallback";
-          fallbackEl.style.display = "flex";
-          fallbackEl.style.alignItems = "center";
-          fallbackEl.style.justifyContent = "center";
-          fallbackEl.style.width = "100%";
-          fallbackEl.style.height = "100%";
           fallbackEl.setAttribute(ARIA.hidden, "true"); // Avatar itself has the label
           el.appendChild(fallbackEl);
         }
@@ -125,55 +144,7 @@ defineComponent({
       }
     };
 
-    const updateStyles = (): void => {
-      // Base styles
-      el.style.display = "inline-flex";
-      el.style.alignItems = "center";
-      el.style.justifyContent = "center";
-      el.style.overflow = "hidden";
-      el.style.userSelect = "none";
-      el.style.verticalAlign = "middle";
-
-      // Size
-      const sizeMap: Record<string, string> = {
-        small: "2rem",
-        medium: "2.5rem",
-        large: "3rem",
-      };
-      const size = sizeMap[el.size] || sizeMap.medium;
-      el.style.width = size;
-      el.style.height = size;
-      el.style.fontSize =
-        el.size === "small"
-          ? "0.75rem"
-          : el.size === "large"
-          ? "1.25rem"
-          : "1rem";
-
-      // Shape
-      switch (el.shape) {
-        case "circle":
-          el.style.borderRadius = "50%";
-          break;
-        case "square":
-          el.style.borderRadius = "0";
-          break;
-        case "rounded":
-          el.style.borderRadius = "0.375rem";
-          break;
-        default:
-          el.style.borderRadius = "50%";
-      }
-
-      // Default background for fallback
-      if (!el.style.backgroundColor) {
-        el.style.backgroundColor = "#e2e8f0";
-        el.style.color = "#475569";
-      }
-    };
-
     updateAria();
-    updateStyles();
     updateDisplay();
 
     ctx.onCleanup(
@@ -187,11 +158,10 @@ defineComponent({
             updateDisplay();
           } else if (attr === "fallback") {
             updateDisplay();
-          } else if (attr === "size" || attr === "shape") {
-            updateStyles();
           } else if (attr === "decorative" || attr === "label") {
             updateAria();
           }
+          // size/shape are handled by attribute-selector CSS
         },
       })
     );

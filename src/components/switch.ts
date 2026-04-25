@@ -12,6 +12,11 @@ interface SwitchElement extends HTMLElement {
 defineComponent({
   tag: "w-switch",
 
+  styles: `
+    w-switch { display: inline-block; }
+    w-switch[disabled] > w-slot[trigger] > * { pointer-events: none; }
+  `,
+
   props: [
     { name: "pressed", type: Boolean, default: false },
     { name: "disabled", type: Boolean, default: false },

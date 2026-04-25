@@ -12,6 +12,14 @@ interface TabsElement extends HTMLElement {
 defineComponent({
   tag: "w-tabs",
 
+  styles: `
+    w-tabs { display: block; }
+    w-tabs > w-slot[list] > * { display: flex; }
+    w-tabs[orientation="horizontal"] > w-slot[list] > * { flex-direction: row; }
+    w-tabs[orientation="vertical"]   > w-slot[list] > * { flex-direction: column; }
+    w-tabs[orientation="vertical"] { display: flex; flex-direction: row; }
+  `,
+
   props: [
     { name: "value", type: String, default: "" },
     { name: "orientation", type: String, default: "horizontal" },

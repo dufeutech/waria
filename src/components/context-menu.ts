@@ -8,6 +8,10 @@ import { SLOT, ARIA, KEY, getSlotName } from "../constants";
 defineComponent({
   tag: "w-context-menu",
 
+  styles: `
+    w-context-menu { display: contents; }
+  `,
+
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "closeOnSelect", type: Boolean, default: true },

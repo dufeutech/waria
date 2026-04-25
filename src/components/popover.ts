@@ -22,6 +22,10 @@ interface PopoverElement extends HTMLElement {
 defineComponent({
   tag: "w-popover",
 
+  styles: `
+    w-popover { display: contents; }
+  `,
+
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "placement", type: String, default: "bottom" },

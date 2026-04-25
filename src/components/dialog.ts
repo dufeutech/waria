@@ -20,6 +20,20 @@ interface DialogElement extends HTMLElement {
 defineComponent({
   tag: "w-dialog",
 
+  styles: `
+    w-dialog { display: contents; }
+    /* Modal dialog body — viewport-centered. We can't anchor on the host
+       because content gets teleported into a portal; key off ARIA instead. */
+    [role="dialog"][aria-modal="true"]:not([hidden]) {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100vh - 2rem);
+    }
+  `,
+
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "modal", type: Boolean, default: true },

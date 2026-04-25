@@ -160,6 +160,20 @@ export interface ComponentSchema<T extends HTMLElement = HTMLElement> {
   methods?: {
     [name: string]: (this: T, ...args: unknown[]) => unknown;
   };
+
+  /**
+   * Structural CSS contributed by this component.
+   *
+   * Aggregated by the factory and emitted into a single `@layer waria`
+   * stylesheet on `init()`. Authors do not need to wrap their CSS — the
+   * factory does it. Because every contribution lives in the `waria`
+   * cascade layer, any unlayered user CSS automatically wins, regardless
+   * of selector specificity.
+   *
+   * Use this for *functional* layout (positioning, overflow, axis-driven
+   * geometry) — never for aesthetics (colors, fonts, spacing).
+   */
+  styles?: string;
 }
 
 /**

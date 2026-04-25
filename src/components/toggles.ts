@@ -14,6 +14,11 @@ interface TogglesElement extends HTMLElement {
 defineComponent({
   tag: "w-toggles",
 
+  styles: `
+    w-toggles { display: inline-flex; }
+    w-toggles[disabled] { pointer-events: none; }
+  `,
+
   props: [
     { name: "value", type: String, default: "" },
     { name: "multiple", type: Boolean, default: false },

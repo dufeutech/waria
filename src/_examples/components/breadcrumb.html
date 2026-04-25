@@ -2,12 +2,19 @@
     <h2>Breadcrumb</h2>
     <w-breadcrumb label="Breadcrumb navigation">
         <w-slot list>
-            <ol style="display: flex; list-style: none; padding: 0; margin: 0; gap: 0.5rem;">
-                <w-slot item><li><a href="#" style="color: #0056b3; text-decoration: none;">Home</a> /</li></w-slot>
-                <w-slot item><li><a href="#" style="color: #0056b3; text-decoration: none;">Products</a> /</li></w-slot>
-                <w-slot item><li><a href="#" style="color: #0056b3; text-decoration: none;">Category</a> /</li></w-slot>
+            <ol>
+                <w-slot item><li><a href="#">Home</a> /</li></w-slot>
+                <w-slot item><li><a href="#">Products</a> /</li></w-slot>
+                <w-slot item><li><a href="#">Category</a> /</li></w-slot>
                 <w-slot item><li current style="color: #666;">Current Page</li></w-slot>
             </ol>
         </w-slot>
     </w-breadcrumb>
+
+    <style>
+        w-breadcrumb a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+    </style>
 </w-view>

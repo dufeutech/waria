@@ -16,6 +16,10 @@ import { defineComponent } from "../factory";
 defineComponent({
   tag: "w-slot",
 
+  styles: `
+    w-slot { display: contents; }
+  `,
+
   props: [
     // Universal slots (12)
     { name: "trigger", type: Boolean, default: false },
@@ -59,13 +63,8 @@ defineComponent({
     { name: "sub", type: Boolean, default: false },
   ],
 
-  setup(ctx) {
-    const el = ctx.element;
-
-    // Make the slot transparent (display: contents)
-    // This ensures the w-slot element doesn't affect layout
-    el.style.display = "contents";
-  },
+  // No setup needed: layout is owned by the @layer waria stylesheet
+  // (display: contents on w-slot keeps it transparent for layout purposes).
 });
 
 export {};

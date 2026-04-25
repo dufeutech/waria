@@ -16,6 +16,54 @@ interface RangeElement extends HTMLElement {
 defineComponent({
   tag: "w-range",
 
+  styles: `
+    w-range {
+      display: block;
+      position: relative;
+      touch-action: none;
+      --w-fill: 0%;
+      --w-knob: 0%;
+    }
+    /* Rail, fill, and knob are all positioned automatically. The fill is
+       typically nested inside the rail in consumer markup, so we use
+       descendant rather than direct-child combinators throughout. */
+    w-range w-slot[rail] > * { position: absolute; }
+    w-range w-slot[fill] > * { position: absolute; }
+    w-range w-slot[knob] > * { position: absolute; }
+
+    /* Horizontal axis */
+    w-range[orientation="horizontal"] w-slot[rail] > * {
+      left: 0; right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    w-range[orientation="horizontal"] w-slot[fill] > * {
+      left: 0; top: 0; bottom: 0; width: var(--w-fill);
+    }
+    w-range[orientation="horizontal"] w-slot[knob] > * {
+      top: 50%;
+      left: var(--w-knob);
+      transform: translate(-50%, -50%);
+    }
+
+    /* Vertical axis */
+    w-range[orientation="vertical"] w-slot[rail] > * {
+      top: 0; bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    w-range[orientation="vertical"] w-slot[fill] > * {
+      left: 0; right: 0; bottom: 0; height: var(--w-fill);
+    }
+    w-range[orientation="vertical"] w-slot[knob] > * {
+      left: 50%;
+      bottom: var(--w-knob);
+      transform: translate(-50%, 50%);
+    }
+
+    w-range[disabled] { pointer-events: none; }
+  `,
+
   props: [
     { name: "min", type: Number, default: 0 },
     { name: "max", type: Number, default: 100 },
@@ -64,7 +112,6 @@ defineComponent({
       ctx.query<HTMLElement>(SLOT.knob);
     const getTrack = (): HTMLElement | null =>
       ctx.query<HTMLElement>(SLOT.rail);
-    const getFill = (): HTMLElement | null => ctx.query<HTMLElement>(SLOT.fill);
 
     // Create hidden input for form compatibility
     const setupHiddenInput = (): void => {
@@ -146,36 +193,11 @@ defineComponent({
     };
 
     const updateVisuals = (): void => {
-      const thumb = getThumb();
-      const fill = getFill();
-      const percentage = getPercentage();
-
-      if (thumb) {
-        if (el.orientation === "horizontal") {
-          thumb.style.left = `${percentage}%`;
-          thumb.style.top = "";
-          thumb.style.transform = "translateX(-50%)";
-        } else {
-          thumb.style.bottom = `${percentage}%`;
-          thumb.style.left = "";
-          thumb.style.transform = "translateY(50%)";
-        }
-      }
-
-      if (fill) {
-        if (el.orientation === "horizontal") {
-          fill.style.width = `${percentage}%`;
-          fill.style.height = "100%";
-          fill.style.bottom = "";
-          fill.style.top = "";
-        } else {
-          fill.style.height = `${percentage}%`;
-          fill.style.width = "100%";
-          fill.style.position = "absolute";
-          fill.style.bottom = "0";
-          fill.style.top = "";
-        }
-      }
+      // Layout is driven by CSS attribute selectors on `orientation`; we just
+      // feed the position percentage in via custom properties on the host.
+      const pct = `${getPercentage()}%`;
+      ctx.element.style.setProperty("--w-knob", pct);
+      ctx.element.style.setProperty("--w-fill", pct);
     };
 
     const setValue = (newValue: number, emitEvent = true): void => {

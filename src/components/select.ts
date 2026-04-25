@@ -22,6 +22,10 @@ interface SelectElement extends HTMLElement {
 defineComponent({
   tag: "w-select",
 
+  styles: `
+    w-select { display: contents; }
+  `,
+
   props: [
     { name: "value", type: String, default: "" },
     { name: "open", type: Boolean, default: false },

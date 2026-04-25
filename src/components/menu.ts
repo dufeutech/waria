@@ -9,6 +9,14 @@ import { SLOT, ARIA, KEY, getSlotName } from "../constants";
 defineComponent({
   tag: "w-menu",
 
+  styles: `
+    w-menu { display: contents; }
+    [role="menu"] > w-slot[sub] > [role="menu"] {
+      /* Submenus: positioned by autoPosition; ensure they render above siblings. */
+      z-index: 1;
+    }
+  `,
+
   props: [
     { name: "open", type: Boolean, default: false },
     { name: "placement", type: String, default: "bottom-start" },
